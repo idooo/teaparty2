@@ -1,0 +1,44 @@
+<!doctype html>
+
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+        <title>Teaparty</title>
+
+        <!-- build:css styles/main.min.css -->
+        <link rel="stylesheet" href="/styles/main.css">
+        <link rel="stylesheet" href="/styles/widgets.css">
+        <!-- endbuild -->
+
+    </head>
+
+<body ng-app="teaparty2">
+
+    <div class="viewport" ui-view="content"></div>
+
+    <!-- build:js scripts/vendor.min.js -->
+    <!-- bower:js -->
+
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- build:js scripts/app.min.js -->
+
+    <!-- include: "type": "js", "files": "scripts/app.js" -->
+
+    <!-- include: "type": "js", "files": "scripts/providers/*.js" -->
+
+    <!-- include: "type": "js", "files": "scripts/services/*.js" -->
+
+    <!-- include: "type": "js", "files": "scripts/controllers/*.js" -->
+
+    <!-- include: "type": "js", "files": "widgets/**/*.js" -->
+
+    <!-- endbuild -->
+
+</body>
+</html>
