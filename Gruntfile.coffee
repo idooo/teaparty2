@@ -70,19 +70,6 @@ module.exports = (grunt) ->
           '<%= settings.dist %>/scripts/app.js': ["<%= settings.app %>/app.js", "<%= settings.app %>/**/*.js"]
 
     copy:
-      scripts:
-        files: [
-          {
-            expand: true
-            cwd: "<%= settings.app %>"
-            dest: "<%= settings.dist %>"
-            src: [
-              "scripts/**/*",
-              "components/**/*.js"
-            ]
-          }
-        ]
-
       distStatic:
         files: [
           {
@@ -106,13 +93,32 @@ module.exports = (grunt) ->
             cwd: "<%= settings.app %>"
             dest: "<%= settings.dist %>"
             src: [
-              "scripts/**/*.template",
-              "components/**/*.template"
+              "widgets/**/*.template"
             ]
           }
         ]
 
-  # watch
+    develop:
+      server:
+        file: 'server.js'
+
+    watch:
+      js:
+        files: ['<%= settings.app %>/**/*.js']
+        tasks: ['ngAnnotate', 'develop']
+        options: { nospawn: true }
+      less:
+        files: ['<%= settings.app %>/**/*.less']
+        tasks: ['less', 'develop']
+        options: { nospawn: true }
+      templatesCopy:
+        files: ['<%= settings.app %>/**/*.template']
+        tasks: ['copy:templates', 'develop']
+        options: { nospawn: true }
+      viewsCopy:
+        files: ['<%= settings.app %>/views/**/*.html']
+        tasks: ['copy:distStatic', 'develop']
+        options: { nospawn: true }
 
   # include source
 
@@ -130,20 +136,29 @@ module.exports = (grunt) ->
   # Aliases
   ###############################################################
 
+  grunt.registerTask 'prepare_build', [
+    'clean'
+    'ngAnnotate'
+    'less'
+    'includeSource'
+    'wiredep'
+    'copy:distStatic'
+    'copy:templates'
+    'develop'
+  ]
+
   ###############################################################
   # Jobs
   ###############################################################
 
   # omg, they gonna serve it!
   grunt.registerTask 'serve', [
-
+    'prepare_build'
+    'watch'
   ]
 
   # build production ready result
   grunt.registerTask 'build', [
-    'clean'
-    'ngAnnotate'
-    'less'
-    'includeSource'
-    'wiredep'
+    'prepare_build'
   ]
+
