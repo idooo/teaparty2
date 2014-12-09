@@ -4,6 +4,7 @@
 var modules = [
 	'ngResource',
 	'ui.router',
+	'btford.socket-io',
 	'app.services',
 	'app.templates',
 	'app.widgets'

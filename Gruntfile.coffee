@@ -27,6 +27,9 @@ module.exports = (grunt) ->
         src: '<%= settings.dist %>/index.html'
         dependencies: true
         devDependencies: false
+        overrides:
+          'socket.io-client':
+            main: ['socket.io.js']
 
   # clean
 
