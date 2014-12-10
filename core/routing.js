@@ -1,8 +1,8 @@
 
-var routes = ['static', 'test'];
+var routes = ['static', 'dashboards'];
 
-module.exports = function(server) {
+module.exports = function(server, model) {
     routes.forEach(function(routeName) {
-        require('./routing/' + routeName)(server);
+        require('./routing/' + routeName)(server, model);
     });
 };
