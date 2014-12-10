@@ -8,9 +8,9 @@ var server = restify.createServer(),
 server.use(restify.bodyParser());
 
 var model = require('./core/database')(config);
-console.log(model);
+
 require('./core/routing')(server, model);
-require('./core/updater');
+//require('./core/updater');
 require('./core/sockets')(io);
 
 server.listen(config.server.port, function () {
