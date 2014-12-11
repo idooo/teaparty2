@@ -1,7 +1,5 @@
 var r = require('./../helpers/response'),
-    sanitize = require('./../helpers/sanitize'),
-    endpoint = '/dashboard/:name',
-    endpointAll = '/dashboards';
+    sanitize = require('./../helpers/sanitize');
 
 module.exports = function(server, model, config) {
 
@@ -9,7 +7,7 @@ module.exports = function(server, model, config) {
      * GET: /dashboard/:name
      * Get dashboard and widget by :name
      */
-    server.get(endpoint, function create(req, res, next) {
+    server.get('/dashboard/:name', function create(req, res, next) {
 
         function findWidgets(ids, callback) {
             var query = model.Widget.where({ _id: {$in: ids }});
@@ -47,7 +45,7 @@ module.exports = function(server, model, config) {
      * POST: /dashboard/:name
      * Create new dashboard with :name
      */
-    server.post(endpoint, function(req, res, next) {
+    server.post('/dashboard/:name', function(req, res, next) {
 
         var dashboard = new model.Dashboard({
             name: req.params.name,
@@ -62,7 +60,11 @@ module.exports = function(server, model, config) {
         });
     });
 
-    server.get(endpointAll, function(req, res, next) {
+    /**
+     * GET: /dashboards
+     * Get the list of dashboards
+     */
+    server.get('/dashboards', function(req, res, next) {
         var query  = model.Dashboard.where({});
 
         query.find(function (err, dashboards) {

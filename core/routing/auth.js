@@ -1,7 +1,5 @@
 var uuid = require('node-uuid'),
-    r = require('./../helpers/response'),
-    endpoint = '/auth',
-    endpointCheck = '/auth/:token';
+    r = require('./../helpers/response');
 
 module.exports = function(server, model, config) {
 
@@ -10,7 +8,15 @@ module.exports = function(server, model, config) {
 
     config.tokens = {};
 
-    server.post(endpoint, function(req, res, next) {
+    /**
+     * POST: /auth
+     * Auth admin user by login and password
+     *
+     * post body:
+     *  - username
+     *  - password
+     */
+    server.post('/auth', function(req, res, next) {
 
         var isCorrect = (req.params.username === adminUsername && req.params.password === adminPassword);
 
@@ -25,7 +31,11 @@ module.exports = function(server, model, config) {
         return next();
     });
 
-    server.get(endpointCheck, function(req, res, next) {
+    /**
+     * GET /auth/:token
+     * Check if :token is authorised and valid
+     */
+    server.get('/auth/:token', function(req, res, next) {
         if (typeof config.tokens[req.params.token] === 'undefined') r.fail(res, {message: 'Token not valid'}, 403);
         else r.ok(res);
 

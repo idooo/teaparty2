@@ -1,9 +1,12 @@
-var r = require('./../helpers/response'),
-    endpoint = '/dashboard/:dashboard/widget/:widget';
+var r = require('./../helpers/response');
 
 module.exports = function(server, model) {
 
-    server.post(endpoint, function(req, res, next) {
+    /**
+     * POST: /dashboard/:dashboard/widget/:widget
+     * Create new widget with :type for selected :dashboard
+     */
+    server.post('/dashboard/:dashboard/widget/:type', function(req, res, next) {
 
         function createWidget(dashboard) {
             var widget = new model.Widget({
