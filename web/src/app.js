@@ -4,40 +4,45 @@
 var modules = [
 	'ngResource',
 	'ui.router',
+	'LocalStorageModule',
 	'btford.socket-io',
 	'app.services',
 	'app.templates',
 	'app.widgets'
 ];
 
+// Init app and modules
 angular.module('teaparty2', modules);
-
 angular.module("app.services", []);
 angular.module("app.templates", []);
+angular.module("app.widgets", []);
 
-angular.module("app.widgets", [])
+// Helper for template path resolving for components
+angular.module("app.widgets").factory('TemplatePath', function() {
+	return {
+		get: function (type, path, component) {
+			return (type === "widget" ? "widgets" : "directives") +
+				"/" + path + "/" + (component || path) + ".template";
+		}
+	}
+});
 
-    // Helper for template path resolving for components
-    .factory('TemplatePath', function() {
-        return {
-            get: function (path, component) {
-                return "widgets/" + path + "/" + (component || path) + ".template";
-            }
-        }
-    });
-
-
-var app = angular.module('teaparty2').config(function($stateProvider, $urlRouterProvider) {
+// Initial app config
+angular.module('teaparty2').config(function($stateProvider, $urlRouterProvider) {
 
     $urlRouterProvider.otherwise('/');
 
 	$stateProvider
-	.state('app', {
-		url: '/',
-		views: { 
-			'content': { templateUrl: "/views/home.html", controller: 'MainCtrl as ctrl'  }
-		}
-	})
+		.state('app', {
+			abstract: true,
+			views: {
+				'content': { templateUrl: "/views/layout.html", controller: 'CentralController as central'  }
+			}
+		})
+		.state('app.dashboard', {
+			url: '/:dashboard',
+			templateUrl: "/views/dashboard.html"
+		})
 });
 
 

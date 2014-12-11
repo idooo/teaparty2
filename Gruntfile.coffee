@@ -46,15 +46,6 @@ module.exports = (grunt) ->
         ]
       tmp: '.tmp/**/*.*'
 
-  # express
-
-    express:
-      options:
-        port: process.env.PORT || 9000
-      dev:
-        options:
-          script: 'server.js'
-
   # less
 
     less:
@@ -96,7 +87,8 @@ module.exports = (grunt) ->
             cwd: "<%= settings.app %>"
             dest: "<%= settings.dist %>"
             src: [
-              "widgets/**/*.template"
+              "widgets/**/*.template",
+              "directives/**/*.template"
             ]
           }
         ]

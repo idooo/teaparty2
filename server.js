@@ -9,7 +9,7 @@ server.use(restify.bodyParser());
 
 var model = require('./core/database')(config);
 
-require('./core/routing')(server, model);
+require('./core/routing')(server, model, config);
 //require('./core/updater');
 require('./core/sockets')(io);
 

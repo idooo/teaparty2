@@ -1,0 +1,14 @@
+<div class="d-custom-select">
+
+    <div ng-click="showDropdown = !showDropdown">
+        <span>{{selected[field]}}</span>
+        <i class="icon-down-dir"></i>
+    </div>
+
+    <div class="d-custom-select__dropdown" ng-show="showDropdown">
+        <div ng-repeat="option in options" ng-click="select(option)">
+            {{option[field]}}
+        </div>
+    </div>
+
+</div>

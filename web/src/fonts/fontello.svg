@@ -1,0 +1,14 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg">
+<metadata>Copyright (C) 2014 by original authors @ fontello.com</metadata>
+<defs>
+<font id="fontello" horiz-adv-x="1000" >
+<font-face font-family="fontello" font-weight="400" font-stretch="normal" units-per-em="1000" ascent="850" descent="-150" />
+<missing-glyph horiz-adv-x="1000" />
+<glyph glyph-name="lock" unicode="&#xe800;" d="m179 421h285v108q0 59-42 101t-101 41-101-41-41-101v-108z m464-53v-322q0-22-16-37t-38-16h-535q-23 0-38 16t-16 37v322q0 22 16 38t38 15h17v108q0 102 74 176t176 74 177-74 73-176v-108h18q23 0 38-15t16-38z" horiz-adv-x="642.9" />
+<glyph glyph-name="lock-open" unicode="&#xe801;" d="m929 529v-143q0-15-11-25t-25-11h-36q-14 0-25 11t-11 25v143q0 59-41 101t-101 41-101-41-42-101v-108h53q23 0 38-15t16-38v-322q0-22-16-37t-38-16h-535q-23 0-38 16t-16 37v322q0 22 16 38t38 15h375v108q0 103 73 176t177 74 176-74 74-176z" horiz-adv-x="928.6" />
+<glyph glyph-name="down-dir" unicode="&#xe802;" d="m571 457q0-14-10-25l-250-250q-11-11-25-11t-25 11l-250 250q-11 11-11 25t11 25 25 11h500q14 0 25-11t10-25z" horiz-adv-x="571.4" />
+</font>
+</defs>
+</svg>

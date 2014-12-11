@@ -1,0 +1,20 @@
+<div class="d-admin-form">
+
+    <div ng-show="isAdmin">
+        admin
+        <i class="icon-lock-open"></i>
+    </div>
+
+    <div ng-hide="isAdmin">
+
+        <i class="icon-lock"></i>
+
+        <input type="text" name="username" ng-model="username"/>
+
+        <input type="password" name="password" ng-model="password"/>
+
+        <button ng-click="login()">auth</button>
+
+    </div>
+
+</div>

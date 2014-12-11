@@ -6,7 +6,7 @@ angular.module('app.widgets')
     return {
         restrict: 'EA', // Suggest to use attribute if possible to provide compatibility with IE8
         replace: true,
-        templateUrl: TemplatePath.get('status'),
+        templateUrl: TemplatePath.get('widget', 'status'),
         link: function(scope, element) {
             console.log('status link');
         },

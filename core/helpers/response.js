@@ -5,7 +5,10 @@ module.exports = {
 
     ok: function(r, response) {
         if (typeof response === 'undefined') response = {};
-        else response = response.toObject();
+        else try {
+            response = response.toObject();
+        }
+        catch (e) { }
 
         response.status = 'ok';
 

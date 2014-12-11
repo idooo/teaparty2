@@ -1,0 +1,15 @@
+<header>
+
+    <admin-form></admin-form>
+
+    <custom-select
+            options="central.dashboards"
+            selected="central.selectedDashboard"
+            field="name"
+            on-change="central.loadDashboard"></custom-select>
+
+</header>
+
+<div class="content" ui-view>
+
+</div>

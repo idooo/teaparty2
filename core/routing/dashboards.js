@@ -1,9 +1,14 @@
 var r = require('./../helpers/response'),
     sanitize = require('./../helpers/sanitize'),
-    endpoint = '/dashboard/:name';
+    endpoint = '/dashboard/:name',
+    endpointAll = '/dashboards';
 
-module.exports = function(server, model) {
+module.exports = function(server, model, config) {
 
+    /**
+     * GET: /dashboard/:name
+     * Get dashboard and widget by :name
+     */
     server.get(endpoint, function create(req, res, next) {
 
         function findWidgets(ids, callback) {
@@ -38,6 +43,10 @@ module.exports = function(server, model) {
         });
     });
 
+    /**
+     * POST: /dashboard/:name
+     * Create new dashboard with :name
+     */
     server.post(endpoint, function(req, res, next) {
 
         var dashboard = new model.Dashboard({
@@ -50,6 +59,29 @@ module.exports = function(server, model) {
             else r.ok(res, data);
 
             return next();
+        });
+    });
+
+    server.get(endpointAll, function(req, res, next) {
+        var query  = model.Dashboard.where({});
+
+        query.find(function (err, dashboards) {
+            if (dashboards) {
+                var sanitized = [];
+
+                dashboards.forEach(function(_dashboard) {
+                    sanitized.push(sanitize(_dashboard));
+                });
+
+                r.ok(res, sanitized);
+                return next();
+            }
+            else {
+                if (err) r.fail(res, err);
+                else r.fail(res);
+
+                return next();
+            }
         });
     });
 };
