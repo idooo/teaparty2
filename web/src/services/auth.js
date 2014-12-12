@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module("app.services")
-    .factory('Auth', function($http, localStorageService) {
+    .factory('Auth', function($http, $q, localStorageService) {
 
         var service = {
             token: undefined,
@@ -20,17 +20,27 @@ angular.module("app.services")
                 return http;
             },
 
+            /**
+             * Check token for validity
+             * @param userToken
+             * @returns {Promise}
+             */
             check: function(userToken) {
+                var http;
 
                 if (typeof userToken === 'undefined') {
                     userToken = localStorageService.get('token');
                     if (userToken === null) {
                         service.token = undefined;
-                        return;
+                        // Create empty promise to have unified function return
+                        // in case of error
+                        var promise = $q(function(resolve, reject) {});
+                        promise.success = function(){};
+                        return promise;
                     }
                 }
 
-                var http = $http.get('/api/auth/' + userToken);
+                http = $http.get('/api/auth/' + userToken);
 
                 http.success(function() {
                     service.token = userToken;
@@ -40,6 +50,7 @@ angular.module("app.services")
                 http.error(function() {
                     service.token = undefined;
                     service.isAuth = false;
+                    localStorageService.remove('token')
                 });
 
                 return http;
