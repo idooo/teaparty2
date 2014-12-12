@@ -4,12 +4,14 @@
 
     <custom-select
             options="central.dashboards"
-            selected="central.selectedDashboard"
+            selected="0"
             field="name"
             on-change="central.loadDashboard"></custom-select>
 
 </header>
 
-<div class="content" ui-view>
+<div>
+
+    <dashboard src="selectedDashboard"></dashboard>
 
 </div>

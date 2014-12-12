@@ -1,3 +1,4 @@
 <div>
-    directive template 2
+    status directive
+    {{data}}
 </div>

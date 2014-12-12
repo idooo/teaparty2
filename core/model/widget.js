@@ -11,8 +11,8 @@ module.exports = function(mongoose) {
         },
         type: String,
         data: {
-            type: Object,
-            default: {}
+            type: mongoose.Schema.Types.Mixed,
+            default: {empty: true}
         },
         creation_date: {
             type: Date,

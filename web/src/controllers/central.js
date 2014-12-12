@@ -6,24 +6,26 @@ angular.module('teaparty2').factory('mySocket', function (socketFactory) {
 });
 */
 
-angular.module('teaparty2').controller('CentralController', function(Auth, Dashboard) {
+angular.module('teaparty2').controller('CentralController', function($rootScope, Auth, Dashboard) {
 
     var self = this;
 
     self.dashboards = [];
-    self.selectedDashboard = undefined;
     self.loadDashboard = loadDashboard;
+    $rootScope.selectedDashboard = undefined;
 
     Dashboard.list(function(data) {
         self.dashboards = data;
         if (self.dashboards.length) {
-            loadDashboard(self.dashboards[0].name);
+            loadDashboard(self.dashboards[0]);
         }
     });
 
-    function loadDashboard(dashboardName) {
-        console.log(dashboardName);
-        self.selectedDashboard = Dashboard.get({name: dashboardName});
+    function loadDashboard(dashboard) {
+        console.log('loadDashboard', dashboard.name);
+        Dashboard.get({name: dashboard.name}, function(data) {
+            $rootScope.selectedDashboard = data;
+        });
     }
 
     //mySocket.emit('event1', 'test');

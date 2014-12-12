@@ -8,13 +8,15 @@ var modules = [
 	'btford.socket-io',
 	'app.services',
 	'app.templates',
-	'app.widgets'
+	'app.widgets',
+	'app.directives'
 ];
 
 // Init app and modules
 angular.module('teaparty2', modules);
 angular.module("app.services", []);
 angular.module("app.templates", []);
+angular.module("app.directives", []);
 angular.module("app.widgets", []);
 
 // Helper for template path resolving for components
@@ -34,14 +36,13 @@ angular.module('teaparty2').config(function($stateProvider, $urlRouterProvider) 
 
 	$stateProvider
 		.state('app', {
-			abstract: true,
-			views: {
-				'content': { templateUrl: "/views/layout.html", controller: 'CentralController as central'  }
-			}
-		})
-		.state('app.dashboard', {
 			url: '/:dashboard',
-			templateUrl: "/views/dashboard.html"
+			views: {
+				'content': {
+					templateUrl: "/views/layout.html",
+					controller: 'CentralController as central'
+				}
+			}
 		})
 });
 

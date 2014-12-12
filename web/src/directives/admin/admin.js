@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app.widgets')
+angular.module('app.directives')
     .directive('adminForm', function(TemplatePath) {
 
     return {

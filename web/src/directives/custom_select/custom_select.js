@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app.widgets')
+angular.module('app.directives')
     .directive('customSelect', function(TemplatePath) {
 
     return {
@@ -8,19 +8,27 @@ angular.module('app.widgets')
         replace: true,
         scope: {
             options: '=',
-            selected: '=',
-            field: '@',
-            onChange: '='
+            onChange: '=',
+            selected: '@',
+            field: '@'
         },
         templateUrl: TemplatePath.get('directive', 'custom_select'),
         link: function(scope) {
             scope.showDropdown = false;
 
             scope.select = function(item) {
-                scope.selected = item;
+                scope.selectedElement = item;
                 scope.showDropdown = false;
-                scope.onChange(item[scope.field], item);
+                scope.onChange(item);
             }
+        },
+        controller: function($scope) {
+            var listener = $scope.$watch("options", function (newValue) {
+                if (typeof newValue !== 'undefined' && newValue.length > 0) {
+                    $scope.selectedElement = newValue[0];
+                    listener();
+                }
+            });
         }
     }
 });

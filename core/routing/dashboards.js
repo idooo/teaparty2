@@ -26,8 +26,11 @@ module.exports = function(server, model, config) {
             if (dashboard) {
                 findWidgets(dashboard.widgets, function(widgets) {
 
-                    // TODO: Sanitize widgets' fields
-                    dashboard.widgets = widgets;
+                    dashboard.widgets = [];
+                    widgets.forEach(function(item) {
+                        dashboard.widgets.push(sanitize(item));
+                    });
+
                     r.ok(res, dashboard);
                     return next();
                 });
