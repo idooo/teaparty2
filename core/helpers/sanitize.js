@@ -7,7 +7,7 @@ module.exports = function(obj, fields) {
     }
     catch (e) {}
 
-    fields = fields || defaults;
+    fields = defaults.concat(fields || []);
 
     fields.forEach(function(fieldName) {
         if (typeof obj[fieldName] !== 'undefined') delete obj[fieldName]

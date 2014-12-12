@@ -24,8 +24,6 @@ angular.module('app.directives')
             $scope.renderDashboard = function() {
                 console.log('render dashboard', $scope.src.name);
 
-                console.log('watch', $scope.src.widgets);
-
                 $element.html('');
 
                 var template = '';

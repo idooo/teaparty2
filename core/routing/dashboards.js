@@ -4,10 +4,10 @@ var r = require('./../helpers/response'),
 module.exports = function(server, model, config) {
 
     /**
-     * GET: /dashboard/:name
+     * GET: /api/dashboard/:name
      * Get dashboard and widget by :name
      */
-    server.get('/dashboard/:name', function create(req, res, next) {
+    server.get('/api/dashboard/:name', function create(req, res, next) {
 
         function findWidgets(ids, callback) {
             var query = model.Widget.where({ _id: {$in: ids }});
@@ -45,10 +45,10 @@ module.exports = function(server, model, config) {
     });
 
     /**
-     * POST: /dashboard/:name
+     * POST: /api/dashboard/:name
      * Create new dashboard with :name
      */
-    server.post('/dashboard/:name', function(req, res, next) {
+    server.post('/api/dashboard/:name', function(req, res, next) {
 
         var dashboard = new model.Dashboard({
             name: req.params.name,
@@ -64,10 +64,10 @@ module.exports = function(server, model, config) {
     });
 
     /**
-     * GET: /dashboards
+     * GET: /api/dashboards
      * Get the list of dashboards
      */
-    server.get('/dashboards', function(req, res, next) {
+    server.get('/api/dashboards', function(req, res, next) {
         var query  = model.Dashboard.where({});
 
         query.find(function (err, dashboards) {

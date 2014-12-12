@@ -10,8 +10,7 @@ server.use(restify.bodyParser());
 var model = require('./core/database')(config);
 
 require('./core/routing')(server, model, config);
-//require('./core/updater');
-require('./core/sockets')(io);
+require('./core/synchronizer')(io, model, config);
 
 server.listen(config.server.port, function () {
     console.log('socket.io server listening at %s', server.url);

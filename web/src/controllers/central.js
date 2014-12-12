@@ -1,12 +1,6 @@
 'use strict';
 
-/*
-angular.module('teaparty2').factory('mySocket', function (socketFactory) {
-  return socketFactory();
-});
-*/
-
-angular.module('teaparty2').controller('CentralController', function($rootScope, Auth, Dashboard) {
+angular.module('teaparty2').controller('CentralController', function($rootScope, Auth, Dashboard, Sockets) {
 
     var self = this;
 
@@ -21,6 +15,10 @@ angular.module('teaparty2').controller('CentralController', function($rootScope,
         }
     });
 
+    Sockets.on('update_widgets', function(data) {
+        console.log('update_widgets', data);
+    });
+
     function loadDashboard(dashboard) {
         console.log('loadDashboard', dashboard.name);
         Dashboard.get({name: dashboard.name}, function(data) {
@@ -28,5 +26,4 @@ angular.module('teaparty2').controller('CentralController', function($rootScope,
         });
     }
 
-    //mySocket.emit('event1', 'test');
 });

@@ -3,10 +3,10 @@ var r = require('./../helpers/response');
 module.exports = function(server, model) {
 
     /**
-     * POST: /dashboard/:dashboard/widget/:widget
+     * POST: /api/dashboard/:dashboard/widget/:widget
      * Create new widget with :type for selected :dashboard
      */
-    server.post('/dashboard/:dashboard/widget/:type', function(req, res, next) {
+    server.post('/api/dashboard/:dashboard/widget/:type', function(req, res, next) {
 
         function createWidget(dashboard) {
             var widget = new model.Widget({

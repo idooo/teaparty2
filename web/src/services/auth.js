@@ -6,7 +6,7 @@ angular.module("app.services")
         var service = {
             token: undefined,
             auth: function(username, password) {
-                var http = $http.post('/auth', {
+                var http = $http.post('/api/auth', {
                     username: username,
                     password: password
                 });
@@ -30,7 +30,7 @@ angular.module("app.services")
                     }
                 }
 
-                var http = $http.get('/auth/' + userToken);
+                var http = $http.get('/api/auth/' + userToken);
 
                 http.success(function() {
                     service.token = userToken;

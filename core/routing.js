@@ -1,5 +1,11 @@
 
-var routes = ['static', 'dashboards', 'widgets', 'auth'];
+var routes = [
+    'static',
+    'dashboards',
+    'widgets',
+    'auth',
+    'push'
+];
 
 module.exports = function(server, model, config) {
     routes.forEach(function(routeName) {

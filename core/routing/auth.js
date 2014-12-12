@@ -9,14 +9,14 @@ module.exports = function(server, model, config) {
     config.tokens = {};
 
     /**
-     * POST: /auth
+     * POST: /api/auth
      * Auth admin user by login and password
      *
      * post body:
      *  - username
      *  - password
      */
-    server.post('/auth', function(req, res, next) {
+    server.post('/api/auth', function(req, res, next) {
 
         var isCorrect = (req.params.username === adminUsername && req.params.password === adminPassword);
 
@@ -35,7 +35,7 @@ module.exports = function(server, model, config) {
      * GET /auth/:token
      * Check if :token is authorised and valid
      */
-    server.get('/auth/:token', function(req, res, next) {
+    server.get('/api/auth/:token', function(req, res, next) {
         if (typeof config.tokens[req.params.token] === 'undefined') r.fail(res, {message: 'Token not valid'}, 403);
         else r.ok(res);
 
