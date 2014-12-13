@@ -5,12 +5,19 @@ module.exports = function(server, model) {
     /**
      * POST: /api/dashboard/:dashboard/widget/:widget
      * Create new widget with :type for selected :dashboard
+     *
+     * post body:
+     *  - type
+     *  - caption
+     *  - datasource
      */
     server.post('/api/dashboard/:dashboard/widget/:type', function(req, res, next) {
 
         function createWidget(dashboard) {
             var widget = new model.Widget({
-                type: req.params.type
+                type: req.params.type,
+                caption: req.params.caption, // TODO: sanitise
+                datasource: req.params.datasource // TODO: validation?
             });
 
             widget.save(function (err, data) {

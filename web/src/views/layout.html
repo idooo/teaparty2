@@ -14,13 +14,13 @@
 
     <div>
         <button ng-click="central.showNewDashboardDialog()">Add dashboard</button>
-        <button ng-click="addWidget(selectedDashboard)">Add widget</button>
+        <button ng-click="central.showNewWidgetDialog()">Add widget</button>
     </div>
 
 </header>
 
 <div>
 
-    <dashboard src="selectedDashboard"></dashboard>
+    <dashboard src="central.selectedDashboard"></dashboard>
 
 </div>

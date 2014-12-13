@@ -14,6 +14,10 @@ module.exports = function(mongoose) {
             type: String,
             default: 'New Widget'
         },
+        datasource: {
+            type: String,
+            default: 'push'
+        },
         data: {
             type: mongoose.Schema.Types.Mixed,
             default: {empty: true}

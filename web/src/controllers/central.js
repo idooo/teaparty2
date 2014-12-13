@@ -7,10 +7,12 @@ angular
         var self = this;
 
         self.dashboards = [];
+        self.selectedDashboard = undefined;
+
         self.loadDashboard = loadDashboard;
         self.showNewDashboardDialog = showNewDashboardDialog;
+        self.showNewWidgetDialog = showNewWidgetDialog;
         self.removeDashboard = removeDashboard;
-        self.selectedDashboard = undefined;
 
         Sockets.on('update_widgets', function(data) {
             console.log('update_widgets', data);
@@ -43,7 +45,7 @@ angular
             var dashboard = self.dashboards[index];
             console.log('loadDashboard', dashboard.name);
             Dashboard.get({name: dashboard.name}, function(data) {
-                $scope.selectedDashboard = data;
+                self.selectedDashboard = data;
             });
         }
 
@@ -61,6 +63,17 @@ angular
             ngDialog.open({
                 template: 'views/modal/new_dashboard.html',
                 controller: 'NewDashboardController as ctrl'
+            });
+        }
+
+
+        function showNewWidgetDialog() {
+            ngDialog.open({
+                template: 'views/modal/new_widget.html',
+                controller: 'NewWidgetController as ctrl',
+                data: {
+                    dashboard: self.selectedDashboard
+                }
             });
         }
 

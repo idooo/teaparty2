@@ -1,4 +1,5 @@
-<div>
+<div class="widget">
     status directive
-    {{data}}
+    <h5>{{widget.caption}}</h5>
+    {{widget.data}}
 </div>

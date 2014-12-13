@@ -7,7 +7,7 @@ angular.module('app.widgets')
         restrict: 'E',
         replace: true,
         scope: {
-            data: '='
+            widget: '=widget'
         },
         templateUrl: TemplatePath.get('widget', 'status'),
         link: function(scope, element) {
