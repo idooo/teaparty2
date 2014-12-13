@@ -35,7 +35,11 @@ module.exports = function(server, model, config) {
 
         var query  = model.Widget.where({ key: req.params.token });
         query.findOne(function (err, widget) {
-            if (widget) pushData(widget, req.body.toString());
+            if (typeof req.body === 'undefined') {
+                r.fail(res, {message: "No data to push"}, 400);
+                return next();
+            }
+            else if (widget) pushData(widget, req.body.toString());
             else {
                 if (err) r.fail(res, err);
                 else r.fail(res);
