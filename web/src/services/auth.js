@@ -5,6 +5,13 @@ angular.module("app.services")
 
         var service = {
             token: undefined,
+
+            /**
+             * Auth user to get the auth token
+             * @param username
+             * @param password
+             * @returns {Promise}
+             */
             auth: function(username, password) {
                 var http = $http.post('/api/auth', {
                     username: username,

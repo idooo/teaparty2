@@ -1,12 +1,21 @@
 <header>
 
-    <admin-form></admin-form>
+    <div style="float: left;">
+        <admin-form></admin-form>
+    </div>
 
-    <custom-select
-            options="central.dashboards"
-            selected="0"
-            field="name"
-            on-change="central.loadDashboard"></custom-select>
+    <div style="float: left;">
+        <custom-select
+                options="central.dashboards"
+                selected="0"
+                field="name"
+                on-change="central.loadDashboard"></custom-select>
+    </div>
+
+    <div>
+        <button ng-click="central.showNewDashboardDialog()">Add dashboard</button>
+        <button ng-click="addWidget(selectedDashboard)">Add widget</button>
+    </div>
 
 </header>
 

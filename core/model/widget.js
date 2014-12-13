@@ -10,6 +10,10 @@ module.exports = function(mongoose) {
             default: uuid.v1
         },
         type: String,
+        caption: {
+            type: String,
+            default: 'New Widget'
+        },
         data: {
             type: mongoose.Schema.Types.Mixed,
             default: {empty: true}
