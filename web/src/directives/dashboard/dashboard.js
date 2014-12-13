@@ -29,7 +29,12 @@ angular.module('app.directives')
 
                 var template = '';
                 $scope.src.widgets.forEach(function(widget, index) {
-                    template += '<widget-' + widget.type + ' widget="src.widgets['+index+']"></widget-' + widget.type + '>';
+                    template += [
+                        '<widget-container>',
+                            '<widget-' + widget.type + ' widget="src.widgets['+index+']">',
+                            '</widget-' + widget.type + '>',
+                        '</widget-container>'
+                    ].join('');
                 });
 
                 var widgets = angular.element(template);

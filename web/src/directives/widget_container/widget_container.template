@@ -1,0 +1,8 @@
+<div class="d-widget-container">
+
+    <div class="widget" ng-transclude></div>
+
+    <div class="d-widget-container__controls">
+        <button>delete</button>
+    </div>
+</div>
