@@ -36,7 +36,7 @@ module.exports = function(server, model, config) {
                 });
             }
             else {
-                if (err) r.fail(res, err);
+                if (err) r.fail(res, err, 400);
                 else r.fail(res);
 
                 return next();
@@ -60,6 +60,31 @@ module.exports = function(server, model, config) {
             else r.ok(res, data);
 
             return next();
+        });
+    });
+
+    /**
+     * DELETE: /api/dashboard/:name
+     * Delete dashboard by name
+     */
+    server.del('/api/dashboard/:name', function(req, res, next) {
+
+        var query  = model.Dashboard.where({ name: req.params.name });
+        query.findOne(function (err, dashboard) {
+            if (dashboard) {
+                dashboard.remove(function(err, data){
+                    if (err) r.fail(res, err, 400);
+                    else r.ok(res, data);
+
+                    return next();
+                })
+            }
+            else {
+                if (err) r.fail(res, err, 400);
+                else r.fail(res);
+
+                return next();
+            }
         });
     });
 

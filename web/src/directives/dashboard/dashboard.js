@@ -25,6 +25,7 @@ angular.module('app.directives')
                 console.log('render dashboard', $scope.src.name);
 
                 $element.html('');
+                if (!$scope.src.widgets.length) return;
 
                 var template = '';
                 $scope.src.widgets.forEach(function(widget, index) {

@@ -2,31 +2,58 @@
 
 angular
     .module('teaparty2')
-    .controller('CentralController', function($rootScope, ngDialog, Auth, Dashboard, Sockets) {
+    .controller('CentralController', function($scope, ngDialog, Auth, Dashboard, Sockets) {
 
         var self = this;
 
         self.dashboards = [];
         self.loadDashboard = loadDashboard;
         self.showNewDashboardDialog = showNewDashboardDialog;
-
-        $rootScope.selectedDashboard = undefined;
-
-        Dashboard.list(function(data) {
-            self.dashboards = data;
-            if (self.dashboards.length) {
-                loadDashboard(self.dashboards[0]);
-            }
-        });
+        self.removeDashboard = removeDashboard;
+        self.selectedDashboard = undefined;
 
         Sockets.on('update_widgets', function(data) {
             console.log('update_widgets', data);
         });
 
-        function loadDashboard(dashboard) {
+        $scope.$on('dashboardAddedEvent', function(event, addedDashboard) {
+            getDashboardsList(function(dashboards) {
+                for (var i=0; i<dashboards.length; i++) {
+                    if (dashboards[i].name === addedDashboard.name) {
+                        return loadDashboard(i);
+                    }
+                }
+            })
+        });
+
+        getDashboardsList(function() {
+            loadDashboard(0);
+        });
+
+        function getDashboardsList(callback) {
+            Dashboard.list(function(data) {
+                self.dashboards = data;
+                if (self.dashboards.length && typeof callback === 'function') {
+                    callback(self.dashboards);
+                }
+            });
+        }
+
+        function loadDashboard(index) {
+            var dashboard = self.dashboards[index];
             console.log('loadDashboard', dashboard.name);
             Dashboard.get({name: dashboard.name}, function(data) {
-                $rootScope.selectedDashboard = data;
+                $scope.selectedDashboard = data;
+            });
+        }
+
+        function removeDashboard(dashboardName) {
+            Dashboard.delete({name: dashboardName}, function(data) {
+                for (var i=0; i<self.dashboards.length; i++) {
+                    if (dashboardName === self.dashboards[i].name) {
+                        self.dashboards[i].deleted = true;
+                    }
+                }
             });
         }
 

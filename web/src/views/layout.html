@@ -5,11 +5,11 @@
     </div>
 
     <div style="float: left;">
-        <custom-select
+        <dashboard-select
                 options="central.dashboards"
-                selected="0"
-                field="name"
-                on-change="central.loadDashboard"></custom-select>
+                selected="central.selectedDashboard"
+                on-remove="central.removeDashboard"
+                on-change="central.loadDashboard"></dashboard-select>
     </div>
 
     <div>

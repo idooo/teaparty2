@@ -2,7 +2,7 @@
 
 angular
     .module('teaparty2')
-    .controller('NewDashboardController', function(ngDialog, Dashboard) {
+    .controller('NewDashboardController', function($rootScope, ngDialog, Dashboard) {
 
         var self = this;
 
@@ -12,8 +12,9 @@ angular
 
         function addDashboard() {
             var dashboard = new Dashboard({name: self.dashboardName});
-            dashboard.$save(function(data) {
+            dashboard.$save(function() {
                 console.log('dashboard added');
+                $rootScope.$broadcast('dashboardAddedEvent', dashboard);
                 ngDialog.close();
             }, function(err) {
                 console.log('err', err);

@@ -1,25 +1,29 @@
 'use strict';
 
 angular.module('app.directives')
-    .directive('customSelect', function(TemplatePath) {
+    .directive('dashboardSelect', function(TemplatePath) {
 
     return {
         restrict: 'EA',
         replace: true,
         scope: {
             options: '=',
+            selected: '=',
             onChange: '=',
-            selected: '@',
-            field: '@'
+            onRemove: '='
         },
-        templateUrl: TemplatePath.get('directive', 'custom_select'),
+        templateUrl: TemplatePath.get('directive', 'dashboard_select'),
         link: function(scope) {
             scope.showDropdown = false;
 
-            scope.select = function(item) {
-                scope.selectedElement = item;
+            scope.select = function(index) {
+                scope.selectedElement = scope.options[index];
                 scope.showDropdown = false;
-                scope.onChange(item);
+                scope.onChange(index);
+            };
+
+            scope.removeDashboard = function(dashboardName) {
+                scope.onRemove(dashboardName);
             }
         },
         controller: function($scope) {
