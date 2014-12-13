@@ -13,8 +13,8 @@ angular.module('app.widgets')
         link: function(scope, element) {
 
         },
-        controller: function($scope, $element, $attrs)  {
-
+        controller: function($scope, $element, $attrs, Subscriber)  {
+            Subscriber.subscribe($scope);
         }
     }
 });

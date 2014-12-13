@@ -16,6 +16,9 @@ angular
 
         Sockets.on('update_widgets', function(data) {
             console.log('update_widgets', data);
+            data.forEach(function(updateObject) {
+                $scope.$broadcast('widgetUpdateEvent:' + updateObject.key, updateObject.data);
+            });
         });
 
         $scope.$on('dashboardAddedEvent', function(event, addedDashboard) {
@@ -73,7 +76,6 @@ angular
                 controller: 'NewDashboardController as ctrl'
             });
         }
-
 
         function showNewWidgetDialog() {
             ngDialog.open({
