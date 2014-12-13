@@ -8,14 +8,21 @@ angular.module('app.directives')
         replace: true,
         transclude: true,
         scope: {
-            widget: '='
+            widgetKey: '@',
+            dashboardName: '@'
         },
         templateUrl: TemplatePath.get('directive', 'widget_container'),
-        link: function(scope, element) {
+        link: function(scope, element, attrs) {
 
         },
-        controller: function($scope, $element, $attrs)  {
+        controller: function($scope, $element, $attrs, Widget)  {
 
+            $scope.removeWidget = function() {
+                console.log('remove widget', $scope.widgetKey);
+                Widget.delete({dashboard: $scope.dashboardName, key: $scope.widgetKey}, function() {
+                    $scope.deleted = true;
+                });
+            }
         }
     }
 });

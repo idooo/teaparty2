@@ -18,7 +18,9 @@ angular
 
             widget.$save(function(data) {
                 console.log('widget added', data);
-                $rootScope.$broadcast('widgetAddedEvent', data);
+                $rootScope.$broadcast('widgetAddedEvent', {
+                    dashboardName: $scope.ngDialogData.dashboard.name
+                });
                 ngDialog.close();
             }, function(err) {
                 console.log('err', err);

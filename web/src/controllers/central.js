@@ -2,7 +2,7 @@
 
 angular
     .module('teaparty2')
-    .controller('CentralController', function($scope, ngDialog, Auth, Dashboard, Sockets) {
+    .controller('CentralController', function($scope, ngDialog, Auth, Dashboard, Widget, Sockets) {
 
         var self = this;
 
@@ -26,6 +26,14 @@ angular
                     }
                 }
             })
+        });
+
+        $scope.$on('widgetAddedEvent', function(event, data) {
+            for (var i=0; i<self.dashboards.length; i++) {
+                if (self.dashboards[i].name === data.dashboardName) {
+                    return loadDashboard(i);
+                }
+            }
         });
 
         getDashboardsList(function() {

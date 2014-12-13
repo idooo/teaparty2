@@ -2,8 +2,8 @@
 
 angular.module("app.services")
     .factory('Widget', function($resource) {
-        return $resource('/api/dashboard/:dashboard/widget/:type', {
+        return $resource('/api/dashboard/:dashboard/widget/:key', {
             dashboard: '@dashboard',
-            type: '@type'
+            key: '@key'
         });
     });

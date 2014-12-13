@@ -1,8 +1,9 @@
-<div class="d-widget-container">
+<div class="d-widget-container" ng-hide="deleted">
 
     <div class="widget" ng-transclude></div>
 
     <div class="d-widget-container__controls">
-        <button>delete</button>
+        {{widgetKey}}
+        <button ng-click="removeWidget()">delete</button>
     </div>
 </div>

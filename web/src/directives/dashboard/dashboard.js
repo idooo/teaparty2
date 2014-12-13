@@ -6,14 +6,11 @@ angular.module('app.directives')
     return {
         restrict: 'EA',
         replace: true,
-        scope: {
-            src: '='
-        },
         templateUrl: TemplatePath.get('directive', 'dashboard'),
-        link: function(scope, element) {
+        link: function(scope) {
             console.log('link dashboard');
 
-            scope.$watch('src', function(newDashboard) {
+            scope.$watch('central.selectedDashboard', function(newDashboard) {
                 if (typeof newDashboard === 'undefined') return;
                 scope.renderDashboard();
             });
@@ -22,16 +19,16 @@ angular.module('app.directives')
         controller: function($scope, $element, $attrs, $compile) {
 
             $scope.renderDashboard = function() {
-                console.log('render dashboard', $scope.src.name);
+                console.log('render dashboard', $scope.central.selectedDashboard.name);
 
                 $element.html('');
-                if (!$scope.src.widgets.length) return;
+                if (!$scope.central.selectedDashboard.widgets.length) return;
 
                 var template = '';
-                $scope.src.widgets.forEach(function(widget, index) {
+                $scope.central.selectedDashboard.widgets.forEach(function(widget, index) {
                     template += [
-                        '<widget-container>',
-                            '<widget-' + widget.type + ' widget="src.widgets['+index+']">',
+                        '<widget-container dashboard-name="' + $scope.central.selectedDashboard.name + '" widget-key="' + widget.key + '">',
+                            '<widget-' + widget.type + ' widget="central.selectedDashboard.widgets['+index+']">',
                             '</widget-' + widget.type + '>',
                         '</widget-container>'
                     ].join('');
