@@ -24,8 +24,8 @@ angular.module("app.widgets", []);
 angular.module("app.widgets").factory('TemplatePath', function() {
 	return {
 		get: function (type, path, component) {
-			return (type === "widget" ? "widgets" : "directives") +
-				"/" + path + "/" + (component || path) + ".template";
+			if (type === 'widget') return "widgets/" + path + "/view/" + (component || path) + ".template";
+			else return "directives/" + path + "/" + (component || path) + ".template";
 		}
 	}
 });

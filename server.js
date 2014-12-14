@@ -3,11 +3,13 @@ var config = require(process.env.conf || './config/default.json'),
     socketio = require('socket.io');
 
 var server = restify.createServer(),
-    io = socketio.listen(server.server);
+    io = socketio.listen(server.server),
+    model = require('./core/database')(config);
+
+// Load all the widgets
+config.widgets = require('./core/widget_loader');
 
 server.use(restify.bodyParser());
-
-var model = require('./core/database')(config);
 
 require('./core/routing')(server, model, config);
 require('./core/synchronizer')(io, model, config);

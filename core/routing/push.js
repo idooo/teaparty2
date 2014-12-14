@@ -22,15 +22,36 @@ module.exports = function(server, model, config) {
         function pushData(widget, rawData) {
             var data = extractBodyData(rawData);
 
-            r.ok(res);
-
-            // TODO: validation stuff
             // TODO: add check that data was saved
-            widget.data = data;
+            if (config.widgets[widget.type]) {
+                try {
+                    widget.data = validateAndSanitise(data, config.widgets[widget.type])
+                }
+                catch (e) {
+                    r.fail(res, {message: "Widget data validation fail"}, 400);
+                    return next();
+                }
+            }
+            else {
+                widget.data = data;
+            }
+
             widget.last_update_date = new Date();
             widget.save();
 
             return next();
+        }
+
+        function validateAndSanitise(data, ref) {
+            if (typeof ref.validate === 'function') {
+                if (!ref.validate(data)) {
+                    throw "ValidationError";
+                }
+            }
+            if (typeof ref.sanitise === 'function') {
+                return ref.sanitise(data);
+            }
+            return data;
         }
 
         var query  = model.Widget.where({ key: req.params.token });

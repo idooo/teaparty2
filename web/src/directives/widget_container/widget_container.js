@@ -16,7 +16,6 @@ angular.module('app.directives')
 
         },
         controller: function($scope, $element, $attrs, Widget)  {
-
             $scope.removeWidget = function() {
                 console.log('remove widget', $scope.widgetKey);
                 Widget.delete({dashboard: $scope.dashboardName, key: $scope.widgetKey}, function() {

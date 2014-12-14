@@ -1,5 +1,0 @@
-<div>
-    status directive
-    <h5>{{widget.caption}}</h5>
-    {{widget.data}}
-</div>

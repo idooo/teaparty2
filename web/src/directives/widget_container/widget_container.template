@@ -6,4 +6,5 @@
         {{widgetKey}}
         <button ng-click="removeWidget()">delete</button>
     </div>
+
 </div>

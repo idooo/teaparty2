@@ -17,6 +17,7 @@ module.exports = (grunt) ->
 
     settings:
       app: 'web/src'
+      widgets: 'widgets'
       dist: 'web/dist'
       tmp: '.tmp'
 
@@ -53,7 +54,7 @@ module.exports = (grunt) ->
         options:
           yuicompress: true
         files:
-          "<%= settings.dist %>/styles/widgets.css": "<%= settings.app %>/widgets/**/*.less"
+          "<%= settings.dist %>/styles/widgets.css": "<%= settings.widgets %>/**/*.less"
           "<%= settings.dist %>/styles/main.css": "<%= settings.app %>/styles/index.less"
 
   # ngmin
@@ -61,7 +62,11 @@ module.exports = (grunt) ->
     ngAnnotate:
       build:
         files:
-          '<%= settings.dist %>/scripts/app.js': ["<%= settings.app %>/app.js", "<%= settings.app %>/**/*.js"]
+          '<%= settings.dist %>/scripts/app.js': [
+            "<%= settings.app %>/app.js",
+            "<%= settings.app %>/**/*.js",
+            "<%= settings.widgets %>/**/view/*.js",
+          ]
 
     copy:
       distStatic:
@@ -87,8 +92,18 @@ module.exports = (grunt) ->
             cwd: "<%= settings.app %>"
             dest: "<%= settings.dist %>"
             src: [
-              "widgets/**/*.template",
               "directives/**/*.template"
+            ]
+          }
+        ]
+      widgetsTemplates:
+        files: [
+          {
+            expand: true
+            cwd: "<%= settings.widgets %>"
+            dest: "<%= settings.dist %>/widgets"
+            src: [
+              "**/*.template"
             ]
           }
         ]
@@ -99,16 +114,16 @@ module.exports = (grunt) ->
 
     watch:
       js:
-        files: ['<%= settings.app %>/**/*.js']
+        files: ['<%= settings.app %>/**/*.js', '<%= settings.widgets %>/**/view/*.js']
         tasks: ['ngAnnotate', 'develop']
         options: { nospawn: true }
       less:
-        files: ['<%= settings.app %>/**/*.less']
+        files: ['<%= settings.app %>/**/*.less', '<%= settings.widgets %>/**/*.less', ]
         tasks: ['less', 'develop']
         options: { nospawn: true }
       templatesCopy:
-        files: ['<%= settings.app %>/**/*.template']
-        tasks: ['copy:templates', 'develop']
+        files: ['<%= settings.app %>/**/*.template', '<%= settings.widgets %>/**/*.template']
+        tasks: ['copy:templates', 'copy:widgetsTemplates', 'develop']
         options: { nospawn: true }
       viewsCopy:
         files: ['<%= settings.app %>/views/**/*.html']
@@ -139,6 +154,7 @@ module.exports = (grunt) ->
     'wiredep'
     'copy:distStatic'
     'copy:templates'
+    'copy:widgetsTemplates'
     'develop'
   ]
 

@@ -1,8 +1,7 @@
 var uuid = require('node-uuid'),
-    modelName = 'Widget',
-    widgetTypes = ['status', 'text'];
+    modelName = 'Widget';
 
-module.exports = function(mongoose) {
+module.exports = function(mongoose, config) {
 
     var schema = mongoose.Schema({
         key: {
@@ -35,7 +34,7 @@ module.exports = function(mongoose) {
     var Widget = mongoose.model(modelName, schema);
 
     Widget.schema.path('type').validate(function (value) {
-        return widgetTypes.indexOf(value) !== -1
+        return typeof config.widgets[value] !== 'undefined'
     }, 'Invalid type');
 
     return {
