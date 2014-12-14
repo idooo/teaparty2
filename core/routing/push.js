@@ -14,7 +14,7 @@ module.exports = function(server, model, config) {
                 return JSON.parse(rawData);
             }
             catch (e) {
-                r.fail(res, {message: "JSON data is not valid"}, 400);
+                r.fail(res, {message: "JSON data is not valid", details: e}, 400);
                 next();
             }
         }
@@ -39,6 +39,7 @@ module.exports = function(server, model, config) {
             widget.last_update_date = new Date();
             widget.save();
 
+            r.ok(res, {message: "Widget data was updated"});
             return next();
         }
 

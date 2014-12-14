@@ -31,6 +31,8 @@ module.exports = (grunt) ->
         overrides:
           'socket.io-client':
             main: ['socket.io.js']
+          'highcharts':
+            main: ['adapters/standalone-framework.js', 'highcharts.js']
 
   # clean
 

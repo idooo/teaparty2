@@ -1,0 +1,7 @@
+<div class="widget-highcharts">
+    <strong>{{widget.caption}}</strong>
+
+    <div class="widget-status__indicator widget-status__indicator--{{widget.data.status}}">
+
+    </div>
+</div>
