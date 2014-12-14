@@ -5,6 +5,7 @@ var modules = [
 	'ngResource',
 	'ui.router',
 	'ngDialog',
+	'gridster',
 	'LocalStorageModule',
 	'btford.socket-io',
 	'app.services',

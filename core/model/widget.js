@@ -28,6 +28,14 @@ module.exports = function(mongoose, config) {
         last_update_date: {
             type: Date,
             default: 0
+        },
+        size: {
+            type: mongoose.Schema.Types.Object,
+            default: { "x": 1, "y": 1 }
+        },
+        position: {
+            type: [Number],
+            default: [0, 0]
         }
     });
 

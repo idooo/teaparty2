@@ -24,15 +24,19 @@ angular.module('app.directives')
                 $element.html('');
                 if (!$scope.central.selectedDashboard.widgets.length) return;
 
-                var template = '';
+                var template = '<div gridster>';
                 $scope.central.selectedDashboard.widgets.forEach(function(widget, index) {
                     template += [
-                        '<widget-container dashboard-name="' + $scope.central.selectedDashboard.name + '" widget-key="' + widget.key + '">',
-                            '<widget-' + widget.type + ' widget="central.selectedDashboard.widgets['+index+']">',
-                            '</widget-' + widget.type + '>',
-                        '</widget-container>'
+                        '<li gridster-item row="' + widget.position[0] + '" col="' + widget.position[1] + '" size-x="' + widget.size.x + '" size-y="' + widget.size.y + '" >',
+                            '<widget-container dashboard-name="' + $scope.central.selectedDashboard.name + '" widget-key="' + widget.key + '">',
+                                '<widget-' + widget.type + ' widget="central.selectedDashboard.widgets['+index+']">',
+                                '</widget-' + widget.type + '>',
+                            '</widget-container>',
+                        '</li>'
                     ].join('');
                 });
+
+                template += '</div>';
 
                 var widgets = angular.element(template);
                 $element.append(widgets);
