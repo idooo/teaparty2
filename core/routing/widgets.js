@@ -128,23 +128,36 @@ module.exports = function(server, model) {
             });
         }
 
+        function validateData(rawData) {
+            var isPostion = false,
+                isSize = false,
+                data = {};
+
+            // TODO: parseint for values
+            if (Object.prototype.toString.call(rawData.position) === "[object Array]" && rawData.position.length >= 2 ) {
+                isPostion = true;
+                data.position = rawData.position.slice(0,2);
+            }
+
+            if (typeof rawData.size !== 'undefined' && typeof rawData.size.x !== 'undefined'
+                && typeof rawData.size.y !== 'undefined') {
+                isSize = true;
+                data.size = {
+                    x: rawData.size.x,
+                    y: rawData.size.y
+                }
+            }
+            if (!(isSize || isPostion)) throw "ValidationError";
+
+            return data;
+        }
+
         findWidget(res, next, req.params.key, function(widget) {
 
             findDashboard(res, next, req.params.dashboard, function(dashboard) {
 
-                // TODO: add ability to change only one attribute?
                 try {
-                    var _raw = JSON.parse(req.body.toString()),
-                        obj = {
-                            position: _raw.position,
-                            size: {
-                                x:  _raw.size.x,
-                                y:  _raw.size.y
-                            }
-                        };
-                    if (Object.prototype.toString.call( obj.position) !== "[object Array]" || obj.position.length < 2 ) {
-                        throw "ValidationError"
-                    }
+                    var obj = validateData(JSON.parse(req.body.toString()));
                 }
                 catch (e) {
                     r.fail(res, {message: "Configuration object is not valid"}, 400);

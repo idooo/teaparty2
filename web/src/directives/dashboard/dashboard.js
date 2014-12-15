@@ -6,11 +6,15 @@ angular.module('app.directives')
     return {
         restrict: 'EA',
         replace: true,
+        scope: {
+            widgets: '=',
+            selectedDashboard: '=src'
+        },
         templateUrl: TemplatePath.get('directive', 'dashboard'),
         link: function(scope) {
             console.log('link dashboard');
 
-            scope.$watch('central.selectedDashboard', function(newDashboard) {
+            scope.$watch('selectedDashboard', function(newDashboard) {
                 if (typeof newDashboard === 'undefined') return;
                 scope.renderDashboard();
             });
@@ -18,18 +22,27 @@ angular.module('app.directives')
         },
         controller: function($scope, $element, $attrs, $compile) {
 
+            $scope.gridsterOpts = {
+                resizable: {
+                    stop: onResize
+                },
+                draggable: {
+                    stop: onDrag
+                }
+            };
+
             $scope.renderDashboard = function() {
-                console.log('render dashboard', $scope.central.selectedDashboard.name);
+                console.log('render dashboard', $scope.selectedDashboard.name);
 
                 $element.html('');
-                if (!$scope.central.selectedDashboard.widgets.length) return;
+                if (!$scope.selectedDashboard.widgets.length) return;
 
-                var template = '<div gridster>';
-                $scope.central.selectedDashboard.widgets.forEach(function(widget, index) {
+                var template = '<div gridster="gridsterOpts">';
+                $scope.selectedDashboard.widgets.forEach(function(widget, index) {
                     template += [
                         '<li gridster-item row="' + widget.position[0] + '" col="' + widget.position[1] + '" size-x="' + widget.size.x + '" size-y="' + widget.size.y + '" >',
-                            '<widget-container dashboard-name="' + $scope.central.selectedDashboard.name + '" widget-key="' + widget.key + '">',
-                                '<widget-' + widget.type + ' widget="central.selectedDashboard.widgets['+index+']">',
+                            '<widget-container dashboard-name="' + $scope.selectedDashboard.name + '" widget-key="' + widget.key + '">',
+                                '<widget-' + widget.type + ' widget="selectedDashboard.widgets['+index+']">',
                                 '</widget-' + widget.type + '>',
                             '</widget-container>',
                         '</li>'
@@ -41,6 +54,16 @@ angular.module('app.directives')
                 var widgets = angular.element(template);
                 $element.append(widgets);
                 $compile(widgets)($scope);
+            };
+
+            function onResize(event, $element, widget, size) {
+                console.log('resize stop - widget arg:', widget);
+                console.log('resize stop - new size arg:', size);
+            }
+
+            function onDrag(event, $element, widget, position) {
+                console.log('drag stop - widget arg:', widget);
+                console.log('drag stop - new position arg:', position);
             }
         }
     }
