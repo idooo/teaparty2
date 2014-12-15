@@ -8,7 +8,7 @@ module.exports = {
         }
         return false;
     },
-    sanitise: function(data) {
+    format: function(data) {
         if (typeof data.status !== 'undefined') {
             return {
                 status: data.status.toLowerCase()

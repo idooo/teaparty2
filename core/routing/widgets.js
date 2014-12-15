@@ -30,7 +30,14 @@ module.exports = function(server, model) {
         }
 
         function addWidgetToDashboard(widget, dashboard) {
-            dashboard.widgets.push(widget._id);
+            // TODO: find the better way to generate initial position
+            var widget_data = {
+                size: { "x": 1, "y": 1 },
+                position: [0, 0],
+                _id: widget._id
+            };
+
+            dashboard.widgets.push(widget_data);
 
             dashboard.save(function (err) {
                 if (err) r.fail(res, err, 400);

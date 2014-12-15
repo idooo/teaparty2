@@ -1,5 +1,6 @@
 var r = require('./../helpers/response'),
-    sanitize = require('./../helpers/sanitize');
+    sanitize = require('./../helpers/sanitize'),
+    extend = require('util')._extend;
 
 module.exports = function(server, model, config) {
 
@@ -24,11 +25,18 @@ module.exports = function(server, model, config) {
         var query  = model.Dashboard.where({ name: req.params.name });
         query.findOne(function (err, dashboard) {
             if (dashboard) {
-                findWidgets(dashboard.widgets, function(widgets) {
+                var _widgets = {};
+                dashboard.widgets.forEach(function(w) {
+                    _widgets[w._id] = {
+                        position: w.position,
+                        size: w.size
+                    }
+                });
 
+                findWidgets(Object.keys(_widgets), function(widgets) {
                     dashboard.widgets = [];
                     widgets.forEach(function(item) {
-                        dashboard.widgets.push(sanitize(item));
+                        dashboard.widgets.push(extend(sanitize(item), _widgets[item._id]));
                     });
 
                     r.ok(res, dashboard);

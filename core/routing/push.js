@@ -25,7 +25,7 @@ module.exports = function(server, model, config) {
             // TODO: add check that data was saved
             if (config.widgets[widget.type]) {
                 try {
-                    widget.data = validateAndSanitise(data, config.widgets[widget.type])
+                    widget.data = validateAndFormat(data, config.widgets[widget.type])
                 }
                 catch (e) {
                     r.fail(res, {message: "Widget data validation fail"}, 400);
@@ -43,14 +43,14 @@ module.exports = function(server, model, config) {
             return next();
         }
 
-        function validateAndSanitise(data, ref) {
+        function validateAndFormat(data, ref) {
             if (typeof ref.validate === 'function') {
                 if (!ref.validate(data)) {
                     throw "ValidationError";
                 }
             }
-            if (typeof ref.sanitise === 'function') {
-                return ref.sanitise(data);
+            if (typeof ref.format === 'function') {
+                return ref.format(data);
             }
             return data;
         }
