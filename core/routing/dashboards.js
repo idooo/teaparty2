@@ -103,7 +103,7 @@ module.exports = function(server, model, config) {
                     sanitized.push(sanitize(_dashboard));
                 });
 
-                r.ok(res, sanitized);
+                r.ok(res, sanitized.sort(function(a, b) { return a.name > b.name }));
                 return next();
             }
             else {

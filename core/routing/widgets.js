@@ -1,4 +1,5 @@
-var r = require('./../helpers/response');
+var r = require('./../helpers/response'),
+    extend = require('util')._extend;
 
 module.exports = function(server, model) {
 
@@ -70,7 +71,7 @@ module.exports = function(server, model) {
             _id = _id.toString();
 
             for (var i=0; i<dashboard.widgets.length; i++) {
-                if (dashboard.widgets[i].toString() === _id) {
+                if (dashboard.widgets[i]._id.toString() === _id) {
                     dashboard.widgets.splice(i, 1);
                 }
             }
@@ -81,34 +82,95 @@ module.exports = function(server, model) {
             });
         }
 
-        function findDashboard(name, callback) {
-            var query  = model.Dashboard.where({ name: name });
-            query.findOne(function (err, dashboard) {
-                if (dashboard) {
-                    if (typeof callback === 'function') callback(dashboard);
-                }
-                else {
-                    if (err) r.fail(res, err);
-                    else r.fail(res);
+        findWidget(res, next, req.params.key, function(widget) {
 
-                    return next();
+            findDashboard(res, next, req.params.dashboard, function(dashboard) {
+
+                deleteDashboardReference(dashboard, widget._id, function() {
+
+                    widget.remove(function(err){
+                        if (err) r.fail(res, err, 400);
+                        else r.ok(res);
+
+                        return next();
+                    });
+                });
+            });
+        });
+    });
+
+    /**
+     * PUT: /api/dashboard/:dashboard/widget/:key
+     * Update widget meta-data (not the data content) by :key
+     *
+     * post body:
+     *  - object {
+     *              "size": {
+     *                  "x": 2,
+     *                  "y": 2
+     *              },
+     *              "position": [2,2]
+     *           }
+     */
+    server.put('/api/dashboard/:dashboard/widget/:key', function(req, res, next) {
+
+        function updateDashboardReference(dashboard, _id, obj, callback) {
+            _id = _id.toString();
+
+            for (var i=0; i<dashboard.widgets.length; i++) {
+                if (dashboard.widgets[i]._id.toString() === _id) {
+                    dashboard.widgets.set(i, extend(dashboard.widgets[i], obj));
                 }
+            }
+            dashboard.save(function(err, data) {
+                if (err) r.fail(res, err, 400);
+                else if (typeof callback === 'function') callback(data);
             });
         }
 
-        var query  = model.Widget.where({ key: req.params.key });
+        findWidget(res, next, req.params.key, function(widget) {
+
+            findDashboard(res, next, req.params.dashboard, function(dashboard) {
+
+                // TODO: add ability to change only one attribute?
+                try {
+                    var _raw = JSON.parse(req.body.toString()),
+                        obj = {
+                            position: _raw.position,
+                            size: {
+                                x:  _raw.size.x,
+                                y:  _raw.size.y
+                            }
+                        };
+                    if (Object.prototype.toString.call( obj.position) !== "[object Array]" || obj.position.length < 2 ) {
+                        throw "ValidationError"
+                    }
+                }
+                catch (e) {
+                    r.fail(res, {message: "Configuration object is not valid"}, 400);
+                    return next();
+                }
+
+                updateDashboardReference(dashboard, widget._id, obj, function(data) {
+                    r.ok(res);
+                    return next();
+                });
+            });
+        });
+    });
+
+    /**
+     * Find widget by key inside the request
+     * @param res
+     * @param next
+     * @param key
+     * @param callback (with the 'widget' argument)
+     */
+    function findWidget(res, next, key, callback) {
+        var query  = model.Widget.where({ key: key });
         query.findOne(function (err, widget) {
             if (widget) {
-                findDashboard(req.params.dashboard, function(dashboard) {
-                    deleteDashboardReference(dashboard, widget._id, function() {
-                        widget.remove(function(err, data){
-                            if (err) r.fail(res, err, 400);
-                            else r.ok(res);
-
-                            return next();
-                        });
-                    });
-                });
+                if (typeof callback === 'function') callback(widget);
             }
             else {
                 if (err) r.fail(res, err, 400);
@@ -117,6 +179,28 @@ module.exports = function(server, model) {
                 return next();
             }
         });
-    });
+    }
+
+    /**
+     * Find dashboard by name inside the request
+     * @param res
+     * @param next
+     * @param name
+     * @param callback (with the 'dashboard' argument)
+     */
+    function findDashboard(res, next, name, callback) {
+        var query  = model.Dashboard.where({ name: name });
+        query.findOne(function (err, dashboard) {
+            if (dashboard) {
+                if (typeof callback === 'function') callback(dashboard);
+            }
+            else {
+                if (err) r.fail(res, err);
+                else r.fail(res);
+
+                return next();
+            }
+        });
+    }
 
 };
