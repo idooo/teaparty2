@@ -5,5 +5,9 @@ angular.module("app.services")
         return $resource('/api/dashboard/:dashboard/widget/:key', {
             dashboard: '@dashboard',
             key: '@key'
+        }, {
+            update: {
+                method:'PUT'
+            }
         });
     });

@@ -114,20 +114,54 @@ module.exports = function(server, model) {
      */
     server.put('/api/dashboard/:dashboard/widget/:key', function(req, res, next) {
 
+        /**
+         * Check if size or position data was changed
+         * @param oldData
+         * @param newData
+         * @returns {boolean}
+         */
+        function wasDataChanged(oldData, newData) {
+            var isChanged = false;
+
+            // TODO: so dirty?
+            isChanged = isChanged || (newData.position && oldData.position.toString() !== newData.position.toString());
+            isChanged = isChanged || (newData.size && oldData.size.x !== newData.size.x);
+            isChanged = isChanged || (newData.size && oldData.size.y !== newData.size.y);
+
+            return isChanged;
+        }
+
+        /**
+         * Update widgets reference in the dashboard and save it to the db
+         * @param dashboard
+         * @param _id
+         * @param obj
+         * @param callback
+         * @returns {*|EmbeddedDocument}
+         */
         function updateDashboardReference(dashboard, _id, obj, callback) {
             _id = _id.toString();
 
             for (var i=0; i<dashboard.widgets.length; i++) {
                 if (dashboard.widgets[i]._id.toString() === _id) {
-                    dashboard.widgets.set(i, extend(dashboard.widgets[i], obj));
+                    if (wasDataChanged(dashboard.widgets[i], obj)) {
+                        dashboard.widgets.set(i, extend(dashboard.widgets[i], obj));
+                        return dashboard.save(function(err, data) {
+                            console.log('saved');
+                            if (err) r.fail(res, err, 400);
+                            else if (typeof callback === 'function') callback(data);
+                        });
+                    }
                 }
             }
-            dashboard.save(function(err, data) {
-                if (err) r.fail(res, err, 400);
-                else if (typeof callback === 'function') callback(data);
-            });
+            if (typeof callback === 'function') callback();
         }
 
+        /**
+         * Validate input position and size objects
+         * @param rawData
+         * @returns {{}|false}
+         */
         function validateData(rawData) {
             var isPostion = false,
                 isSize = false,
@@ -147,7 +181,7 @@ module.exports = function(server, model) {
                     y: rawData.size.y
                 }
             }
-            if (!(isSize || isPostion)) throw "ValidationError";
+            if (!(isSize || isPostion)) return false;
 
             return data;
         }
@@ -156,15 +190,13 @@ module.exports = function(server, model) {
 
             findDashboard(res, next, req.params.dashboard, function(dashboard) {
 
-                try {
-                    var obj = validateData(JSON.parse(req.body.toString()));
-                }
-                catch (e) {
+                var obj = validateData(req.params);
+                if (!obj) {
                     r.fail(res, {message: "Configuration object is not valid"}, 400);
                     return next();
                 }
 
-                updateDashboardReference(dashboard, widget._id, obj, function(data) {
+                updateDashboardReference(dashboard, widget._id, obj, function() {
                     r.ok(res);
                     return next();
                 });

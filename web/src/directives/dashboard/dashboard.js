@@ -20,7 +20,7 @@ angular.module('app.directives')
             });
 
         },
-        controller: function($scope, $element, $attrs, $compile) {
+        controller: function($scope, $element, $attrs, $compile, Widget) {
 
             $scope.gridsterOpts = {
                 resizable: {
@@ -40,11 +40,14 @@ angular.module('app.directives')
                 var template = '<div gridster="gridsterOpts">';
                 $scope.selectedDashboard.widgets.forEach(function(widget, index) {
                     template += [
-                        '<li gridster-item row="' + widget.position[0] + '" col="' + widget.position[1] + '" size-x="' + widget.size.x + '" size-y="' + widget.size.y + '" >',
+                        '<li gridster-item row="' + widget.position[0] + '" col="' + widget.position[1] + '" ',
+                            'size-x="' + widget.size.x + '" size-y="' + widget.size.y + '" key="'+ widget.key +'">',
+
                             '<widget-container dashboard-name="' + $scope.selectedDashboard.name + '" widget-key="' + widget.key + '">',
                                 '<widget-' + widget.type + ' widget="selectedDashboard.widgets['+index+']">',
                                 '</widget-' + widget.type + '>',
                             '</widget-container>',
+
                         '</li>'
                     ].join('');
                 });
@@ -57,13 +60,21 @@ angular.module('app.directives')
             };
 
             function onResize(event, $element, widget, size) {
-                console.log('resize stop - widget arg:', widget);
                 console.log('resize stop - new size arg:', size);
+                Widget.update({
+                    dashboard: $scope.selectedDashboard.name,
+                    key: widget.key,
+                    size: size
+                });
             }
 
             function onDrag(event, $element, widget, position) {
-                console.log('drag stop - widget arg:', widget);
                 console.log('drag stop - new position arg:', position);
+                Widget.update({
+                    dashboard: $scope.selectedDashboard.name,
+                    key: widget.key,
+                    position: position
+                });
             }
         }
     }
