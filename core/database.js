@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var models = ['dashboard', 'widget'],
+var models = ['dashboard', 'widget', 'rotation'],
     model = {};
 
 module.exports = function(config) {
