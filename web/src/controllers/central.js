@@ -2,7 +2,7 @@
 
 angular
     .module('teaparty2')
-    .controller('CentralController', function($scope, ngDialog, Auth, Dashboard, Widget, Sockets) {
+    .controller('CentralController', function($rootScope, $scope, $state, $stateParams, ngDialog, Auth, Dashboard, Widget, Sockets) {
 
         var self = this;
 
@@ -12,6 +12,7 @@ angular
         self.loadDashboard = loadDashboard;
         self.showNewDashboardDialog = showNewDashboardDialog;
         self.showNewWidgetDialog = showNewWidgetDialog;
+        self.goToDashboard = goToDashboard;
         self.removeDashboard = removeDashboard;
 
         Sockets.on('update_widgets', function(data) {
@@ -21,14 +22,9 @@ angular
             });
         });
 
-        $scope.$on('dashboardAddedEvent', function(event, addedDashboard) {
-            getDashboardsList(function(dashboards) {
-                for (var i=0; i<dashboards.length; i++) {
-                    if (dashboards[i].name === addedDashboard.name) {
-                        return loadDashboard(i);
-                    }
-                }
-            })
+        $scope.$on('dashboardAddedEvent', function() {
+            $rootScope.dashboards = [];
+            init();
         });
 
         $scope.$on('widgetAddedEvent', function(event, data) {
@@ -39,9 +35,35 @@ angular
             }
         });
 
-        getDashboardsList(function() {
-            loadDashboard(0);
-        });
+        init();
+
+        function init() {
+
+            var selectDashboard = function(dashboards) {
+                if (typeof $stateParams.dashboard !== 'undefined' && $stateParams.dashboard) {
+                    for (var i = 0; i < dashboards.length; i++) {
+                        if (dashboards[i].url === $stateParams.dashboard) return loadDashboard(i);
+                    }
+                    $state.go('app', {dashboard: ''});
+                }
+                return loadDashboard(0);
+            };
+
+            if (typeof $rootScope.dashboards === 'undefined' || $rootScope.dashboards.length === 0) {
+                getDashboardsList(function(dashboards) {
+                    $rootScope.dashboards = dashboards;
+                    selectDashboard(dashboards);
+                });
+            }
+            else {
+                self.dashboards = $rootScope.dashboards;
+                selectDashboard(self.dashboards);
+            }
+        }
+
+        function goToDashboard(url) {
+            $state.go('app', {dashboard: url}, {reload: false});
+        }
 
         function getDashboardsList(callback) {
             Dashboard.list(function(data) {

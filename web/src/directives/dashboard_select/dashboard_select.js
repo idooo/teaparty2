@@ -17,7 +17,6 @@ angular.module('app.directives')
             scope.showDropdown = false;
 
             scope.select = function(index) {
-                scope.selectedElement = scope.options[index];
                 scope.showDropdown = false;
                 scope.onChange(index);
             };
@@ -25,14 +24,6 @@ angular.module('app.directives')
             scope.removeDashboard = function(dashboardName) {
                 scope.onRemove(dashboardName);
             }
-        },
-        controller: function($scope) {
-            var listener = $scope.$watch("options", function (newValue) {
-                if (typeof newValue !== 'undefined' && newValue.length > 0) {
-                    $scope.selectedElement = newValue[0];
-                    listener();
-                }
-            });
         }
     }
 });

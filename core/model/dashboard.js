@@ -1,4 +1,9 @@
-var modelName = 'Dashboard';
+var uuid = require('node-uuid'),
+    modelName = 'Dashboard';
+
+function getUrl() {
+    return uuid.v1().replace(/-/g, '');
+}
 
 module.exports = function(mongoose) {
 
@@ -10,7 +15,10 @@ module.exports = function(mongoose) {
             required: true,
             unique: true
         },
-        url: String,
+        url: {
+            type: String,
+            default: getUrl
+        },
         widgets: Array,
         private: {
             type: Boolean,
