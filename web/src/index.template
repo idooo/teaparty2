@@ -18,6 +18,7 @@
         <!-- bower:css -->
 
         <!-- endbower -->
+        <link rel="stylesheet" href="/styles/vendor.css">
         <!-- endbuild -->
 
     </head>
@@ -30,6 +31,7 @@
     <!-- bower:js -->
 
     <!-- endbower -->
+    <!-- include: "type": "js", "files": "scripts/vendor.js" -->
     <!-- endbuild -->
 
     <!-- build:js scripts/app.min.js -->

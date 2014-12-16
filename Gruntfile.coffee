@@ -17,6 +17,7 @@ module.exports = (grunt) ->
 
     settings:
       app: 'web/src'
+      vendor: 'web/vendor'
       widgets: 'widgets'
       dist: 'web/dist'
       tmp: '.tmp'
@@ -58,6 +59,7 @@ module.exports = (grunt) ->
         files:
           "<%= settings.dist %>/styles/widgets.css": "<%= settings.widgets %>/**/*.less"
           "<%= settings.dist %>/styles/main.css": "<%= settings.app %>/styles/index.less"
+          "<%= settings.dist %>/styles/vendor.css": "<%= settings.vendor %>/**/*.less"
 
   # ngmin
 
@@ -68,6 +70,11 @@ module.exports = (grunt) ->
             "<%= settings.app %>/app.js",
             "<%= settings.app %>/**/*.js",
             "<%= settings.widgets %>/**/view/*.js",
+          ]
+      vendor:
+        files:
+          '<%= settings.dist %>/scripts/vendor.js': [
+            "<%= settings.vendor %>/**/*.js",
           ]
 
     copy:
