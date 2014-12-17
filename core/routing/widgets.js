@@ -147,7 +147,6 @@ module.exports = function(server, model) {
                     if (wasDataChanged(dashboard.widgets[i], obj)) {
                         dashboard.widgets.set(i, extend(dashboard.widgets[i], obj));
                         return dashboard.save(function(err, data) {
-                            console.log('saved');
                             if (err) r.fail(res, err, 400);
                             else if (typeof callback === 'function') callback(data);
                         });

@@ -12,7 +12,7 @@ module.exports = function(mongoose) {
             type: String,
             default: getUrl
         },
-        widgets: {
+        dashboards: {
             type: Array,
             default: Array
         },

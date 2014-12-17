@@ -1,5 +1,5 @@
 
-var defaults = ['_id', '__v'];
+var defaults = ['__v'];
 
 module.exports = function(obj, fields) {
     try {
