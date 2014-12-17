@@ -12,7 +12,9 @@ config.widgets = require('./core/widget_loader');
 server.use(restify.bodyParser());
 
 require('./core/routing')(server, model, config);
-require('./core/synchronizer')(io, model, config);
+
+if (process.env.nosync !== "true")
+    require('./core/synchronizer')(io, model, config);
 
 server.listen(config.server.port, function () {
     console.log('socket.io server listening at %s', server.url);
