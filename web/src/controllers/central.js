@@ -12,6 +12,7 @@ angular
         self.loadDashboard = loadDashboard;
         self.showNewDashboardDialog = showNewDashboardDialog;
         self.showNewWidgetDialog = showNewWidgetDialog;
+        self.showRotationsDialog = showRotationsDialog;
         self.goToDashboard = goToDashboard;
         self.removeDashboard = removeDashboard;
 
@@ -106,6 +107,13 @@ angular
                 data: {
                     dashboard: self.selectedDashboard
                 }
+            });
+        }
+
+        function showRotationsDialog() {
+            ngDialog.open({
+                template: 'views/modal/rotation.html',
+                controller: 'RotationController as ctrl'
             });
         }
 

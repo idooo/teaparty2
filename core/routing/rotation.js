@@ -73,6 +73,62 @@ module.exports = function(server, model) {
     });
 
     /**
+     * GET: /api/rotations
+     * Get the rotations list
+     */
+    server.get('/api/rotations', function(req, res, next) {
+
+        function loadDashboards(callback) {
+            var query = model.Dashboard.where();
+            query.find(function (err, dashboards) {
+                if (err) {
+                    r.fail(res, err);
+                    return next();
+                }
+
+                var formattedDashboards = {};
+
+                dashboards.forEach(function(dashboard) {
+                    formattedDashboards[dashboard._id.toString()] = dashboard;
+                });
+
+                if (typeof callback !== 'undefined') callback(formattedDashboards);
+            })
+        }
+
+        loadDashboards(function(formattedDashboards) {
+
+            var query  = model.Rotation.where();
+            query.find(function (err, rotations) {
+                if (err) {
+                    r.fail(res, err);
+                    return next();
+                }
+
+                var formattedRotations = [];
+
+                rotations.forEach(function(rotation) {
+                    var dashboards = [];
+                    rotation.dashboards.forEach(function(rawDashboard) {
+
+                        var _strID = rawDashboard._id.toString();
+                        if (formattedDashboards[_strID] !== 'undefined') {
+                            var _dashboard = sanitize(formattedDashboards[_strID], ['widgets']);
+                            _dashboard.timeout = rawDashboard.timeout;
+                            dashboards.push(_dashboard);
+                        }
+                    });
+                    rotation.dashboards = dashboards;
+                    formattedRotations.push(sanitize(rotation));
+                });
+
+                r.ok(res, formattedRotations);
+                return next();
+            });
+        });
+    });
+
+    /**
      * DELETE: /api/rotation/:url
      * Delete the rotation by key/url
      */

@@ -1,0 +1,33 @@
+<div>
+
+    rotation control
+
+    <div ng-repeat="rotation in ctrl.rotations" ng-hide="rotation.deleted">
+
+        <b>{{rotation.url}}</b>
+        <button ng-click="ctrl.removeRotation(rotation)">remove</button>
+
+        <div ng-repeat="dashboard in rotation.dashboards">
+            {{dashboard.name}} - {{dashboard.timeout}}
+            <button ng-click="ctrl.removeDashboardFromRotation(rotation, dashboard)">remove</button>
+            <button ng-click="ctrl.setDashboardTimeout(rotation, dashboard, 31)">set timeout</button>
+        </div>
+
+        <div style="font-size: 10px;">
+
+            <div ng-repeat="dashboard in ctrl.dashboards" ng-hide="ctrl.isDashboardInRotation(rotation, dashboard._id)">
+
+                {{dashboard.name}} - {{dashboard._id}}
+
+                <button ng-click="ctrl.addDashboardToRotation(rotation, dashboard)">add</button>
+
+            </div>
+            <br/>
+
+        </div>
+
+    </div>
+
+    <button ng-click="ctrl.createRotation()">add rotation</button>
+
+</div>
