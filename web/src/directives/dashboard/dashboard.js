@@ -8,7 +8,8 @@ angular.module('app.directives')
         replace: true,
         scope: {
             widgets: '=',
-            selectedDashboard: '=src'
+            selectedDashboard: '=src',
+            options: '=?'
         },
         templateUrl: TemplatePath.get('directive', 'dashboard'),
         link: function(scope) {
@@ -30,6 +31,12 @@ angular.module('app.directives')
                     stop: onDrag
                 }
             };
+
+            for (var key in $scope.options) {
+                if ($scope.options.hasOwnProperty(key)) {
+                    $scope.gridsterOpts[key] = $scope.options[key];
+                }
+            }
 
             $scope.renderDashboard = function() {
                 console.log('render dashboard', $scope.selectedDashboard.name);

@@ -2,70 +2,47 @@
 
 angular
     .module('teaparty2')
-    .controller('RotationController', function(ngDialog, Rotation, Dashboard) {
+    .controller('RotationController', function($timeout, $state, $stateParams, Rotation, Dashboard) {
 
         var self = this;
 
-        self.rotations = [];
-        self.dashboards = [];
+        self.rotation = {};
+        self.selectedDashboard = undefined;
 
-        self.removeRotation = removeRotation;
-        self.createRotation = createRotation;
-        self.removeDashboardFromRotation = removeDashboardFromRotation;
-        self.setDashboardTimeout = setDashboardTimeout;
-        self.addDashboardToRotation = addDashboardToRotation;
-        self.isDashboardInRotation = isDashboardInRotation;
+        self.options = {
+            resizable: { enabled: false },
+            draggable: { enabled: false }
+        };
 
         init();
 
         function init() {
-            self.rotations = Rotation.list();
-            self.dashboards = Dashboard.list();
-        }
-
-        function createRotation() {
-            (new Rotation()).$save();
-        }
-
-        function removeRotation(rotation) {
-            Rotation.delete({url: rotation.url});
-            rotation.deleted = true;
-        }
-
-        function removeDashboardFromRotation(rotation, dashboard) {
-            Rotation.removeDashboard({
-                url: rotation.url,
-                dashboardID: dashboard._id
-            }, function(){
-                for (var i=0; i<rotation.dashboards.length; i++) {
-                    if (rotation.dashboards[i]._id === dashboard._id) return rotation.dashboards.splice(i, 1);
+            self.rotation = Rotation.get({
+                url: $stateParams.url
+            }, function(response) {
+                if (response.dashboards.length > 0) {
+                    loadDashboardByIndex(0);
                 }
+            }, function() {
+                $state.go('app');
             })
         }
 
-        function setDashboardTimeout(rotation, dashboard, timeout) {
-            Rotation.updateDashboard({
-                url: rotation.url,
-                dashboardID: dashboard._id,
-                timeout: timeout
-            }, function(){
-                dashboard.timeout = timeout;
-            })
-        }
+        function loadDashboardByIndex(index) {
+            console.log('loadDashboardByIndex', index);
 
-        function addDashboardToRotation(rotation, dashboard) {
-            Rotation.addDashboard({
-                url: rotation.url,
-                dashboardID: dashboard._id
-            }, function () {
-                rotation.dashboards.push(dashboard);
+            if (self.rotation.dashboards.length <= index) index = 0;
+            var dashboard = self.rotation.dashboards[index];
+
+            Dashboard.get({name: dashboard.name}, function(data) {
+                self.selectedDashboard = data;
+                console.log(self.rotation.dashboards);
+
+                $timeout(function() {
+                    console.log('timeout');
+                    loadDashboardByIndex(index + 1)
+                }, self.rotation.dashboards[index].timeout * 1000)
             });
         }
 
-        function isDashboardInRotation(rotation, dashboardID) {
-            for (var i=0; i<rotation.dashboards.length; i++) {
-                if (rotation.dashboards[i]._id === dashboardID) return true;
-            }
-            return false;
-        }
 });

@@ -34,15 +34,24 @@ angular.module("app.widgets").factory('TemplatePath', function() {
 // Initial app config
 angular.module('teaparty2').config(function($stateProvider, $urlRouterProvider) {
 
-    $urlRouterProvider.otherwise('/');
+    $urlRouterProvider.otherwise('/d/');
 
 	$stateProvider
 		.state('app', {
-			url: '/:dashboard',
+			url: '/d/:dashboard',
 			views: {
 				'content': {
 					templateUrl: "/views/layout.html",
 					controller: 'CentralController as central'
+				}
+			}
+		})
+		.state('rotation', {
+			url: '/rotation/:url',
+			views: {
+				'content': {
+					templateUrl: "/views/rotation.html",
+					controller: 'RotationController as rotation'
 				}
 			}
 		})

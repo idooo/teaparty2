@@ -112,8 +112,8 @@ angular
 
         function showRotationsDialog() {
             ngDialog.open({
-                template: 'views/modal/rotation.html',
-                controller: 'RotationController as ctrl'
+                template: 'views/modal/rotations_control.html',
+                controller: 'RotationsControlController as ctrl'
             });
         }
 

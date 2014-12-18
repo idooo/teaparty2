@@ -55,14 +55,20 @@ module.exports = function(server, model) {
         var errorHandler = getErrorHandler(res, next);
         findRotation(req.params.url,
             function(rotation) {
-                var _ids = [];
-                rotation.dashboards.forEach(function(dashboardRef) {
-                    _ids.push(dashboardRef._id);
+                var _ids = [],
+                    timeouts = {};
+
+                rotation.dashboards.forEach(function(dashboard) {
+                    _ids.push(dashboard._id);
+                    timeouts[dashboard._id.toString()] = dashboard.timeout;
                 });
+
                 findDashboards(_ids, function(rawDashboards) {
                     var dashboards = [];
                     rawDashboards.forEach(function(rawDashboard) {
-                        dashboards.push(sanitize(rawDashboard, ['widgets']))
+                        var _dashboard = sanitize(rawDashboard, ['widgets']);
+                        _dashboard.timeout = timeouts[rawDashboard._id.toString()];
+                        dashboards.push(_dashboard);
                     });
                     rotation.dashboards = dashboards;
                     r.ok(res, rotation);
