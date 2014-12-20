@@ -1,16 +1,24 @@
 <div class="d-custom-select">
 
-    <div ng-click="showDropdown = !showDropdown">
+    <div class="d-custom-select__selector"
+         ng-click="showDropdown = !showDropdown"
+         ng-class="{'active': showDropdown}"   >
+
         <span>{{selected.name}}</span>
         <i class="icon-down-dir"></i>
+
     </div>
 
     <div class="d-custom-select__dropdown" ng-show="showDropdown">
-        <div ng-repeat="dashboard in options" ng-show="!dashboard.deleted">
-            <span ng-click="select(dashboard.url)"
-                  style="width: 100px; display: inline-block;">{{dashboard.name}}</span>
-            <span style="cursor: pointer" ng-click="removeDashboard(dashboard.name)">x</span>
+
+        <div class="d-custom-select__dropdown-item"
+             ng-repeat="dashboard in options"
+             ng-show="!dashboard.deleted">
+
+            <span ng-click="select(dashboard.url)">{{dashboard.name}}</span>
+
         </div>
+
     </div>
 
 </div>

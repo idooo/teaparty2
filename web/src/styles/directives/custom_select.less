@@ -1,9 +1,52 @@
+@import "../variables";
+@import "../mixins";
+
+// Variables
+
+@color: #fff - @background_color;
+@hover_color: lighten(@color, 20%);
+
+@dropdown_bg_color: darken(@background_color, 20%);
+
+// =======================================================================================
+
 .d-custom-select {
+	color: #fff - @background_color;
+	.user-select();
+	.transition(~"color 0.3s");
+
+	&__selector {
+		padding: 3px 4px 3px 8px;
+		cursor: pointer;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		font-size: 14px;
+
+		&:hover {
+			color: @hover_color;
+		}
+
+		&.active {
+			background-color: @dropdown_bg_color;
+		}
+	}
 
 	&__dropdown {
-		background-color: #fff;
-		box-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+		background-color: @dropdown_bg_color;
 		position: absolute;
+		padding: 8px 12px;
 		z-index: 100;
+	}
+
+	&__dropdown-item {
+		cursor: pointer;
+		font-weight: 300;
+		font-size: 12px;
+		padding: 2px 0;
+
+		&:hover {
+			color: @hover_color;
+		}
 	}
 }

@@ -1,7 +1,23 @@
 .d-widget-container {
-	display: block;
+	display: flex;
+	height: 100%;
+	width: 100%;
+	flex-direction: column;
 
 	&__controls {
-		
+		//display: none;
+		position: absolute;
+		bottom: 0;
+		right: 0;
+	}
+
+	&__body {
+		height: 100%;
+		width: 100%;
 	}
 }
+
+	.widget {
+		height: 100%;
+		width: 100%;
+	}

@@ -16,6 +16,9 @@ angular
         self.goToDashboard = goToDashboard;
         self.removeDashboard = removeDashboard;
 
+        self.isHeaderOpen = false;
+        self.isAdmin = false;
+
         Sockets.on('update_widgets', function(data) {
             console.log('update_widgets', data);
             data.forEach(function(updateObject) {

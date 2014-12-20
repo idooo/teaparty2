@@ -24,6 +24,7 @@ angular.module('app.directives')
         controller: function($scope, $element, $attrs, $compile, Widget) {
 
             $scope.gridsterOpts = {
+                columns: 8,
                 resizable: {
                     stop: onResize
                 },
@@ -51,7 +52,7 @@ angular.module('app.directives')
                             'size-x="' + widget.size.x + '" size-y="' + widget.size.y + '" key="'+ widget.key +'">',
 
                             '<widget-container dashboard-name="' + $scope.selectedDashboard.name + '" widget-key="' + widget.key + '">',
-                                '<widget-' + widget.type + ' widget="selectedDashboard.widgets['+index+']">',
+                                '<widget-' + widget.type + ' class="widget" widget="selectedDashboard.widgets['+index+']">',
                                 '</widget-' + widget.type + '>',
                             '</widget-container>',
 

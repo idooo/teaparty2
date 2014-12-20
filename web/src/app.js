@@ -40,7 +40,7 @@ angular.module('teaparty2').config(function($stateProvider, $urlRouterProvider) 
 		.state('app', {
 			url: '/d/:dashboard',
 			views: {
-				'content': {
+				content: {
 					templateUrl: "/views/layout.html",
 					controller: 'CentralController as central'
 				}
@@ -49,7 +49,7 @@ angular.module('teaparty2').config(function($stateProvider, $urlRouterProvider) 
 		.state('rotation', {
 			url: '/rotation/:url',
 			views: {
-				'content': {
+				content: {
 					templateUrl: "/views/rotation.html",
 					controller: 'RotationController as rotation'
 				}

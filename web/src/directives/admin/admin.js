@@ -6,13 +6,12 @@ angular.module('app.directives')
     return {
         restrict: 'EA',
         replace: true,
-        scope: {},
-        templateUrl: TemplatePath.get('directive', 'admin'),
-        link: function(scope, element) {
-            scope.isAdmin = false;
+        scope: {
+            isAdmin: '='
         },
+        templateUrl: TemplatePath.get('directive', 'admin'),
         controller: function($scope, $element, $attrs, Auth)  {
-            Auth.check().success(function(){
+            Auth.check().success(function() {
                 $scope.isAdmin = true;
             });
 

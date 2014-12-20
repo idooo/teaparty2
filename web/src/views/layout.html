@@ -1,24 +1,41 @@
 <header>
 
-    <div style="float: left;">
-        <admin-form></admin-form>
-    </div>
+    <div class="header-content">
 
-    <div style="float: left;">
-        <dashboard-select
+        <div class="header-content__element menu-toggler"
+             ng-click="central.isHeaderOpen = !central.isHeaderOpen">
+
+            <i class="icon-menu"></i>
+
+        </div>
+
+        <div class="header-content__element"
+             dashboard-select
                 options="central.dashboards"
                 selected="central.selectedDashboard"
                 on-remove="central.removeDashboard"
-                on-change="central.goToDashboard"></dashboard-select>
+                on-change="central.goToDashboard">
+        </div>
+
     </div>
 
-    <div>
-        <button ng-click="central.showNewDashboardDialog()">Add dashboard</button>
-        <button ng-click="central.showNewWidgetDialog()">Add widget</button>
-    </div>
+    <div class="header-content" ng-show="central.isHeaderOpen">
 
-    <div style="float: right;">
-        <button ng-click="central.showRotationsDialog()">Rotations</button>
+        <div admin-form is-admin="central.isAdmin" ng-hide="central.isAdmin"></div>
+
+        <div class="header-auth-content" ng-show="central.isAdmin">
+
+            <div>
+                <button ng-click="central.showNewDashboardDialog()">Add dashboard</button>
+                <button ng-click="central.showNewWidgetDialog()">Add widget</button>
+            </div>
+
+            <div style="float: right;">
+                <button ng-click="central.showRotationsDialog()">Rotations</button>
+            </div>
+
+        </div>
+
     </div>
 
 </header>
