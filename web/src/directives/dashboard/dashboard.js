@@ -84,6 +84,7 @@ angular.module('app.directives')
 
             function onResize(event, $element, widget, size) {
                 console.log('resize stop - new size arg:', size);
+                $scope.$broadcast('widgetSizeChangeEvent:'+widget.key);
                 Widget.update({
                     dashboard: $scope.selectedDashboard.name,
                     key: widget.key,
@@ -93,6 +94,7 @@ angular.module('app.directives')
 
             function onDrag(event, $element, widget, position) {
                 console.log('drag stop - new position arg:', position);
+                $scope.$broadcast('widgetPositionChangeEvent:'+widget.key);
                 Widget.update({
                     dashboard: $scope.selectedDashboard.name,
                     key: widget.key,

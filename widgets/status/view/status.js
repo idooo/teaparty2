@@ -10,11 +10,8 @@ angular.module('app.widgets')
             widget: '=widget'
         },
         templateUrl: TemplatePath.get('widget', 'status'),
-        link: function(scope, element) {
-
-        },
-        controller: function($scope, $element, $attrs, Subscriber)  {
-            Subscriber.subscribe($scope);
+        controller: function($scope, $element, $attrs, WidgetSubscriber)  {
+            WidgetSubscriber.update($scope);
         }
     }
 });
