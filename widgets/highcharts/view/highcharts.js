@@ -18,9 +18,11 @@ angular.module('app.widgets')
                 scope.chart = new Highcharts.Chart(scope.widget.data);
             };
 
+            scope.render();
+
             setTimeout(function() {
-                scope.render();
-            }, 2000);
+                scope.chart.reflow();
+            }, 1000);
         },
         controller: function($scope, $element, $attrs, WidgetSubscriber)  {
             WidgetSubscriber.update($scope, function() {

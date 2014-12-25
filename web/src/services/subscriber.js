@@ -9,11 +9,6 @@ angular.module("app.services")
                     if (typeof callback === 'function') callback(data);
                 });
             },
-            positionChange: function ($scope, callback) {
-                $scope.$on('widgetPositionChangeEvent:' + $scope.widget.key, function(event, data) {
-                    if (typeof callback === 'function') callback(data);
-                });
-            },
             sizeChange: function ($scope, callback) {
                 $scope.$on('widgetSizeChangeEvent:' + $scope.widget.key, function(event, data) {
                     if (typeof callback === 'function') callback(data);

@@ -2,149 +2,159 @@
 
 angular
     .module('teaparty2')
-    .controller('CentralController', function($rootScope, $scope, $state, $stateParams, ngDialog, Auth, Dashboard, Widget, Sockets) {
+    .controller('CentralController', CentralController);
 
-        var self = this;
+function CentralController($rootScope, $scope, $state, $stateParams, ngDialog, Settings, Auth, Dashboard, Sockets) {
 
-        $rootScope.isAuthorised = false;
+    var self = this;
 
-        self.dashboards = [];
-        self.dashboardOptions = {
-            resizable: { enabled: false },
-            draggable: { enabled: false }
-        };
-        self.selectedDashboard = undefined;
+    $rootScope.isAuthorised = false;
 
-        self.loadDashboard = loadDashboard;
-        self.goToDashboard = goToDashboard;
-        self.removeDashboard = removeDashboard;
-        self.lockUnlockDashboard = lockUnlockDashboard;
+    self.dashboards = [];
+    self.dashboardOptions = {
+        resizable: { enabled: false },
+        draggable: { enabled: false }
+    };
+    self.selectedDashboard = undefined;
 
-        // Modals openers
-        self.showNewDashboardDialog = showNewDashboardDialog;
-        self.showNewWidgetDialog = showNewWidgetDialog;
-        self.showRotationsDialog = showRotationsDialog;
-        self.showLoginDialog = showLoginDialog;
+    self.loadDashboard = loadDashboard;
+    self.goToDashboard = goToDashboard;
+    self.removeDashboard = removeDashboard;
+    self.lockUnlockDashboard = lockUnlockDashboard;
 
-        self.isHeaderOpen = false;
+    // Modals openers
+    self.showNewDashboardDialog = showNewDashboardDialog;
+    self.showNewWidgetDialog = showNewWidgetDialog;
+    self.showRotationsDialog = showRotationsDialog;
+    self.showLoginDialog = showLoginDialog;
 
-        Sockets.on('update_widgets', function(data) {
-            console.log('update_widgets', data);
-            data.forEach(function(updateObject) {
-                $scope.$broadcast('widgetUpdateEvent:' + updateObject.key, updateObject.data);
-            });
+    self.isHeaderOpen = false;
+
+    Sockets.on('update_widgets', function(data) {
+        console.log('update_widgets', data);
+        data.forEach(function(updateObject) {
+            $scope.$broadcast('widgetUpdateEvent:' + updateObject.key, updateObject.data);
         });
+    });
 
-        $scope.$on('dashboardAddedEvent', function() {
-            $rootScope.dashboards = [];
-            init();
-        });
-
-        $scope.$on('widgetAddedEvent', function(event, data) {
-            for (var i=0; i<self.dashboards.length; i++) {
-                if (self.dashboards[i].name === data.dashboardName) {
-                    return loadDashboard(i);
-                }
-            }
-        });
-
+    $scope.$on('dashboardAddedEvent', function() {
+        $rootScope.dashboards = [];
         init();
+    });
 
-        function init() {
+    $scope.$on('widgetAddedEvent', function(event, data) {
+        for (var i=0; i<self.dashboards.length; i++) {
+            if (self.dashboards[i].name === data.dashboardName) {
+                return loadDashboard(i);
+            }
+        }
+    });
 
-            Auth.check(undefined, function(isAuthorised) {
-                $rootScope.isAuthorised = isAuthorised;
-            });
+    init();
 
-            var selectDashboard = function(dashboards) {
-                if (typeof $stateParams.dashboard !== 'undefined' && $stateParams.dashboard) {
-                    for (var i = 0; i < dashboards.length; i++) {
-                        if (dashboards[i].url === $stateParams.dashboard) return loadDashboard(i);
-                    }
-                    $state.go('app', {dashboard: ''});
-                }
-                return loadDashboard(0);
-            };
+    function init() {
 
-            if (typeof $rootScope.dashboards === 'undefined' || $rootScope.dashboards.length === 0) {
-                getDashboardsList(function(dashboards) {
-                    $rootScope.dashboards = dashboards;
-                    selectDashboard(dashboards);
-                });
+        Settings.get(function(settings) {
+            if (typeof settings !== 'undefined' && settings.auth === false) {
+                $rootScope.isAuthorised = true;
+                Auth.token = 0;
             }
             else {
-                self.dashboards = $rootScope.dashboards;
-                selectDashboard(self.dashboards);
+                Auth.check(undefined, function (isAuthorised) {
+                    $rootScope.isAuthorised = isAuthorised;
+                });
             }
-        }
+        });
 
-        function goToDashboard(url) {
-            $state.go('app', {dashboard: url}, {reload: false});
-        }
-
-        function getDashboardsList(callback) {
-            Dashboard.list(function(data) {
-                self.dashboards = data;
-                if (self.dashboards.length && typeof callback === 'function') {
-                    callback(self.dashboards);
+        var selectDashboard = function(dashboards) {
+            if (typeof $stateParams.dashboard !== 'undefined' && $stateParams.dashboard) {
+                for (var i = 0; i < dashboards.length; i++) {
+                    if (dashboards[i].url === $stateParams.dashboard) return loadDashboard(i);
                 }
+                $state.go('app', {dashboard: ''});
+            }
+            return loadDashboard(0);
+        };
+
+        if (typeof $rootScope.dashboards === 'undefined' || $rootScope.dashboards.length === 0) {
+            getDashboardsList(function(dashboards) {
+                $rootScope.dashboards = dashboards;
+                selectDashboard(dashboards);
             });
         }
-
-        function loadDashboard(index) {
-            var dashboard = self.dashboards[index];
-            console.log('loadDashboard', dashboard.name);
-            Dashboard.get({name: dashboard.name}, function(data) {
-                self.selectedDashboard = data;
-            });
+        else {
+            self.dashboards = $rootScope.dashboards;
+            selectDashboard(self.dashboards);
         }
+    }
 
-        function removeDashboard(dashboardName) {
-            Dashboard.delete({name: dashboardName}, function(data) {
-                for (var i=0; i<self.dashboards.length; i++) {
-                    if (dashboardName === self.dashboards[i].name) {
-                        self.dashboards[i].deleted = true;
-                    }
+    function goToDashboard(url) {
+        $state.go('app', {dashboard: url}, {reload: false});
+    }
+
+    function getDashboardsList(callback) {
+        Dashboard.list(function(data) {
+            self.dashboards = data;
+            if (self.dashboards.length && typeof callback === 'function') {
+                callback(self.dashboards);
+            }
+        });
+    }
+
+    function loadDashboard(index) {
+        var dashboard = self.dashboards[index];
+        console.log('loadDashboard', dashboard.name);
+        Dashboard.get({name: dashboard.name}, function(data) {
+            self.selectedDashboard = data;
+        });
+    }
+
+    function removeDashboard(dashboardName) {
+        Dashboard.delete({name: dashboardName}, function(data) {
+            for (var i=0; i<self.dashboards.length; i++) {
+                if (dashboardName === self.dashboards[i].name) {
+                    self.dashboards[i].deleted = true;
                 }
-            });
-        }
+            }
+        });
+    }
 
-        function lockUnlockDashboard() {
-            self.dashboardOptions.resizable.enabled = !self.dashboardOptions.resizable.enabled;
-            self.dashboardOptions.draggable.enabled = !self.dashboardOptions.draggable.enabled;
-        }
+    function lockUnlockDashboard() {
+        self.dashboardOptions.resizable.enabled = !self.dashboardOptions.resizable.enabled;
+        self.dashboardOptions.draggable.enabled = !self.dashboardOptions.draggable.enabled;
+    }
 
-        // Modals
+    // Modals
 
-        function showNewDashboardDialog() {
-            ngDialog.open({
-                template: 'views/modal/new_dashboard.html',
-                controller: 'NewDashboardController as ctrl'
-            });
-        }
+    function showNewDashboardDialog() {
+        ngDialog.open({
+            template: 'views/modal/new_dashboard.html',
+            controller: 'NewDashboardController as ctrl'
+        });
+    }
 
-        function showNewWidgetDialog() {
-            ngDialog.open({
-                template: 'views/modal/new_widget.html',
-                controller: 'NewWidgetController as ctrl',
-                data: {
-                    dashboard: self.selectedDashboard
-                }
-            });
-        }
+    function showNewWidgetDialog() {
+        ngDialog.open({
+            template: 'views/modal/new_widget.html',
+            controller: 'NewWidgetController as ctrl',
+            data: {
+                dashboard: self.selectedDashboard
+            }
+        });
+    }
 
-        function showRotationsDialog() {
-            ngDialog.open({
-                template: 'views/modal/rotations_control.html',
-                controller: 'RotationsControlController as ctrl'
-            });
-        }
+    function showRotationsDialog() {
+        ngDialog.open({
+            template: 'views/modal/rotations_control.html',
+            controller: 'RotationsControlController as ctrl'
+        });
+    }
 
-        function showLoginDialog() {
-            ngDialog.open({
-                template: 'views/modal/login.html',
-                controller: 'LoginController as ctrl'
-            });
-        }
+    function showLoginDialog() {
+        ngDialog.open({
+            template: 'views/modal/login.html',
+            controller: 'LoginController as ctrl'
+        });
+    }
 
-});
+}

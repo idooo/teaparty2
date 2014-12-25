@@ -1,6 +1,7 @@
 
 var routes = [
     'static',
+    'settings',
     'dashboards',
     'widgets',
     'auth',

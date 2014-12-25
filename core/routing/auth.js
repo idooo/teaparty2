@@ -37,7 +37,7 @@ module.exports = function(server, model, config) {
     });
 
     /**
-     * GET /auth/:token
+     * GET /api/auth/:token
      * Check if :token is authorised and valid
      */
     server.get('/api/auth/:token', function(req, res, next) {
