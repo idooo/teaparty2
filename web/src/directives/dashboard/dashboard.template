@@ -1,4 +1,4 @@
-<div class="d-dashboard">
+<div class="d-dashboard d-dashboard--{{state}}">
 
     <div class="spinner"></div>
 

@@ -6,18 +6,27 @@ angular
 
         var self = this;
 
+        $rootScope.isAuthorised = false;
+
         self.dashboards = [];
+        self.dashboardOptions = {
+            resizable: { enabled: false },
+            draggable: { enabled: false }
+        };
         self.selectedDashboard = undefined;
 
         self.loadDashboard = loadDashboard;
+        self.goToDashboard = goToDashboard;
+        self.removeDashboard = removeDashboard;
+        self.lockUnlockDashboard = lockUnlockDashboard;
+
+        // Modals openers
         self.showNewDashboardDialog = showNewDashboardDialog;
         self.showNewWidgetDialog = showNewWidgetDialog;
         self.showRotationsDialog = showRotationsDialog;
-        self.goToDashboard = goToDashboard;
-        self.removeDashboard = removeDashboard;
+        self.showLoginDialog = showLoginDialog;
 
         self.isHeaderOpen = false;
-        self.isAdmin = false;
 
         Sockets.on('update_widgets', function(data) {
             console.log('update_widgets', data);
@@ -42,6 +51,10 @@ angular
         init();
 
         function init() {
+
+            Auth.check(undefined, function(isAuthorised) {
+                $rootScope.isAuthorised = isAuthorised;
+            });
 
             var selectDashboard = function(dashboards) {
                 if (typeof $stateParams.dashboard !== 'undefined' && $stateParams.dashboard) {
@@ -96,6 +109,13 @@ angular
             });
         }
 
+        function lockUnlockDashboard() {
+            self.dashboardOptions.resizable.enabled = !self.dashboardOptions.resizable.enabled;
+            self.dashboardOptions.draggable.enabled = !self.dashboardOptions.draggable.enabled;
+        }
+
+        // Modals
+
         function showNewDashboardDialog() {
             ngDialog.open({
                 template: 'views/modal/new_dashboard.html',
@@ -117,6 +137,13 @@ angular
             ngDialog.open({
                 template: 'views/modal/rotations_control.html',
                 controller: 'RotationsControlController as ctrl'
+            });
+        }
+
+        function showLoginDialog() {
+            ngDialog.open({
+                template: 'views/modal/login.html',
+                controller: 'LoginController as ctrl'
             });
         }
 

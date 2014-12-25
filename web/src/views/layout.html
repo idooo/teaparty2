@@ -2,15 +2,7 @@
 
     <div class="header-content">
 
-        <div class="header-content__element menu-toggler"
-             ng-click="central.isHeaderOpen = !central.isHeaderOpen">
-
-            <i class="icon-menu"></i>
-
-        </div>
-
-        <div class="header-content__element"
-             dashboard-select
+        <div dashboard-select
                 options="central.dashboards"
                 selected="central.selectedDashboard"
                 on-remove="central.removeDashboard"
@@ -19,29 +11,24 @@
 
     </div>
 
-    <div class="header-content" ng-show="central.isHeaderOpen">
+    <div class="header-content header-content--right" ng-show="isAuthorised">
+        <a href="#" ng-click="central.lockUnlockDashboard()">Lock/Unlock</a>
+        <a href="#" class="" ng-click="central.showNewDashboardDialog()">Add dashboard</a>
+        <a href="#" ng-click="central.showNewWidgetDialog()">Add widget</a>
+        <a href="#" ng-click="central.showRotationsDialog()">Rotations</a>
+    </div>
 
-        <div admin-form is-admin="central.isAdmin" ng-hide="central.isAdmin"></div>
-
-        <div class="header-auth-content" ng-show="central.isAdmin">
-
-            <div>
-                <button ng-click="central.showNewDashboardDialog()">Add dashboard</button>
-                <button ng-click="central.showNewWidgetDialog()">Add widget</button>
-            </div>
-
-            <div style="float: right;">
-                <button ng-click="central.showRotationsDialog()">Rotations</button>
-            </div>
-
-        </div>
-
+    <div class="header-content header-content--right" ng-hide="isAuthorised">
+        <a href="#" ng-click="central.showLoginDialog()">Login</a>
     </div>
 
 </header>
 
 <div>
 
-    <dashboard src="central.selectedDashboard" widgets="central.selectedDashboard.widgets"></dashboard>
+    <dashboard
+            options="central.dashboardOptions"
+            src="central.selectedDashboard"
+            widgets="central.selectedDashboard.widgets"></dashboard>
 
 </div>

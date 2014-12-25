@@ -18,9 +18,14 @@ module.exports = function(server, model, config) {
      */
     server.post('/api/auth', function(req, res, next) {
 
+        if (config.auth === false) {
+            r.ok(res, {token: 0});
+            return next();
+        }
+
         var isCorrect = (req.params.username === adminUsername && req.params.password === adminPassword);
 
-        if (!isCorrect) r.fail(res, {message: 'Wrong password'}, 403);
+        if (!isCorrect) r.fail(res, {message: 'Wrong password'}, 400);
         else {
             var token = uuid.v1();
             config.tokens[token] = new Date();
@@ -36,8 +41,16 @@ module.exports = function(server, model, config) {
      * Check if :token is authorised and valid
      */
     server.get('/api/auth/:token', function(req, res, next) {
-        if (typeof config.tokens[req.params.token] === 'undefined') r.fail(res, {message: 'Token not valid'}, 403);
-        else r.ok(res);
+
+        if (config.auth === false) {
+            r.ok(res);
+        }
+        else {
+            if (typeof config.tokens[req.params.token] === 'undefined') {
+                r.fail(res, {message: 'Token not valid'}, 400);
+            }
+            else r.ok(res);
+        }
 
         return next();
     });

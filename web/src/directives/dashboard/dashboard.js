@@ -13,6 +13,8 @@ angular.module('app.directives')
         },
         templateUrl: TemplatePath.get('directive', 'dashboard'),
         link: function(scope) {
+            scope.state = 'locked';
+
             console.log('link dashboard');
 
             scope.$watch('selectedDashboard', function(newDashboard) {
@@ -20,24 +22,37 @@ angular.module('app.directives')
                 scope.renderDashboard();
             });
 
+            scope.$watch('options', function() {
+                scope.updateOptions();
+            }, true);
+
         },
         controller: function($scope, $element, $attrs, $compile, Widget) {
 
             $scope.gridsterOpts = {
                 columns: 8,
-                resizable: {
-                    stop: onResize
-                },
-                draggable: {
-                    stop: onDrag
-                }
+                resizable: {},
+                draggable: {}
             };
 
-            for (var key in $scope.options) {
-                if ($scope.options.hasOwnProperty(key)) {
-                    $scope.gridsterOpts[key] = $scope.options[key];
+            $scope.updateOptions = function() {
+                console.log('update gridster options', $scope.options);
+                for (var key in $scope.options) {
+                    if ($scope.options.hasOwnProperty(key)) {
+                        $scope.gridsterOpts[key] = $scope.options[key];
+                    }
                 }
-            }
+                if (typeof $scope.gridsterOpts.resizable.stop !== 'function') {
+                    $scope.gridsterOpts.resizable.stop = onResize;
+                }
+                if (typeof $scope.gridsterOpts.draggable.stop !== 'function') {
+                    $scope.gridsterOpts.draggable.stop = onDrag;
+                }
+
+                $scope.state = ($scope.gridsterOpts.resizable.enabled && $scope.gridsterOpts.draggable.enabled) ? 'unlocked' : 'locked';
+
+                console.log('updated options', $scope.gridsterOpts);
+            };
 
             $scope.renderDashboard = function() {
                 console.log('render dashboard', $scope.selectedDashboard.name);

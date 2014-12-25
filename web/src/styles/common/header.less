@@ -1,22 +1,39 @@
 @import "../variables";
 @import "../mixins";
 
-header {
+// Variables
 
+@link_color: @text_color;
+@link_hover_color: lighten(@text_color, 20%);
+
+// ===============================================================
+
+header {
+	.clearfix();
+	height: 26px;
 }
 
 	.header-content {
-		.clearfix();
+		float: left;	
 
-		&__element {
-			float: left;
+		&--right {
+			float: right;
+		}
+
+		& > a {
+			font-size: 12px;
+			margin: 5px 8px;
+			display: inline-block;
+			color: @link_color;
+			text-decoration: none;
+			border-bottom: 1px dotted darken(@text_color, 33%);
+
+			.transition(~"all 0.3s");
+
+			&:hover {
+				color: @link_hover_color;
+				border-bottom-color: @text_color;
+			}
 		}
 	}
 
-	.menu-toggler {
-		cursor: pointer;
-		font-size: 18px;
-		margin-left: 5px;
-		margin-right: 10px;
-		color: @text_color;
-	}

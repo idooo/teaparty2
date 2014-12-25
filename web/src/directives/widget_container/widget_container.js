@@ -12,9 +12,6 @@ angular.module('app.directives')
             dashboardName: '@'
         },
         templateUrl: TemplatePath.get('directive', 'widget_container'),
-        link: function(scope, element, attrs) {
-
-        },
         controller: function($scope, $element, $attrs, Widget)  {
             $scope.removeWidget = function() {
                 console.log('remove widget', $scope.widgetKey);

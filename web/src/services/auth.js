@@ -5,6 +5,7 @@ angular.module("app.services")
 
         var service = {
             token: undefined,
+            isAuthorised: false,
 
             /**
              * Auth user to get the auth token
@@ -21,7 +22,13 @@ angular.module("app.services")
                 http.success(function(data) {
                     localStorageService.set('token', data.token);
                     service.token = data.token;
-                    service.isAuth = true;
+                    service.isAuthorised = true;
+                });
+
+                http.error(function() {
+                    service.token = undefined;
+                    service.isAuthorised = false;
+                    localStorageService.remove('token')
                 });
 
                 return http;
@@ -30,9 +37,10 @@ angular.module("app.services")
             /**
              * Check token for validity
              * @param userToken
+             * @param isAuthorised
              * @returns {Promise}
              */
-            check: function(userToken) {
+            check: function(userToken, callback) {
                 var http;
 
                 if (typeof userToken === 'undefined') {
@@ -51,13 +59,15 @@ angular.module("app.services")
 
                 http.success(function() {
                     service.token = userToken;
-                    service.isAuth = true;
+                    service.isAuthorised = true;
+                    if (typeof callback === 'function') callback(service.isAuthorised);
                 });
 
                 http.error(function() {
                     service.token = undefined;
-                    service.isAuth = false;
-                    localStorageService.remove('token')
+                    service.isAuthorised = false;
+                    localStorageService.remove('token');
+                    if (typeof callback === 'function') callback(service.isAuthorised);
                 });
 
                 return http;
