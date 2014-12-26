@@ -1,0 +1,7 @@
+<div class="list">
+
+    <div ng-repeat="item in widget.data">
+        {{item.value}} - {{item.label}}
+    </div>
+
+</div>
