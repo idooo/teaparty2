@@ -1,8 +1,7 @@
 <div class="d-widget-container" ng-hide="deleted">
 
     <div class="d-widget-container__controls">
-        <i class="icon-code" title="{{widgetKey}}"></i>
-        <i class="icon-trash-empty" ng-click="removeWidget()"></i>
+        <i class="icon-cog" ng-click="openWidgetSettingsDialog()"></i>
     </div>
 
     <div class="d-widget-container__body" ng-transclude></div>

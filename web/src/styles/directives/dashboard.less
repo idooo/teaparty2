@@ -1,7 +1,23 @@
+@import "../variables";
+@import "../mixins";
+
 .d-dashboard {
 
 	// TODO: Not the best way to lock/unlock widgets
-	&--locked .d-widget-container__controls {
-		display: none;
+	&--locked {
+
+		.d-widget-container__controls {
+			display: none;
+		}
+
+		.gridster-item,
+		.d-widget-container {
+			background-color: transparent !important;
+		}
+
+	}
+
+	&--unlocked .widget {
+		background-color: @widget_bg_color;
 	}
 }

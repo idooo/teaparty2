@@ -9,9 +9,18 @@ module.exports = function(server, model, config) {
      */
     server.post('/api/push/:token', function(req, res, next) {
 
+        function getToken(req) {
+            if (req.is('application/json')) {
+                var tokenMatch = req.url.match(/\/([^\/]+$)/);
+                if (tokenMatch.length === 2) return tokenMatch[1];
+            }
+            return req.params.token;
+        }
+
         function extractBodyData(rawData) {
             try {
-                return JSON.parse(rawData);
+                if (req.is('application/json')) return req.body;
+                return JSON.parse(rawData.toString());
             }
             catch (e) {
                 r.fail(res, {message: "JSON data is not valid", details: e}, 400);
@@ -55,13 +64,14 @@ module.exports = function(server, model, config) {
             return data;
         }
 
-        var query  = model.Widget.where({ key: req.params.token });
+        var query  = model.Widget.where({ key: getToken(req) });
         query.findOne(function (err, widget) {
+
             if (typeof req.body === 'undefined') {
                 r.fail(res, {message: "No data to push"}, 400);
                 return next();
             }
-            else if (widget) pushData(widget, req.body.toString());
+            else if (widget) pushData(widget, req.body);
             else {
                 if (err) r.fail(res, err);
                 else r.fail(res);

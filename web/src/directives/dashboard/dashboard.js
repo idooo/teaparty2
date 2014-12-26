@@ -31,26 +31,14 @@ angular.module('app.directives')
 
             $scope.gridsterOpts = {
                 columns: 8,
-                resizable: {},
-                draggable: {}
+                resizable: { stop: onResize },
+                draggable: { stop: onDrag}
             };
 
             $scope.updateOptions = function() {
                 console.log('update gridster options', $scope.options);
-                for (var key in $scope.options) {
-                    if ($scope.options.hasOwnProperty(key)) {
-                        $scope.gridsterOpts[key] = $scope.options[key];
-                    }
-                }
-                if (typeof $scope.gridsterOpts.resizable.stop !== 'function') {
-                    $scope.gridsterOpts.resizable.stop = onResize;
-                }
-                if (typeof $scope.gridsterOpts.draggable.stop !== 'function') {
-                    $scope.gridsterOpts.draggable.stop = onDrag;
-                }
-
+                $scope.gridsterOpts = mergeGridsterOptions($scope.gridsterOpts, $scope.options);
                 $scope.state = ($scope.gridsterOpts.resizable.enabled && $scope.gridsterOpts.draggable.enabled) ? 'unlocked' : 'locked';
-
                 console.log('updated options', $scope.gridsterOpts);
             };
 
@@ -81,6 +69,33 @@ angular.module('app.directives')
                 $element.append(widgets);
                 $compile(widgets)($scope);
             };
+
+            /**
+             * Smart merge gridster options objects
+             * @param destination
+             * @param source
+             * @returns {*}
+             */
+            function mergeGridsterOptions(destination, source) {
+                for (var key in source) {
+                    if (source.hasOwnProperty(key)) {
+                        if (key === 'resizable' || key === 'draggable') {
+                            if (typeof destination[key] === 'undefined') {
+                                destination[key] = {};
+                            }
+                            for (var innerKey in source[key]) {
+                                if (source[key].hasOwnProperty(innerKey)) {
+                                    destination[key][innerKey] = source[key][innerKey];
+                                }
+                            }
+                        }
+                        else {
+                            destination[key] = source[key];
+                        }
+                    }
+                }
+                return destination;
+            }
 
             function onResize(event, $element, widget, size) {
                 console.log('resize stop - new size arg:', size);

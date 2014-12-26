@@ -12,15 +12,21 @@ angular.module('app.directives')
             dashboardName: '@'
         },
         templateUrl: TemplatePath.get('directive', 'widget_container'),
-        link: function() {
+        controller: function($scope, $element, $attrs, ngDialog, Widget)  {
 
-        },
-        controller: function($scope, $element, $attrs, Widget)  {
             $scope.removeWidget = function() {
                 console.log('remove widget', $scope.widgetKey);
                 Widget.delete({dashboard: $scope.dashboardName, key: $scope.widgetKey}, function() {
                     $scope.deleted = true;
                 });
+                ngDialog.close();
+            };
+
+            $scope.openWidgetSettingsDialog = function() {
+                ngDialog.open({
+                    scope: $scope,
+                    template: 'views/modal/widget_settings.html'
+                })
             }
         }
     }
