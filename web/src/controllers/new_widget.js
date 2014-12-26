@@ -2,12 +2,19 @@
 
 angular
     .module('teaparty2')
-    .controller('NewWidgetController', function($scope, $rootScope, ngDialog, Widget) {
+    .controller('NewWidgetController', function($scope, $rootScope, ngDialog, Settings, Widget) {
 
         var self = this;
 
+        self.availableWidgetTypes = [];
+        self.widgetType = undefined;
+        self.widgetCaption = '';
         self.addWidget = addWidget;
-        self.widgetType = 'status'; // TODO: moar types plz
+
+        Settings.get(function(settings) {
+            self.availableWidgetTypes = settings.widgetTypes;
+            if (self.availableWidgetTypes.length !== 0) self.widgetType = self.availableWidgetTypes[0];
+        });
 
         function addWidget() {
             var widget = new Widget({

@@ -6,7 +6,8 @@
     <input type="text" ng-model="ctrl.widgetCaption"/>
 
     type:
-    <input type="text" ng-model="ctrl.widgetType"/>
+    <select ng-model="ctrl.widgetType" ng-options="option for option in ctrl.availableWidgetTypes"></select>
+
 
     <button ng-click="ctrl.addWidget()">Create</button>
     {{ctrl.error}}

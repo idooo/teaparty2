@@ -6,10 +6,14 @@ angular.module("app.services")
         var service = {
             settings: undefined,
             get: function(callback) {
+                var http;
 
-                if (typeof service.settings !== 'undefined') return service.settings;
+                if (typeof service.settings !== 'undefined') {
+                    if (typeof callback === 'function') callback(service.settings);
+                    return service.settings;
+                }
 
-                var http = $http.get(settingsEndpoint);
+                http = $http.get(settingsEndpoint);
 
                 http.success(function(data) {
                     service.settings = data;
@@ -18,7 +22,9 @@ angular.module("app.services")
 
                 http.error(function() {
                     if (typeof callback === 'function') callback();
-                })
+                });
+
+                return http;
             }
         };
 
