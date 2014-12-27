@@ -54,18 +54,6 @@ function CentralController($rootScope, $scope, $state, $stateParams, ngDialog, S
 
     function init() {
 
-        Settings.get(function(settings) {
-            if (typeof settings !== 'undefined' && settings.auth === false) {
-                $rootScope.isAuthorised = true;
-                Auth.token = 0;
-            }
-            else {
-                Auth.check(undefined, function (isAuthorised) {
-                    $rootScope.isAuthorised = isAuthorised;
-                });
-            }
-        });
-
         var selectDashboard = function(dashboards) {
             if (typeof $stateParams.dashboard !== 'undefined' && $stateParams.dashboard) {
                 for (var i = 0; i < dashboards.length; i++) {

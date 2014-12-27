@@ -32,7 +32,7 @@ angular.module("app.widgets").factory('TemplatePath', function () {
 });
 
 // Initial app config
-angular.module('teaparty2').config(function ($stateProvider, $urlRouterProvider, gridsterConfig) {
+angular.module('teaparty2').config(function($stateProvider, $urlRouterProvider, gridsterConfig) {
 
     gridsterConfig.resizable.handles = ['se'];
 
@@ -60,4 +60,18 @@ angular.module('teaparty2').config(function ($stateProvider, $urlRouterProvider,
 
 });
 
+angular.module('teaparty2').run(function($rootScope, $http, Settings, Auth) {
+    Auth.updateAuthHeader();
+    Settings.get(function(settings) {
+        if (typeof settings !== 'undefined' && settings.auth === false) {
+            $rootScope.isAuthorised = true;
+            Auth.token = 0;
+        }
+        else {
+            Auth.check(undefined, function (isAuthorised) {
+                $rootScope.isAuthorised = isAuthorised;
+            });
+        }
+    });
+});
 
