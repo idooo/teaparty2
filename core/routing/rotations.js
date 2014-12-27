@@ -178,37 +178,33 @@ module.exports = function(server, model, config) {
 
         var errorHandler = getErrorHandler(res, next);
 
-        findRotation(req.params.url,
+        findRotation(req.params.url, function(rotation) {
 
-            function(rotation) {
+            findDashboard(req.params.dashboardID, function(dashboard) {
 
-                findDashboard(req.params.dashboardID,
+                for (var i=0; i<rotation.dashboards.length; i++) {
+                    if (rotation.dashboards[i]._id.toString() === req.params.dashboardID) {
+                        r.fail(res, {message: "Dashboard already in this rotation"}, 400);
+                        return next();
+                    }
+                }
 
-                    function(dashboard) {
+                rotation.dashboards.push({
+                    _id: dashboard._id,
+                    timeout: 30
+                });
 
-                        for (var i=0; i<rotation.dashboards.length; i++) {
-                            if (rotation.dashboards[i]._id.toString() === req.params.dashboardID) {
-                                r.fail(res, {message: "Dashboard already in this rotation"}, 400);
-                                return next();
-                            }
-                        }
-
-                        rotation.dashboards.push({
-                            _id: dashboard._id,
-                            timeout: 30
-                        });
-
-                        rotation.save(function(err) {
-                            if (!err) {
-                                r.ok(res);
-                                return next();
-                            }
-                            errorHandler(err);
-                        })
-                    },
-                    errorHandler);
+                rotation.save(function(err) {
+                    if (!err) {
+                        r.ok(res);
+                        return next();
+                    }
+                    errorHandler(err);
+                })
             },
             errorHandler);
+        },
+        errorHandler);
 
         function findDashboard(dashboardID, callback, errorCallback) {
             var query  = model.Dashboard.where({ _id: mongoose.Types.ObjectId(dashboardID) });
@@ -235,33 +231,31 @@ module.exports = function(server, model, config) {
 
         var errorHandler = getErrorHandler(res, next);
 
-        findRotation(req.params.url,
+        findRotation(req.params.url, function(rotation) {
+            var found = false;
+            for (var i=0; i<rotation.dashboards.length; i++) {
+                if (rotation.dashboards[i]._id.toString() === req.params.dashboardID) {
+                    found = true;
 
-            function(rotation) {
-                var found = false;
-                for (var i=0; i<rotation.dashboards.length; i++) {
-                    if (rotation.dashboards[i]._id.toString() === req.params.dashboardID) {
-                        found = true;
+                    // TODO: not safe?
+                    rotation.dashboards.set(i, extend(rotation.dashboards[i], {
+                        timeout: parseInt(req.params.timeout, 10)
+                    }));
 
-                        // TODO: not safe?
-                        rotation.dashboards.set(i, extend(rotation.dashboards[i], {
-                            timeout: parseInt(req.params.timeout, 10)
-                        }));
-
-                        rotation.save(function(err) {
-                            if (err) return errorHandler(err);
-                            r.ok(res);
-                            return next();
-                        })
-                    }
+                    rotation.save(function(err) {
+                        if (err) return errorHandler(err);
+                        r.ok(res);
+                        return next();
+                    })
                 }
+            }
 
-                if (!found) {
-                    r.fail(res, {message: "No dashboard with this id in rotation"}, 404);
-                    return next();
-                }
-            },
-            errorHandler);
+            if (!found) {
+                r.fail(res, {message: "No dashboard with this id in rotation"}, 404);
+                return next();
+            }
+        },
+        errorHandler);
     });
 
     /**
@@ -276,28 +270,26 @@ module.exports = function(server, model, config) {
 
         var errorHandler = getErrorHandler(res, next);
 
-        findRotation(req.params.url,
+        findRotation(req.params.url, function(rotation) {
+            var found = false;
+            for (var i=0; i<rotation.dashboards.length; i++) {
+                if (rotation.dashboards[i]._id.toString() === req.params.dashboardID) {
+                    found = true;
+                    rotation.dashboards.splice(i, 1);
 
-            function(rotation) {
-                var found = false;
-                for (var i=0; i<rotation.dashboards.length; i++) {
-                    if (rotation.dashboards[i]._id.toString() === req.params.dashboardID) {
-                        found = true;
-                        rotation.dashboards.splice(i, 1);
-
-                        rotation.save(function(err) {
-                            if (err) return errorHandler(err);
-                            r.ok(res);
-                            return next();
-                        })
-                    }
+                    rotation.save(function(err) {
+                        if (err) return errorHandler(err);
+                        r.ok(res);
+                        return next();
+                    })
                 }
+            }
 
-                if (!found) {
-                    r.fail(res, {message: "No dashboard with this id in rotation"}, 404);
-                    return next();
-                }
-            },
-            errorHandler);
+            if (!found) {
+                r.fail(res, {message: "No dashboard with this id in rotation"}, 404);
+                return next();
+            }
+        },
+        errorHandler);
     });
 };

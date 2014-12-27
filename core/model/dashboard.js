@@ -9,7 +9,7 @@ module.exports = function(mongoose) {
 
     var schema = mongoose.Schema({
         name: {
-            type: String, // TODO: check is not 'rotation'
+            type: String,
             lowercase: true,
             trim: true,
             required: true,
