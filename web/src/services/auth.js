@@ -3,16 +3,24 @@
 angular.module("app.services")
     .factory('Auth', function($http, $q, localStorageService) {
 
-        // TODO: refactor
+        var authEndpoint = '/api/auth';
 
         var service = {
             token: undefined,
             isAuthorised: false,
 
+            /**
+             * Read auth token from the local storage
+             * @returns {*}
+             */
             readTokenFromStorage: function() {
                 return localStorageService.get('token');
             },
 
+            /**
+             * Update the auth HTTP header by new token
+             * @param token
+             */
             updateAuthHeader: function(token) {
                 if (typeof token === 'undefined') {
                     if (typeof service.token === 'undefined') {
@@ -26,46 +34,62 @@ angular.module("app.services")
             },
 
             /**
+             * Save token to all the places, update the header
+             * and execute the callback
+             * @param token
+             * @param callback (with argument 'isAuthorised' (bool))
+             */
+            authorize: function(token, callback) {
+                service.token = token;
+                service.isAuthorised = true;
+                localStorageService.set('token', token);
+                service.updateAuthHeader();
+                if (typeof callback === 'function') callback(service.isAuthorised);
+            },
+
+            /**
+             * Reset the auth token, update auth header and execute callback
+             * @param callback (with argument 'isAuthorised' (bool))
+             */
+            deauthorize: function(callback) {
+                service.token = undefined;
+                service.isAuthorised = false;
+                localStorageService.remove('token');
+                service.updateAuthHeader();
+                if (typeof callback === 'function') callback(service.isAuthorised);
+            },
+
+            /**
              * Auth user to get the auth token
              * @param username
              * @param password
-             * @returns {Promise}
              */
             auth: function(username, password) {
-                var http = $http.post('/api/auth', {
+                var http = $http.post(authEndpoint, {
                     username: username,
                     password: password
                 });
 
                 http.success(function(data) {
-                    localStorageService.set('token', data.token);
-                    service.token = data.token;
-                    service.isAuthorised = true;
-                    service.updateAuthHeader()
+                    service.authorize(data.token);
                 });
 
                 http.error(function() {
-                    service.token = undefined;
-                    service.isAuthorised = false;
-                    localStorageService.remove('token');
-                    service.updateAuthHeader()
+                    service.deauthorize();
                 });
-
-                return http;
             },
 
             /**
              * Check token for validity
-             * @param userToken
+             * @param token
              * @param callback
-             * @returns {Promise}
              */
-            check: function(userToken, callback) {
+            check: function(token, callback) {
                 var http;
 
-                if (typeof userToken === 'undefined') {
-                    userToken = service.readTokenFromStorage();
-                    if (userToken === null) {
+                if (typeof token === 'undefined') {
+                    token = service.readTokenFromStorage();
+                    if (token === null) {
                         service.token = undefined;
                         // Create empty promise to have unified function return
                         // in case of error
@@ -75,24 +99,15 @@ angular.module("app.services")
                     }
                 }
 
-                http = $http.get('/api/auth/' + userToken);
+                http = $http.get(authEndpoint + '/' + token);
 
                 http.success(function() {
-                    service.token = userToken;
-                    service.isAuthorised = true;
-                    if (typeof callback === 'function') callback(service.isAuthorised);
-                    service.updateAuthHeader();
+                    service.authorize(token, callback);
                 });
 
                 http.error(function() {
-                    service.token = undefined;
-                    service.isAuthorised = false;
-                    localStorageService.remove('token');
-                    service.updateAuthHeader();
-                    if (typeof callback === 'function') callback(service.isAuthorised);
+                    service.deauthorize(callback);
                 });
-
-                return http;
             }
         };
 
