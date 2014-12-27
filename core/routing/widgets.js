@@ -198,10 +198,16 @@ module.exports = function(server, model, config) {
                 isSize = false,
                 data = {};
 
-            // TODO: parseint for values
             if (Object.prototype.toString.call(rawData.position) === "[object Array]" && rawData.position.length >= 2 ) {
                 isPostion = true;
-                data.position = rawData.position.slice(0,2);
+                try {
+                    data.position = rawData.position.slice(0, 2).map(function (i) {
+                        return parseInt(i, 10)
+                    });
+                }
+                catch (e) {
+                    return false;
+                }
             }
 
             if (typeof rawData.size !== 'undefined' && typeof rawData.size.x !== 'undefined'

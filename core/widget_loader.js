@@ -11,12 +11,17 @@ widgetsList.forEach(function(widgetName) {
         files = fs.readdirSync(widgetPath);
 
     files.forEach(function(filename) {
-        var filepath = widgetPath + '/' + filename;
-        if (fs.statSync(filepath).isFile() && filepath.slice(-3) === '.js') {
-            var importedWidget = require(filepath);
-            widgets[importedWidget.name] = importedWidget;
+        try {
+            var filepath = widgetPath + '/' + filename;
+            if (fs.statSync(filepath).isFile() && filepath.slice(-3) === '.js') {
+                var importedWidget = require(filepath);
+                widgets[importedWidget.name] = importedWidget;
+            }
         }
-    });
+        catch (e) {
+            console.log('Cannot load ' + filename + ' widget');
+        }
+    })
 });
 
 module.exports = widgets;

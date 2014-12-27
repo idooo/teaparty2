@@ -4,7 +4,7 @@ angular
     .module('teaparty2')
     .controller('CentralController', CentralController);
 
-function CentralController($rootScope, $scope, $state, $stateParams, ngDialog, Settings, Auth, Dashboard, Sockets) {
+function CentralController($rootScope, $scope, $state, $stateParams, ngDialog, Dashboard, Sockets) {
 
     var self = this;
 
@@ -117,6 +117,7 @@ function CentralController($rootScope, $scope, $state, $stateParams, ngDialog, S
     }
 
     // Modals
+    // ------------------------------------------------------------------------------------------
 
     function showNewDashboardDialog() {
         ngDialog.open({

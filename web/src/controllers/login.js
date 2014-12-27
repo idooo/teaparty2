@@ -2,21 +2,25 @@
 
 angular
     .module('teaparty2')
-    .controller('LoginController', function($rootScope, ngDialog, Auth) {
+    .controller('LoginController', LoginController);
 
-        var self = this;
+function LoginController($rootScope, ngDialog, Auth) {
 
-        self.login = function() {
-            Auth.auth(self.username, self.password, function(isAuthorised, err) {
-                $rootScope.isAuthorised = isAuthorised;
-                $rootScope.$broadcast('userAuthEvent');
+    var self = this;
 
-                if (isAuthorised) {
-                    ngDialog.close();
-                }
-                else {
-                    self.error = err;
-                }
-            })
-        }
-});
+    self.error = '';
+
+    self.login = function() {
+        Auth.auth(self.username, self.password, function(isAuthorised, err) {
+            $rootScope.isAuthorised = isAuthorised;
+            $rootScope.$broadcast('userAuthEvent');
+
+            if (isAuthorised) {
+                ngDialog.close();
+            }
+            else {
+                self.error = err;
+            }
+        })
+    }
+}

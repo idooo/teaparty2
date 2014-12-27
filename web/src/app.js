@@ -21,7 +21,7 @@ angular.module("app.templates", []);
 angular.module("app.directives", []);
 angular.module("app.widgets", []);
 
-// Helper for template path resolving for components
+// Helper for templates resolving for components and widgets
 angular.module("app.widgets").factory('TemplatePath', function () {
     return {
         get: function (type, path, component) {
@@ -61,6 +61,8 @@ angular.module('teaparty2').config(function($stateProvider, $urlRouterProvider, 
 });
 
 angular.module('teaparty2').run(function($rootScope, $http, Settings, Auth) {
+
+    // Initial auth
     Auth.updateAuthHeader();
     Settings.get(function(settings) {
         if (typeof settings !== 'undefined' && settings.auth === false) {
