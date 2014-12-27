@@ -3,7 +3,8 @@ var uuid = require('node-uuid'),
 
 module.exports = function(server, model, config) {
 
-    var adminUsername = config.admin.username,
+    var noAuth = config.auth !== true,
+        adminUsername = config.admin.username,
         adminPassword = config.admin.password;
 
     config.tokens = {};
@@ -18,7 +19,7 @@ module.exports = function(server, model, config) {
      */
     server.post('/api/auth', function(req, res, next) {
 
-        if (config.auth === false) {
+        if (noAuth) {
             r.ok(res, {token: 0});
             return next();
         }
@@ -42,7 +43,7 @@ module.exports = function(server, model, config) {
      */
     server.get('/api/auth/:token', function(req, res, next) {
 
-        if (config.auth === false) {
+        if (noAuth) {
             r.ok(res);
         }
         else {

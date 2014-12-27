@@ -6,7 +6,7 @@ var routes = [
     'widgets',
     'auth',
     'push',
-    'rotation'
+    'rotations'
 ];
 
 module.exports = function(server, model, config) {

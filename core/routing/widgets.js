@@ -1,11 +1,15 @@
-var r = require('./../helpers/response'),
+var helpers = require('./../helpers'),
+    r = helpers.response,
+    auth = helpers.auth,
     extend = require('util')._extend;
 
-module.exports = function(server, model) {
+module.exports = function(server, model, config) {
 
     /**
      * POST: /api/dashboard/:dashboard/widget/
      * Create new widget for selected :dashboard
+     *
+     * AUTH: not authorised users can't create widgets
      *
      * post body:
      *  - type
@@ -13,6 +17,19 @@ module.exports = function(server, model) {
      *  - datasource
      */
     server.post('/api/dashboard/:dashboard/widget', function(req, res, next) {
+
+        auth.check(req, res, next, config);
+
+        var query  = model.Dashboard.where({ name: req.params.dashboard });
+        query.findOne(function (err, dashboard) {
+            if (dashboard) createWidget(dashboard);
+            else {
+                if (err) r.fail(res, err);
+                else r.fail(res);
+
+                return next();
+            }
+        });
 
         function createWidget(dashboard) {
             var widget = new model.Widget({
@@ -48,39 +65,17 @@ module.exports = function(server, model) {
             });
         }
 
-        var query  = model.Dashboard.where({ name: req.params.dashboard });
-
-        query.findOne(function (err, dashboard) {
-            if (dashboard) createWidget(dashboard);
-            else {
-                if (err) r.fail(res, err);
-                else r.fail(res);
-
-                return next();
-            }
-        });
     });
 
     /**
      * DELETE: /api/dashboard/:dashboard/widget/:key
      * Delete widget by :key
+     *
+     * AUTH: not authorised users can't delete widgets
      */
     server.del('/api/dashboard/:dashboard/widget/:key', function(req, res, next) {
 
-        function deleteDashboardReference(dashboard, _id, callback) {
-            _id = _id.toString();
-
-            for (var i=0; i<dashboard.widgets.length; i++) {
-                if (dashboard.widgets[i]._id.toString() === _id) {
-                    dashboard.widgets.splice(i, 1);
-                }
-            }
-
-            dashboard.save(function(err) {
-                if (err) r.fail(res, err, 400);
-                else if (typeof callback === 'function') callback();
-            });
-        }
+        auth.check(req, res, next, config);
 
         findWidget(res, next, req.params.key, function(widget) {
 
@@ -97,11 +92,29 @@ module.exports = function(server, model) {
                 });
             });
         });
+
+        function deleteDashboardReference(dashboard, _id, callback) {
+            _id = _id.toString();
+
+            for (var i=0; i<dashboard.widgets.length; i++) {
+                if (dashboard.widgets[i]._id.toString() === _id) {
+                    dashboard.widgets.splice(i, 1);
+                }
+            }
+
+            dashboard.save(function(err) {
+                if (err) r.fail(res, err, 400);
+                else if (typeof callback === 'function') callback();
+            });
+        }
+
     });
 
     /**
      * PUT: /api/dashboard/:dashboard/widget/:key
      * Update widget meta-data (not the data content) by :key
+     *
+     * AUTH: not authorised users can't update widgets settings
      *
      * post body:
      *  - object {
@@ -113,6 +126,25 @@ module.exports = function(server, model) {
      *           }
      */
     server.put('/api/dashboard/:dashboard/widget/:key', function(req, res, next) {
+
+        auth.check(req, res, next, config);
+
+        findWidget(res, next, req.params.key, function(widget) {
+
+            findDashboard(res, next, req.params.dashboard, function(dashboard) {
+
+                var obj = validateData(req.params);
+                if (!obj) {
+                    r.fail(res, {message: "Configuration object is not valid"}, 400);
+                    return next();
+                }
+
+                updateDashboardReference(dashboard, widget._id, obj, function() {
+                    r.ok(res);
+                    return next();
+                });
+            });
+        });
 
         /**
          * Check if size or position data was changed
@@ -185,22 +217,6 @@ module.exports = function(server, model) {
             return data;
         }
 
-        findWidget(res, next, req.params.key, function(widget) {
-
-            findDashboard(res, next, req.params.dashboard, function(dashboard) {
-
-                var obj = validateData(req.params);
-                if (!obj) {
-                    r.fail(res, {message: "Configuration object is not valid"}, 400);
-                    return next();
-                }
-
-                updateDashboardReference(dashboard, widget._id, obj, function() {
-                    r.ok(res);
-                    return next();
-                });
-            });
-        });
     });
 
     /**

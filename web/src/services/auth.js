@@ -3,9 +3,9 @@
 angular.module("app.services")
     .factory('Auth', function($http, $q, localStorageService) {
 
-        var authEndpoint = '/api/auth';
-
         var service = {
+            endpoint: '/api/auth',
+            header: 'Authorization-Token',
             token: undefined,
             isAuthorised: false,
 
@@ -30,7 +30,7 @@ angular.module("app.services")
                         token = service.token;
                     }
                 }
-                $http.defaults.headers.common.AuthorizationToken = token;
+                $http.defaults.headers.common[service.header] = token;
             },
 
             /**
@@ -63,19 +63,20 @@ angular.module("app.services")
              * Auth user to get the auth token
              * @param username
              * @param password
+             * @param callback
              */
-            auth: function(username, password) {
-                var http = $http.post(authEndpoint, {
+            auth: function(username, password, callback) {
+                var http = $http.post(service.endpoint, {
                     username: username,
                     password: password
                 });
 
                 http.success(function(data) {
-                    service.authorize(data.token);
+                    service.authorize(data.token, callback);
                 });
 
                 http.error(function() {
-                    service.deauthorize();
+                    service.deauthorize(callback);
                 });
             },
 
@@ -91,15 +92,10 @@ angular.module("app.services")
                     token = service.readTokenFromStorage();
                     if (token === null) {
                         service.token = undefined;
-                        // Create empty promise to have unified function return
-                        // in case of error
-                        var promise = $q(function(resolve, reject) {});
-                        promise.success = function(){};
-                        return promise;
                     }
                 }
 
-                http = $http.get(authEndpoint + '/' + token);
+                http = $http.get(service.endpoint + '/' + token);
 
                 http.success(function() {
                     service.authorize(token, callback);

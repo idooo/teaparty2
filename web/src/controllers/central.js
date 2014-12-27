@@ -8,8 +8,6 @@ function CentralController($rootScope, $scope, $state, $stateParams, ngDialog, S
 
     var self = this;
 
-    $rootScope.isAuthorised = false;
-
     self.dashboards = [];
     self.dashboardOptions = {
         resizable: { enabled: false },
@@ -48,6 +46,12 @@ function CentralController($rootScope, $scope, $state, $stateParams, ngDialog, S
                 return loadDashboard(i);
             }
         }
+    });
+
+    $scope.$on('userAuthEvent', function() {
+        getDashboardsList(function(dashboards) {
+            $rootScope.dashboards = dashboards;
+        });
     });
 
     init();

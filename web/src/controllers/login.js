@@ -7,9 +7,9 @@ angular
         var self = this;
 
         self.login = function() {
-            Auth.auth(self.username, self.password).success(function(data) {
-                console.log(data);
-                $rootScope.isAuthorised = true;
+            Auth.auth(self.username, self.password, function(isAuthorised) {
+                $rootScope.isAuthorised = isAuthorised;
+                $rootScope.$broadcast('userAuthEvent');
                 ngDialog.close();
             })
         }
