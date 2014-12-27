@@ -76,7 +76,11 @@ module.exports = function(server, model, config) {
         });
 
         dashboard.save(function (err, data) {
-            if (err) r.fail(res, err, 400);
+            if (err) {
+                var message = "Unknown backend error";
+                if (err.code === 11000) message = "Dashboard with this name already exists";
+                r.fail(res, {message: message}, 400);
+            }
             else r.ok(res, data);
 
             return next();

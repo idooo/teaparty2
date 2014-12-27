@@ -26,7 +26,7 @@ module.exports = function(server, model, config) {
 
         var isCorrect = (req.params.username === adminUsername && req.params.password === adminPassword);
 
-        if (!isCorrect) r.fail(res, {message: 'Wrong password'}, 400);
+        if (!isCorrect) r.fail(res, {message: 'Invalid username or password'}, 400);
         else {
             var token = uuid.v1();
             config.tokens[token] = new Date();

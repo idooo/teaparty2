@@ -1,0 +1,31 @@
+@import "../variables";
+@import "../mixins";
+
+// Variables
+@btn_main_bg_hover_color: lighten(@btn_main_bg_color, 10%);
+
+// ===============================================================
+
+button,
+input[type="submit"],
+.btn {
+	display: inline-block;
+	padding: 10px 20px;
+	cursor: pointer;
+	font-size: 14px;
+	background-color: @btn_main_bg_color;
+	color: @btn_main_text_color;
+	border: none;
+	font-weight: 600;
+	text-align: center;
+	border-radius: 2px;
+	text-decoration: none;
+	-webkit-appearance: none;
+	.user-select(none);
+	.transition(~"color 0.25s, background-color 0.25s");
+
+	&:hover {
+		background-color: @btn_main_bg_hover_color;
+	}
+}
+

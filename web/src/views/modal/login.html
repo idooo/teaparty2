@@ -1,9 +1,21 @@
-<div class="admin-form">
+<div class="login-form">
 
-    <input type="text" name="username" ng-model="ctrl.username"/>
+    <form ng-submit="ctrl.login()">
 
-    <input type="password" name="password" ng-model="ctrl.password"/>
+        <fieldset>
+            <label>Username</label>
+            <input type="text" name="username" required ng-model="ctrl.username"/>
+        </fieldset>
 
-    <button ng-click="ctrl.login()">Login</button>
+        <fieldset>
+            <label>Password</label>
+            <input type="password" name="password" required ng-model="ctrl.password"/>
+        </fieldset>
+
+        <input type="submit" value="Login">
+
+        <span class="form-error-message">{{ctrl.error.message}}</span>
+
+    </form>
 
 </div>

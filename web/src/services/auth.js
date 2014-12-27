@@ -50,13 +50,16 @@ angular.module("app.services")
             /**
              * Reset the auth token, update auth header and execute callback
              * @param callback (with argument 'isAuthorised' (bool))
+             * @param message - optional message to pass to callback
              */
-            deauthorize: function(callback) {
+            deauthorize: function(callback, message) {
                 service.token = undefined;
                 service.isAuthorised = false;
                 localStorageService.remove('token');
                 service.updateAuthHeader();
-                if (typeof callback === 'function') callback(service.isAuthorised);
+                if (typeof callback === 'function') {
+                    callback(service.isAuthorised, message);
+                }
             },
 
             /**
@@ -75,8 +78,8 @@ angular.module("app.services")
                     service.authorize(data.token, callback);
                 });
 
-                http.error(function() {
-                    service.deauthorize(callback);
+                http.error(function(data) {
+                    service.deauthorize(callback, data);
                 });
             },
 

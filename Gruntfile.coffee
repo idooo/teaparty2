@@ -32,6 +32,8 @@ module.exports = (grunt) ->
         overrides:
           'socket.io-client':
             main: ['socket.io.js']
+          'ngDialog':
+            main: ['js/ngDialog.js', 'css/ngDialog.css']
           'highcharts':
             main: ['adapters/standalone-framework.js', 'highcharts.js']
 

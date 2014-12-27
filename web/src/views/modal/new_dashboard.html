@@ -1,10 +1,18 @@
 <div>
 
-    <h3>new Dashboard</h3>
+    <h3>New dashboard</h3>
 
-    name:
-    <input type="text" ng-model="ctrl.dashboardName"/>
+    <form ng-submit="ctrl.addDashboard()">
 
-    <button ng-click="ctrl.addDashboard()">Create</button>
-    {{ctrl.error}}
+        <fieldset>
+            <label>Name</label>
+            <input type="text" required ng-model="ctrl.dashboardName"/>
+        </fieldset>
+
+        <input type="submit" value="Add dashboard"/>
+
+        <span class="form-error-message">{{ctrl.error.message}}</span>
+
+    </form>
+
 </div>

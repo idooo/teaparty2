@@ -18,7 +18,7 @@ angular
                 ngDialog.close();
             }, function(err) {
                 console.log('err', err);
-                self.error = err.data.error;
+                self.error = err.data;
             });
         }
 });
