@@ -1,0 +1,13 @@
+<div class="widget-text">
+
+    <div class="widget-text__caption">
+
+        <div class="widget-status__caption-inner">
+
+            {{widget.data.text || widget.caption}}
+
+        </div>
+
+    </div>
+
+</div>
