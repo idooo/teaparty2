@@ -30,7 +30,7 @@ angular.module('app.directives')
         controller: function($scope, $element, $attrs, $compile, Widget) {
 
             $scope.gridsterOpts = {
-                columns: 8,
+                columns: 10,
                 resizable: { stop: onResize },
                 draggable: { stop: onDrag}
             };

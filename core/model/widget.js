@@ -17,6 +17,10 @@ module.exports = function(mongoose, config) {
             type: String,
             default: 'push'
         },
+        settings: {
+            type: Object,
+            default: Object
+        },
         data: {
             type: mongoose.Schema.Types.Mixed,
             default: {empty: true}
