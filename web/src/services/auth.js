@@ -1,114 +1,112 @@
 'use strict';
 
 angular.module("app.services")
-    .factory('Auth', function($http, $q, localStorageService) {
+    .service('Auth', function($http, $q, localStorageService) {
 
-        var service = {
-            endpoint: '/api/auth',
-            header: 'Authorization-Token',
-            token: undefined,
-            isAuthorised: false,
+        var self = this,
+            endpoint = '/api/auth',
+            header = 'Authorization-Token';
 
-            /**
-             * Read auth token from the local storage
-             * @returns {*}
-             */
-            readTokenFromStorage: function() {
-                return localStorageService.get('token');
-            },
+        self.token = undefined;
+        self.isAuthorised = false;
 
-            /**
-             * Update the auth HTTP header by new token
-             * @param token
-             */
-            updateAuthHeader: function(token) {
-                if (typeof token === 'undefined') {
-                    if (typeof service.token === 'undefined') {
-                        token = service.readTokenFromStorage()
-                    }
-                    else {
-                        token = service.token;
-                    }
+        /**
+         * Read auth token from the local storage
+         * @returns {*}
+         */
+        self.readTokenFromStorage = function() {
+            return localStorageService.get('token');
+        };
+
+        /**
+         * Update the auth HTTP header by new token
+         * @param token
+         */
+        self.updateAuthHeader = function(token) {
+            if (typeof token === 'undefined') {
+                if (typeof self.token === 'undefined') {
+                    token = self.readTokenFromStorage()
                 }
-                $http.defaults.headers.common[service.header] = token;
-            },
-
-            /**
-             * Save token to all the places, update the header
-             * and execute the callback
-             * @param token
-             * @param callback (with argument 'isAuthorised' (bool))
-             */
-            authorize: function(token, callback) {
-                service.token = token;
-                service.isAuthorised = true;
-                localStorageService.set('token', token);
-                service.updateAuthHeader();
-                if (typeof callback === 'function') callback(service.isAuthorised);
-            },
-
-            /**
-             * Reset the auth token, update auth header and execute callback
-             * @param callback (with argument 'isAuthorised' (bool))
-             * @param message - optional message to pass to callback
-             */
-            deauthorize: function(callback, message) {
-                service.token = undefined;
-                service.isAuthorised = false;
-                localStorageService.remove('token');
-                service.updateAuthHeader();
-                if (typeof callback === 'function') {
-                    callback(service.isAuthorised, message);
+                else {
+                    token = self.token;
                 }
-            },
+            }
+            $http.defaults.headers.common[header] = token;
+        };
 
-            /**
-             * Auth user to get the auth token
-             * @param username
-             * @param password
-             * @param callback
-             */
-            auth: function(username, password, callback) {
-                var http = $http.post(service.endpoint, {
-                    username: username,
-                    password: password
-                });
+        /**
+         * Save token to all the places, update the header
+         * and execute the callback
+         * @param token
+         * @param callback (with argument 'isAuthorised' (bool))
+         */
+        self.authorize = function(token, callback) {
+            self.token = token;
+            self.isAuthorised = true;
+            localStorageService.set('token', token);
+            self.updateAuthHeader();
+            if (typeof callback === 'function') callback(self.isAuthorised);
+        };
 
-                http.success(function(data) {
-                    service.authorize(data.token, callback);
-                });
-
-                http.error(function(data) {
-                    service.deauthorize(callback, data);
-                });
-            },
-
-            /**
-             * Check token for validity
-             * @param token
-             * @param callback
-             */
-            check: function(token, callback) {
-                var http;
-
-                if (typeof token === 'undefined') {
-                    token = service.readTokenFromStorage();
-                    if (token === null) {
-                        service.token = undefined;
-                    }
-                }
-
-                http = $http.get(service.endpoint + '/' + token);
-
-                http.success(function() {
-                    service.authorize(token, callback);
-                });
-
-                http.error(function() {
-                    service.deauthorize(callback);
-                });
+        /**
+         * Reset the auth token, update auth header and execute callback
+         * @param callback (with argument 'isAuthorised' (bool))
+         * @param message - optional message to pass to callback
+         */
+        self.deauthorize = function(callback, message) {
+            self.token = undefined;
+            self.isAuthorised = false;
+            localStorageService.remove('token');
+            self.updateAuthHeader();
+            if (typeof callback === 'function') {
+                callback(self.isAuthorised, message);
             }
         };
 
-        return service;
+        /**
+         * Auth user to get the auth token
+         * @param username
+         * @param password
+         * @param callback
+         */
+        self.auth = function(username, password, callback) {
+            var http = $http.post(endpoint, {
+                username: username,
+                password: password
+            });
+
+            http.success(function(data) {
+                self.authorize(data.token, callback);
+            });
+
+            http.error(function(data) {
+                self.deauthorize(callback, data);
+            });
+        };
+
+        /**
+         * Check token for validity
+         * @param token
+         * @param callback
+         */
+        self.check = function(token, callback) {
+            var http;
+
+            if (typeof token === 'undefined') {
+                token = self.readTokenFromStorage();
+                if (token === null) {
+                    self.token = undefined;
+                }
+            }
+
+            http = $http.get(endpoint + '/' + token);
+
+            http.success(function() {
+                self.authorize(token, callback);
+            });
+
+            http.error(function() {
+                self.deauthorize(callback);
+            });
+        };
     });

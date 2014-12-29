@@ -1,32 +1,32 @@
 'use strict';
 
 angular.module("app.services")
-    .factory('Settings', function($http) {
-        var settingsEndpoint = '/api/settings';
-        var service = {
-            settings: undefined,
-            get: function(callback) {
-                var http;
+    .service('Settings', function($http) {
 
-                if (typeof service.settings !== 'undefined') {
-                    if (typeof callback === 'function') callback(service.settings);
-                    return service.settings;
-                }
+        var self = this,
+            settingsEndpoint = '/api/settings';
 
-                http = $http.get(settingsEndpoint);
+        self.settings = undefined;
 
-                http.success(function(data) {
-                    service.settings = data;
-                    if (typeof callback === 'function') callback(service.settings);
-                });
+        self.get = function(callback) {
+            var http;
 
-                http.error(function() {
-                    if (typeof callback === 'function') callback();
-                });
-
-                return http;
+            if (typeof self.settings !== 'undefined') {
+                if (typeof callback === 'function') callback(self.settings);
+                return self.settings;
             }
-        };
 
-        return service;
+            http = $http.get(settingsEndpoint);
+
+            http.success(function(data) {
+                self.settings = data;
+                if (typeof callback === 'function') callback(self.settings);
+            });
+
+            http.error(function() {
+                if (typeof callback === 'function') callback();
+            });
+
+            return http;
+        }
     });
