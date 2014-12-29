@@ -10,8 +10,9 @@ var modules = [
     'btford.socket-io',
     'app.services',
     'app.templates',
+    'app.directives',
     'app.widgets',
-    'app.directives'
+    'app.widgets.templates'
 ];
 
 // Init app and modules
@@ -20,6 +21,7 @@ angular.module("app.services", []);
 angular.module("app.templates", []);
 angular.module("app.directives", []);
 angular.module("app.widgets", []);
+angular.module("app.widgets.templates", []);
 
 // Helper for templates resolving for components and widgets
 angular.module("app.widgets").factory('TemplatePath', function () {

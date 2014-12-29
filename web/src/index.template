@@ -28,24 +28,15 @@
     <div class="viewport" ui-view="content"></div>
 
     <!-- build:js scripts/vendor.min.js -->
-    <!-- bower:js -->
-
-    <!-- endbower -->
-    <!-- include: "type": "js", "files": "scripts/vendor.js" -->
+        <!-- bower:js -->
+        <!-- endbower -->
+        <!-- include: "type": "js", "files": "scripts/vendor.js" -->
     <!-- endbuild -->
 
     <!-- build:js scripts/app.min.js -->
-
-    <!-- include: "type": "js", "files": "scripts/app.js" -->
-
-    <!-- include: "type": "js", "files": "scripts/providers/*.js" -->
-
-    <!-- include: "type": "js", "files": "scripts/services/*.js" -->
-
-    <!-- include: "type": "js", "files": "scripts/controllers/*.js" -->
-
-    <!-- include: "type": "js", "files": "widgets/**/*.js" -->
-
+        <!-- include: "type": "js", "files": "scripts/app.js" -->
+        <!-- include: "type": "js", "files": "scripts/app_templates.js" -->
+        <!-- include: "type": "js", "files": "scripts/widgets_templates.js" -->
     <!-- endbuild -->
 
 </body>

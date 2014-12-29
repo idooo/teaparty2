@@ -50,7 +50,19 @@ module.exports = (grunt) ->
             ]
           }
         ]
-      tmp: '.tmp/**/*.*'
+      build:
+        files: [
+          {
+            dot: true
+            src: [
+              '<%= settings.dist %>/scripts/*.js'
+              '!<%= settings.dist %>/scripts/*.min.js'
+              '<%= settings.dist %>/styles/*.css'
+              '!<%= settings.dist %>/styles/*.min.css'
+              '<%= settings.tmp %>'
+            ]
+          }
+        ]
 
   # less
 
@@ -144,20 +156,70 @@ module.exports = (grunt) ->
   # include source
 
     includeSource:
+      options:
+        basePath: '<%= settings.dist %>/'
+        baseUrl: '/'
+
+      includeJS:
+        files:
+          '<%= settings.dist %>/index.html': '<%= settings.app %>/index.template'
+
+    html2js:
+      appTemplates:
         options:
-          basePath: '<%= settings.dist %>/'
-          baseUrl: '/'
+          base: 'web/src'
+          module: 'app.templates'
+          singleModule: true
 
-        includeJS:
-          files:
-            '<%= settings.dist %>/index.html': '<%= settings.app %>/index.template'
+        src: [
+          '<%= settings.app %>/**/*.template',
+          '!<%= settings.app %>/index.template'
+        ]
+        dest: '<%= settings.dist %>/scripts/app_templates.js'
+
+      widgetTemplates:
+        options:
+          base: ''
+          module: 'app.widgets.templates'
+          singleModule: true
+
+        src: [ '<%= settings.widgets %>/**/*.template' ]
+        dest: '<%= settings.dist %>/scripts/widgets_templates.js'
+
+    useminPrepare:
+      html: "<%= settings.dist %>/index.html"
+      options:
+        dest: "<%= settings.dist %>/"
+
+    usemin:
+      html: ["<%= settings.dist %>/{,*/}*.html"]
+      css: ["<%= settings.dist %>/{,*/}*.css"]
+      options:
+        assetsDirs: ["<%= settings.dist %>/", "<%= settings.app %>/"]
+
+    htmlmin:
+      default:
+        options:
+          removeComments: true
+          collapseWhitespace: true
+
+        expand: true
+        cwd: '<%= settings.dist %>',
+        src: ['**/*.html'],
+        dest: '<%= settings.dist %>/'
+
+    uglify:
+      options:
+        compress:
+          drop_console: true
 
 
   ###############################################################
-  # Aliases
+  # Jobs
   ###############################################################
 
-  grunt.registerTask 'prepare_build', [
+  # omg, they gonna serve it!
+  grunt.registerTask 'serve', [
     'clean'
     'ngAnnotate'
     'less'
@@ -167,20 +229,24 @@ module.exports = (grunt) ->
     'copy:templates'
     'copy:widgetsTemplates'
     'develop'
-  ]
-
-  ###############################################################
-  # Jobs
-  ###############################################################
-
-  # omg, they gonna serve it!
-  grunt.registerTask 'serve', [
-    'prepare_build'
     'watch'
   ]
 
   # build production ready result
   grunt.registerTask 'build', [
-    'prepare_build'
+    'clean'
+    'ngAnnotate'
+    'html2js'
+    'less'
+    'includeSource'
+    'wiredep'
+    'copy:distStatic'
+    'useminPrepare'
+    'concat'
+    'uglify'
+    'cssmin'
+    'usemin'
+    'htmlmin'
+    'clean:build'
   ]
 
