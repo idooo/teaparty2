@@ -17,7 +17,6 @@ function CentralController($rootScope, $scope, $state, $stateParams, ngDialog, D
 
     self.loadDashboard = loadDashboard;
     self.goToDashboard = goToDashboard;
-    self.removeDashboard = removeDashboard;
     self.lockUnlockDashboard = lockUnlockDashboard;
 
     // Modals openers
@@ -25,6 +24,7 @@ function CentralController($rootScope, $scope, $state, $stateParams, ngDialog, D
     self.showNewWidgetDialog = showNewWidgetDialog;
     self.showRotationsDialog = showRotationsDialog;
     self.showLoginDialog = showLoginDialog;
+    self.showDashboardSettingsDialog = showDashboardSettingsDialog;
 
     self.isHeaderOpen = false;
 
@@ -36,6 +36,11 @@ function CentralController($rootScope, $scope, $state, $stateParams, ngDialog, D
     });
 
     $scope.$on('dashboardAddedEvent', function() {
+        $rootScope.dashboards = [];
+        init();
+    });
+
+    $scope.$on('dashboardDeletedEvent', function() {
         $rootScope.dashboards = [];
         init();
     });
@@ -101,16 +106,6 @@ function CentralController($rootScope, $scope, $state, $stateParams, ngDialog, D
         });
     }
 
-    function removeDashboard(dashboardName) {
-        Dashboard.delete({name: dashboardName}, function(data) {
-            for (var i=0; i<self.dashboards.length; i++) {
-                if (dashboardName === self.dashboards[i].name) {
-                    self.dashboards[i].deleted = true;
-                }
-            }
-        });
-    }
-
     function lockUnlockDashboard() {
         self.dashboardOptions.resizable.enabled = !self.dashboardOptions.resizable.enabled;
         self.dashboardOptions.draggable.enabled = !self.dashboardOptions.draggable.enabled;
@@ -147,6 +142,16 @@ function CentralController($rootScope, $scope, $state, $stateParams, ngDialog, D
         ngDialog.open({
             template: 'views/modal/login.html',
             controller: 'LoginController as ctrl'
+        });
+    }
+
+    function showDashboardSettingsDialog() {
+        ngDialog.open({
+            template: 'views/modal/dashboard_settings.html',
+            controller: 'DashboardSettingsController as ctrl',
+            data: {
+                dashboard: self.selectedDashboard
+            }
         });
     }
 

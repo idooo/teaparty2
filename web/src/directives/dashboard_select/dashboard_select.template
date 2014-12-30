@@ -1,6 +1,7 @@
 <div class="d-custom-select">
 
     <div class="d-custom-select__selector"
+         ng-show="options.length > 0"
          ng-click="showDropdown = !showDropdown"
          ng-class="{'active': showDropdown}"   >
 

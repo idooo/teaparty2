@@ -12,6 +12,13 @@
     </div>
 
     <div class="header-content header-content--right" ng-show="isAuthorised">
+
+        <a href="#"
+           ng-show="central.dashboards.length > 0"
+           ng-click="central.showDashboardSettingsDialog()">Dashboard settings</a>
+
+        |
+
         <a href="#" ng-click="central.lockUnlockDashboard()">Lock/Unlock</a>
         <a href="#" class="" ng-click="central.showNewDashboardDialog()">Add dashboard</a>
         <a href="#" ng-click="central.showNewWidgetDialog()">Add widget</a>
@@ -26,7 +33,10 @@
 
 <div>
 
+    <div ng-show="central.dashboards.length === 0">no dashboard</div>
+
     <dashboard
+            ng-hide="central.dashboards.length === 0"
             options="central.dashboardOptions"
             src="central.selectedDashboard"
             widgets="central.selectedDashboard.widgets"></dashboard>
