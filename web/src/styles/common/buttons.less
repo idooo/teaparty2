@@ -3,6 +3,7 @@
 
 // Variables
 @btn_main_bg_hover_color: lighten(@btn_main_bg_color, 10%);
+@btn_warning_bg_hover_color: lighten(@btn_main_bg_color, 10%);
 
 // ===============================================================
 
@@ -28,4 +29,15 @@ input[type="submit"],
 		background-color: @btn_main_bg_hover_color;
 	}
 }
+
+	.btn--warning {
+		background-color: @btn_warning_bg_color;
+		color: @btn_warning_text_color;
+
+		&:hover {
+			background-color: @btn_warning_bg_hover_color;
+		}
+	}
+
+
 

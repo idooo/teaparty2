@@ -53,6 +53,14 @@ function CentralController($rootScope, $scope, $state, $stateParams, ngDialog, D
         }
     });
 
+    $scope.$on('widgetDeletedEvent', function(event, data) {
+        for (var i=0; i<self.dashboards.length; i++) {
+            if (self.dashboards[i].name === data.dashboardName) {
+                return loadDashboard(i);
+            }
+        }
+    });
+
     $scope.$on('userAuthEvent', function() {
         getDashboardsList(function(dashboards) {
             $rootScope.dashboards = dashboards;

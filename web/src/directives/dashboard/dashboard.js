@@ -54,7 +54,7 @@ angular.module('app.directives')
                         '<li gridster-item row="' + widget.position[0] + '" col="' + widget.position[1] + '" ',
                             'size-x="' + widget.size.x + '" size-y="' + widget.size.y + '" key="'+ widget.key +'">',
 
-                            '<widget-container dashboard-name="' + $scope.selectedDashboard.name + '" widget-key="' + widget.key + '">',
+                            '<widget-container dashboard-name="' + $scope.selectedDashboard.name + '" widget="selectedDashboard.widgets['+index+']">',
                                 '<widget-' + widget.type + ' class="widget" widget="selectedDashboard.widgets['+index+']">',
                                 '</widget-' + widget.type + '>',
                             '</widget-container>',

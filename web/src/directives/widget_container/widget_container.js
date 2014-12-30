@@ -8,24 +8,20 @@ angular.module('app.directives')
         replace: true,
         transclude: true,
         scope: {
-            widgetKey: '@',
+            widget: '=',
             dashboardName: '@'
         },
         templateUrl: TemplatePath.get('directive', 'widget_container'),
-        controller: function($scope, $element, $attrs, ngDialog, Widget)  {
-
-            $scope.removeWidget = function() {
-                console.log('remove widget', $scope.widgetKey);
-                Widget.delete({dashboard: $scope.dashboardName, key: $scope.widgetKey}, function() {
-                    $scope.deleted = true;
-                });
-                ngDialog.close();
-            };
+        controller: function($scope, $element, $attrs, ngDialog)  {
 
             $scope.openWidgetSettingsDialog = function() {
                 ngDialog.open({
-                    scope: $scope,
-                    template: 'views/modal/widget_settings.html'
+                    template: 'views/modal/widget_settings.html',
+                    controller: 'WidgetSettingsController as ctrl',
+                    data: {
+                        dashboardName: $scope.dashboardName,
+                        widget: $scope.widget
+                    }
                 })
             }
         }
