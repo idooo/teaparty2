@@ -7,6 +7,11 @@
         <input type="text" readonly ng-model="ngDialogData.widget.key"/>
     </fieldset>
 
+    <fieldset>
+        <label>Type</label>
+        <input type="text" readonly ng-model="ngDialogData.widget.type"/>
+    </fieldset>
+
     <button ng-click="ctrl.cloneWidget()">Clone</button>
 
     <button class="btn--warning" ng-click="ctrl.removeWidget()">Remove</button>
