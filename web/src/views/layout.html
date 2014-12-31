@@ -17,12 +17,17 @@
            ng-show="central.dashboards.length > 0"
            ng-click="central.showDashboardSettingsDialog()">Dashboard settings</a>
 
-        |
-
         <a href="#" ng-click="central.lockUnlockDashboard()">Lock/Unlock</a>
+
+        <span class="header-content__divider"></span>
+
         <a href="#" class="" ng-click="central.showNewDashboardDialog()">Add dashboard</a>
         <a href="#" ng-click="central.showNewWidgetDialog()">Add widget</a>
+
+        <span class="header-content__divider"></span>
+
         <a href="#" ng-click="central.showRotationsDialog()">Rotations</a>
+
     </div>
 
     <div class="header-content header-content--right" ng-hide="isAuthorised">

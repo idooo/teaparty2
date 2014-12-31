@@ -213,6 +213,13 @@ module.exports = (grunt) ->
         compress:
           drop_console: true
 
+    jsdoc:
+      dist:
+        src: ['core/**/*.js', '<%= settings.app %>/**/*.js', '<%= settings.widgets %>/**/*.js']
+        options:
+          destination: 'docs'
+          template : "node_modules/grunt-jsdoc/node_modules/ink-docstrap/template",
+          configure : "jsdoc.conf.json"
 
   ###############################################################
   # Jobs

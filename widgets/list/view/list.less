@@ -1,3 +1,34 @@
+@import "../../imports";
+
 // Variables
 
+@value_color: @text_color;
+@label_color: darken(@text_color, 33%);
+
 // =======================================================================================
+
+.widget-list {
+
+}
+
+	.widget-list-container {
+		list-style-type: none;
+		padding: 0;
+		margin: 0;
+	}
+
+		.widget-list-item {
+			margin: 0;
+			padding: 0;
+			white-space: nowrap;
+
+			&__value {
+				color: @value_color;
+				font-size: 20px;
+				font-weight: 600;
+			}
+
+			&__label {
+				color: @label_color;
+			}
+		}

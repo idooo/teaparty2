@@ -1,3 +1,8 @@
+/**
+ * Dashboard model
+ * @module core/model/Dashboard
+ **/
+
 var uuid = require('node-uuid'),
     modelName = 'Dashboard';
 

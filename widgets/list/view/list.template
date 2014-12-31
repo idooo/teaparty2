@@ -1,9 +1,16 @@
 <div class="widget-list">
 
-    {{widget.caption}}
+    <h3 ng-show="!!widget.caption">{{widget.caption}}</h3>
 
-    <div ng-repeat="item in widget.data">
-        {{item.value}} - {{item.label}}
-    </div>
+    <ul class="widget-list-container">
+
+        <li class="widget-list-item" ng-repeat="item in widget.data">
+
+            <span class="widget-list-item__value">{{item.value}}</span>
+            <span class="widget-list-item__label">{{item.label}}</span>
+
+        </li>
+
+    </ul>
 
 </div>

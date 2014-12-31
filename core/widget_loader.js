@@ -8,7 +8,11 @@ var fs = require('fs'),
 widgetsList.forEach(function(widgetName) {
 
     var widgetPath = widgetsFolder + '/' + widgetName,
-        files = fs.readdirSync(widgetPath);
+        files;
+
+    if (!fs.statSync(widgetPath).isDirectory()) return;
+
+    files = fs.readdirSync(widgetPath);
 
     files.forEach(function(filename) {
         try {
