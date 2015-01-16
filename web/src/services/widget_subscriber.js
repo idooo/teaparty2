@@ -11,8 +11,8 @@ angular.module("app.services")
         };
 
         this.sizeChange = function($scope, callback) {
-            $scope.$on('widgetSizeChangeEvent:' + $scope.widget.key, function(event) {
-                if (typeof callback === 'function') callback();
+            $scope.$on('widgetSizeChangeEvent:' + $scope.widget.key, function(event, width, height) {
+                if (typeof callback === 'function') callback(width, height);
             });
         };
 

@@ -99,7 +99,12 @@ angular.module('app.directives')
 
             function onResize(event, $element, widget, size) {
                 console.log('resize stop - new size arg:', size);
-                $scope.$broadcast('widgetSizeChangeEvent:'+widget.key);
+
+                var gridster = $scope.$$childHead.gridster,
+                    height = (gridster.curColWidth - gridster.margins[0] * 2) * size.y,
+                    width = (gridster.curRowHeight - gridster.margins[1] * 2) * size.x;
+
+                $scope.$broadcast('widgetSizeChangeEvent:' + widget.key, width, height);
                 Widget.update({
                     dashboard: $scope.selectedDashboard.name,
                     key: widget.key,
