@@ -58,7 +58,7 @@ Optional. Validator for incoming data for your widget
 Optional. Custom formatters for data for your widget. The output of this function will be saved to database. Please strip all redundant data to keep database more compact.
 
 #### <widget_dir>/view/anyname.template
-Template that will be used in your AngularJS widget directive. All widget data you will find in `{{widget}}` object. For example widget data you can find in `{{widget.data}}`. Inspect this object to see all the properties you can show to user.
+Template that will be used in your AngularJS widget directive. All widget data you will find in `{{widget}}` object. For example widget data will be placed to `{{widget.data}}`. 
 
 #### <widget_dir>/view/anyname.less
 Styles for your widget. Use `@import "../../imports";` to get access to glocal application style variables and mixins
@@ -109,13 +109,18 @@ function (type, path, component) {
 ##### controller
 If you want to enable live updates for your widget via sockets (I think you want), you need to inject `WidgetSubscriber` service and subscribe your widget to updates: `WidgetSubscriber.update($scope);`. All data will be copied to `$scope.data`.
 
-`WidgetSubscriber` has two methods you can use:
+##### `WidgetSubscriber` has two methods you can use:
 
 ###### WidgetSubscriber.update($scope, [callback])
 Where `callback` is `function(data) {}` that will be executed when your widget will receive the data update
 
 ###### WidgetSubscriber.sizeChange($scope, [callback])
-Where `callback` is `function() {}` that will be executed when size was changed for your widget
+Where `callback` is `function(width, height) {}` that will be executed when size was changed for your widget. `width` and `height` are sizes of widget container in pixels
+
+##### `WidgetHelper` is optional injectable service with methods:
+
+###### WidgetHelper.textFill(textElement, parentWidth, parentHeight)
+Change the font size of text element dynamically to fill the parent element
 
 #### Installation
 You will need to rebuild application using `grunt build` (your directive will be added to app’s code) and also restart the application (backend application load widgets references at the start of the application)

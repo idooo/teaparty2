@@ -4,7 +4,11 @@
 
         <div class="widget-status__caption-inner">
 
-            {{widget.data.text || widget.caption}}
+            <span>
+
+                {{widget.data.text || widget.caption}}
+
+            </span>
 
         </div>
 
