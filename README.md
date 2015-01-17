@@ -109,7 +109,10 @@ function (type, path, component) {
 ##### controller
 If you want to enable live updates for your widget via sockets (I think you want), you need to inject `WidgetSubscriber` service and subscribe your widget to updates: `WidgetSubscriber.update($scope);`. All data will be copied to `$scope.data`.
 
-##### `WidgetSubscriber` has two methods you can use:
+##### `WidgetSubscriber` has methods you can use:
+
+###### WidgetSubscriber.ready($scope, [callback])
+Where `callback` is `function(data) {}` that will be executed when your widget was rendered
 
 ###### WidgetSubscriber.update($scope, [callback])
 Where `callback` is `function(data) {}` that will be executed when your widget will receive the data update

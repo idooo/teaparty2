@@ -17,4 +17,8 @@ angular
             });
         };
 
+        this.ready = function($scope, callback) {
+            if (typeof callback === 'function') $scope.$on('widgetReadyEvent', callback);
+        }
+
     });

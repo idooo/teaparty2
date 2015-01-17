@@ -27,7 +27,9 @@ angular.module('teaparty2.dashboard')
             }, true);
 
         },
-        controller: function($scope, $element, $attrs, $compile, Widget) {
+        controller: function($scope, $element, $attrs, $compile, $timeout, Widget) {
+
+            var renderTimeout = 1000;
 
             $scope.gridsterOpts = {
                 columns: 10,
@@ -68,6 +70,10 @@ angular.module('teaparty2.dashboard')
                 var widgets = angular.element(template);
                 $element.append(widgets);
                 $compile(widgets)($scope);
+
+                $timeout(function() {
+                    $scope.$broadcast('widgetReadyEvent');
+                }, renderTimeout)
             };
 
             /**

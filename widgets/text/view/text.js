@@ -10,7 +10,7 @@ angular.module('teaparty2.widgets')
             widget: '=widget'
         },
         templateUrl: TemplatePath.get('text'),
-        controller: function($scope, $element, $attrs, $timeout, WidgetSubscriber, WidgetHelper)  {
+        controller: function($scope, $element, $attrs, WidgetSubscriber, WidgetHelper)  {
 
             $scope.textElement = Sizzle('.widget-status__caption-inner > span', $element[0])[0];
 
@@ -20,10 +20,9 @@ angular.module('teaparty2.widgets')
                 WidgetHelper.textFill($scope.textElement, width, height);
             });
 
-            // TODO: do something beautiful here
-            $timeout(function() {
+            WidgetSubscriber.ready($scope, function() {
                 WidgetHelper.textFill($scope.textElement, $element[0].offsetWidth, $element[0].offsetHeight);
-            }, 1000)
+            });
 
         }
     }
