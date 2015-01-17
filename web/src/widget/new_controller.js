@@ -1,7 +1,7 @@
 'use strict';
 
 angular
-    .module('teaparty2')
+    .module('teaparty2.widget')
     .controller('NewWidgetController', NewWidgetController);
 
 function NewWidgetController($scope, $rootScope, ngDialog, Settings, Widget) {

@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('app.directives')
-    .directive('dashboardSelect', function(TemplatePath) {
+angular.module('teaparty2.dashboard')
+    .directive('dashboardSelect', function() {
 
     return {
         restrict: 'EA',
@@ -12,7 +12,7 @@ angular.module('app.directives')
             onChange: '=',
             onRemove: '='
         },
-        templateUrl: TemplatePath.get('directive', 'dashboard_select'),
+        templateUrl: 'dashboard/dashboard_select/dashboard_select.template',
         link: function(scope) {
             scope.showDropdown = false;
 

@@ -1,7 +1,7 @@
 'use strict';
 
 angular
-    .module('teaparty2')
+    .module('teaparty2.core')
     .controller('LoginController', LoginController);
 
 function LoginController($rootScope, ngDialog, Auth) {

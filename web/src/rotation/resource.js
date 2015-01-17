@@ -1,6 +1,7 @@
 'use strict';
 
-angular.module("app.services")
+angular
+    .module("teaparty2.rotation")
     .factory('Rotation', function($resource) {
         return $resource('/api/rotation/:url', {
                 url: '@url',

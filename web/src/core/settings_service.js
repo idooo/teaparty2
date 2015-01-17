@@ -1,6 +1,7 @@
 'use strict';
 
-angular.module("app.services")
+angular
+    .module("teaparty2.core")
     .service('Settings', function($http) {
 
         var self = this,

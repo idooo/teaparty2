@@ -1,7 +1,7 @@
 'use strict';
 
 angular
-    .module('teaparty2')
+    .module('teaparty2.rotation')
     .controller('RotationController', RotationController);
 
 function RotationController($timeout, $state, $stateParams, Rotation, Dashboard) {

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app.widgets')
+angular.module('teaparty2.widgets')
     .directive('widgetText', function(TemplatePath) {
 
     return {
@@ -9,7 +9,7 @@ angular.module('app.widgets')
         scope: {
             widget: '=widget'
         },
-        templateUrl: TemplatePath.get('widget', 'text'),
+        templateUrl: TemplatePath.get('text'),
         controller: function($scope, $element, $attrs, $timeout, WidgetSubscriber, WidgetHelper)  {
 
             $scope.textElement = Sizzle('.widget-status__caption-inner > span', $element[0])[0];

@@ -1,7 +1,7 @@
 'use strict';
 
 angular
-    .module('teaparty2')
+    .module('teaparty2.dashboard')
     .controller('DashboardSettingsController', DashboardSettingsController);
 
 function DashboardSettingsController($scope, $rootScope, ngDialog, Dashboard) {

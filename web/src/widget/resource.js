@@ -1,6 +1,7 @@
 'use strict';
 
-angular.module("app.services")
+angular
+    .module("teaparty2.widget")
     .factory('Widget', function($resource) {
         return $resource('/api/dashboard/:dashboard/widget/:key', {
             dashboard: '@dashboard',

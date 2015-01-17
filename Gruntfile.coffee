@@ -103,7 +103,7 @@ module.exports = (grunt) ->
               "*.{ico,png,txt}"
               "views/**/*.html"
               "images/**/*"
-              "fonts/*"
+              "styles/fonts/*"
               "styles/*.htc"
             ]
           }
@@ -115,7 +115,7 @@ module.exports = (grunt) ->
             cwd: "<%= settings.app %>"
             dest: "<%= settings.dist %>"
             src: [
-              "directives/**/*.template"
+              "**/*.template"
             ]
           }
         ]
@@ -168,7 +168,7 @@ module.exports = (grunt) ->
       appTemplates:
         options:
           base: 'web/src'
-          module: 'app.templates'
+          module: 'teaparty2.template'
           singleModule: true
 
         src: [
@@ -180,7 +180,7 @@ module.exports = (grunt) ->
       widgetTemplates:
         options:
           base: ''
-          module: 'app.widgets.templates'
+          module: 'teaparty2.widgets.template'
           singleModule: true
 
         src: [ '<%= settings.widgets %>/**/*.template' ]

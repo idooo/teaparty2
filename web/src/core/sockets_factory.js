@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module("app.services")
+angular.module("teaparty2.core")
     .factory('Sockets', function (socketFactory) {
         return socketFactory();
     });

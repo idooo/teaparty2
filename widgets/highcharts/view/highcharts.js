@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app.widgets')
+angular.module('teaparty2.widgets')
     .directive('widgetHighcharts', function(TemplatePath) {
 
     return {
@@ -9,7 +9,7 @@ angular.module('app.widgets')
         scope: {
             widget: '=widget'
         },
-        templateUrl: TemplatePath.get('widget', 'highcharts'),
+        templateUrl: TemplatePath.get('highcharts'),
         link: function(scope, el) {
 
             scope.render = function() {

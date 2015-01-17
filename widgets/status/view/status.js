@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app.widgets')
+angular.module('teaparty2.widgets')
     .directive('widgetStatus', function(TemplatePath) {
 
     return {
@@ -9,7 +9,7 @@ angular.module('app.widgets')
         scope: {
             widget: '=widget'
         },
-        templateUrl: TemplatePath.get('widget', 'status'),
+        templateUrl: TemplatePath.get('status'),
         controller: function($scope, $element, $attrs, WidgetSubscriber)  {
             WidgetSubscriber.update($scope);
         }

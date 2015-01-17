@@ -1,7 +1,7 @@
 'use strict';
 
 angular
-    .module('teaparty2')
+    .module('teaparty2.core')
     .controller('CentralController', CentralController);
 
 function CentralController($rootScope, $scope, $state, $stateParams, ngDialog, Dashboard, Sockets) {

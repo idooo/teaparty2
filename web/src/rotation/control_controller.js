@@ -1,7 +1,7 @@
 'use strict';
 
 angular
-    .module('teaparty2')
+    .module('teaparty2.rotation')
     .controller('RotationsControlController', RotationsControlController);
 
 function RotationsControlController(Rotation, Dashboard) {

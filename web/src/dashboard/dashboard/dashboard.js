@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('app.directives')
-    .directive('dashboard', function(TemplatePath) {
+angular.module('teaparty2.dashboard')
+    .directive('dashboard', function() {
 
     return {
         restrict: 'EA',
@@ -11,7 +11,7 @@ angular.module('app.directives')
             selectedDashboard: '=src',
             options: '=?'
         },
-        templateUrl: TemplatePath.get('directive', 'dashboard'),
+        templateUrl: 'dashboard/dashboard/dashboard.template',
         link: function(scope) {
             scope.state = 'locked';
 

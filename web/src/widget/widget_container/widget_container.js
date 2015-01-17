@@ -1,7 +1,8 @@
 'use strict';
 
-angular.module('app.directives')
-    .directive('widgetContainer', function(TemplatePath) {
+angular
+    .module('teaparty2.widget')
+    .directive('widgetContainer', function() {
 
     return {
         restrict: 'E',
@@ -11,7 +12,7 @@ angular.module('app.directives')
             widget: '=',
             dashboardName: '@'
         },
-        templateUrl: TemplatePath.get('directive', 'widget_container'),
+        templateUrl: 'widget/widget_container/widget_container.template',
         controller: function($scope, $element, $attrs, ngDialog)  {
 
             $scope.openWidgetSettingsDialog = function() {
