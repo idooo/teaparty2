@@ -11,27 +11,26 @@ angular.module('teaparty2.widgets')
         },
         templateUrl: TemplatePath.get('highcharts'),
         link: function(scope, el) {
-
             scope.render = function() {
                 if (typeof scope.widget.data.chart === 'undefined') scope.widget.data.chart = {};
                 scope.widget.data.chart.renderTo = el[0];
                 scope.chart = new Highcharts.Chart(scope.widget.data);
             };
 
+            scope.reflow = function() {
+                scope.chart.reflow();
+            };
+
             scope.render();
 
-            setTimeout(function() {
-                scope.chart.reflow();
-            }, 1000);
         },
         controller: function($scope, $element, $attrs, WidgetSubscriber)  {
-            WidgetSubscriber.update($scope, function() {
-                $scope.render();
-            });
 
-            WidgetSubscriber.sizeChange($scope, function() {
-                $scope.chart.reflow();
-            })
+            WidgetSubscriber.update($scope, $scope.render);
+
+            WidgetSubscriber.sizeChange($scope, $scope.reflow);
+
+            WidgetSubscriber.ready($scope, $scope.reflow);
         }
     }
 });

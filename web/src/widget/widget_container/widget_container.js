@@ -13,6 +13,14 @@ angular
             dashboardName: '@'
         },
         templateUrl: 'widget/widget_container/widget_container.template',
+        link: function(scope) {
+            scope.rendered = false;
+
+            scope.$on('widgetReadyEvent', function() {
+                scope.rendered = true;
+            });
+        },
+
         controller: function($scope, $element, $attrs, ngDialog)  {
 
             $scope.openWidgetSettingsDialog = function() {
@@ -24,7 +32,7 @@ angular
                         widget: $scope.widget
                     }
                 })
-            }
+            };
         }
     }
 });

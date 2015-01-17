@@ -22,14 +22,14 @@ var modules = [
 // Init app and modules
 angular.module('teaparty2', modules);
 
-angular.module("teaparty2.core", []);
-angular.module("teaparty2.dashboard", []);
-angular.module("teaparty2.rotation", []);
-angular.module("teaparty2.widget", []);
-angular.module("teaparty2.template", []);
+angular.module('teaparty2.core', []);
+angular.module('teaparty2.dashboard', []);
+angular.module('teaparty2.rotation', []);
+angular.module('teaparty2.widget', []);
+angular.module('teaparty2.template', []);
 
-angular.module("teaparty2.widgets", []);
-angular.module("teaparty2.widgets.template", []);
+angular.module('teaparty2.widgets', []);
+angular.module('teaparty2.widgets.template', []);
 
 // Initial app config
 angular
@@ -45,7 +45,7 @@ angular
                 url: '/d/:dashboard',
                 views: {
                     content: {
-                        templateUrl: "/views/layout.html",
+                        templateUrl: '/views/layout.html',
                         controller: 'CentralController as central'
                     }
                 }
@@ -54,7 +54,7 @@ angular
                 url: '/rotation/:url',
                 views: {
                     content: {
-                        templateUrl: "/views/rotation.html",
+                        templateUrl: '/views/rotation.html',
                         controller: 'RotationController as rotation'
                     }
                 }

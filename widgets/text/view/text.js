@@ -10,9 +10,10 @@ angular.module('teaparty2.widgets')
             widget: '=widget'
         },
         templateUrl: TemplatePath.get('text'),
+        link: function(scope, element) {
+            scope.textElement = Sizzle('.widget-status__caption-inner > span', element[0])[0];
+        },
         controller: function($scope, $element, $attrs, WidgetSubscriber, WidgetHelper)  {
-
-            $scope.textElement = Sizzle('.widget-status__caption-inner > span', $element[0])[0];
 
             WidgetSubscriber.update($scope);
 

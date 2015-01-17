@@ -4,6 +4,8 @@
         <i class="icon-cog" ng-click="openWidgetSettingsDialog()"></i>
     </div>
 
-    <div class="d-widget-container__body" ng-transclude></div>
+    <div class="d-widget-container__body"
+         ng-class="{'d-widget-container__body--rendered': rendered}"
+         ng-transclude></div>
 
 </div>
