@@ -11,34 +11,38 @@ angular.module('teaparty2.widgets')
             },
             templateUrl: TemplatePath.get('highcharts'),
             link: function (scope, el) {
-                scope.container = el.find('div');
+                scope.container = el.find('div')[0];
                 scope.rendering = false;
-                scope.chartElement = undefined;
 
                 scope.render = function () {
                     if (typeof scope.widget.data.chart === 'undefined') scope.widget.data.chart = {};
-                    scope.widget.data.chart.renderTo = scope.container[0];
+                    scope.widget.data.chart.renderTo = scope.container;
+                    scope.widget.data.chart.spacingTop = 30; // Add padding for header
                     scope.chart = new Highcharts.Chart(scope.widget.data);
 
-                    scope.chartElement = Sizzle('.highcharts-container')[0];
+                    scope.chartElement = Sizzle('.highcharts-container', scope.container)[0];
                 };
 
                 scope.render();
             },
             controller: function ($scope, $element, $attrs, $timeout, WidgetSubscriber) {
 
-                WidgetSubscriber.update($scope, $scope.render);
-
-                WidgetSubscriber.sizeChange($scope, function () {
+                $scope.reflow = function() {
                     startRendering();
                     $timeout(function() {
                         $scope.chart.reflow();
                         stopRendering();
                     }, 1000)
+                };
+
+                WidgetSubscriber.update($scope, $scope.render);
+
+                WidgetSubscriber.sizeChange($scope, function () {
+                    $scope.reflow();
                 });
 
                 WidgetSubscriber.ready($scope, function () {
-                    $scope.chart.reflow();
+                    $scope.reflow();
                 });
 
                 function startRendering() {
