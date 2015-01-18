@@ -1,0 +1,15 @@
+{
+    "globals": {
+        "Sizzle": true,
+        "angular": true
+    },
+    "env": {
+        "browser": true
+    },
+    "rules": {
+        "no-use-before-define": [2, "nofunc"],
+        "curly": 0,
+        "quotes": [2, "single", "avoid-escape"],
+        "no-underscore-dangle": 0
+    }
+}

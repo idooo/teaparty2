@@ -219,11 +219,22 @@ module.exports = (grunt) ->
         options:
           destination: 'docs'
           template : "node_modules/grunt-jsdoc/node_modules/ink-docstrap/template",
-          configure : "jsdoc.conf.json"
+          configure : "tools/config/jsdoc.conf.json"
+
+    eslint:
+      front:
+        options:
+            config: 'tools/config/eslint.ng.json'
+        src: ['<%= settings.app %>/**/*.js']
+
 
   ###############################################################
   # Jobs
   ###############################################################
+
+  grunt.registerTask 'test', [
+    'eslint:front'
+  ]
 
   # omg, they gonna serve it!
   grunt.registerTask 'serve', [
@@ -241,6 +252,7 @@ module.exports = (grunt) ->
 
   # build production ready result
   grunt.registerTask 'build', [
+    'test'
     'clean'
     'ngAnnotate'
     'html2js'
