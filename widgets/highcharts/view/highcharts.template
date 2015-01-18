@@ -1,5 +1,7 @@
 <div class="widget-highcharts">
 
-    <div class="spinner"></div>
+    <span class="spinner" ng-show="rendering"></span>
+
+    <div class="widget-highcharts__chart-container"></div>
 
 </div>
