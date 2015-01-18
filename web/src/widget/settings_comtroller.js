@@ -1,42 +1,46 @@
-'use strict';
+(function () {
 
-angular
-    .module('teaparty2.widget')
-    .controller('WidgetSettingsController', WidgetSettingsController);
+    'use strict';
 
-function WidgetSettingsController($scope, $rootScope, ngDialog, Widget) {
+    angular
+        .module('teaparty2.widget')
+        .controller('WidgetSettingsController', WidgetSettingsController);
 
-    var self = this;
+    function WidgetSettingsController($scope, $rootScope, ngDialog, Widget) {
 
-    self.removeWidget = function() {
-        Widget.delete({
-            dashboard: $scope.ngDialogData.dashboardName,
-            key: $scope.ngDialogData.widget.key
-        }, function() {
-            console.log('widget removed', $scope.ngDialogData.widget.key);
-            $rootScope.$broadcast('widgetDeletedEvent', {
-                dashboardName: $scope.ngDialogData.dashboardName
+        var self = this;
+
+        self.removeWidget = removeWidget;
+        self.cloneWidget = cloneWidget;
+
+        function removeWidget() {
+            Widget.delete({
+                dashboard: $scope.ngDialogData.dashboardName,
+                key: $scope.ngDialogData.widget.key
+            }, function () {
+                $rootScope.$broadcast('widgetDeletedEvent', {
+                    dashboardName: $scope.ngDialogData.dashboardName
+                });
+                ngDialog.close();
             });
-            ngDialog.close();
-        });
-    };
+        }
 
-    self.cloneWidget = function() {
-        var widget = new Widget({
-            dashboard: $scope.ngDialogData.dashboardName,
-            type: $scope.ngDialogData.widget.type,
-            caption: $scope.ngDialogData.widget.caption
-        });
-
-        widget.$save(function(data) {
-            console.log('widget cloned', data);
-            $rootScope.$broadcast('widgetAddedEvent', {
-                dashboardName: $scope.ngDialogData.dashboardName
+        function cloneWidget() {
+            var widget = new Widget({
+                dashboard: $scope.ngDialogData.dashboardName,
+                type: $scope.ngDialogData.widget.type,
+                caption: $scope.ngDialogData.widget.caption
             });
-            ngDialog.close();
-        }, function(err) {
-            console.log('err', err);
-            self.error = err.data.error;
-        });
+
+            widget.$save(function () {
+                $rootScope.$broadcast('widgetAddedEvent', {
+                    dashboardName: $scope.ngDialogData.dashboardName
+                });
+                ngDialog.close();
+            }, function (err) {
+                self.error = err.data.error;
+            });
+        }
     }
-}
+
+})();

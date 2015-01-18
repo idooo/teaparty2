@@ -1,36 +1,35 @@
 'use strict';
 
 angular.module('teaparty2.widgets')
-    .directive('widgetHighcharts', function(TemplatePath) {
+    .directive('widgetHighcharts', function (TemplatePath) {
 
-    return {
-        restrict: 'E',
-        replace: true,
-        scope: {
-            widget: '=widget'
-        },
-        templateUrl: TemplatePath.get('highcharts'),
-        link: function(scope, el) {
-            scope.render = function() {
-                if (typeof scope.widget.data.chart === 'undefined') scope.widget.data.chart = {};
-                scope.widget.data.chart.renderTo = el[0];
-                scope.chart = new Highcharts.Chart(scope.widget.data);
-            };
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                widget: '=widget'
+            },
+            templateUrl: TemplatePath.get('highcharts'),
+            link: function (scope, el) {
+                scope.render = function () {
+                    if (typeof scope.widget.data.chart === 'undefined') scope.widget.data.chart = {};
+                    scope.widget.data.chart.renderTo = el[0];
+                    scope.chart = new Highcharts.Chart(scope.widget.data);
+                };
 
-            scope.reflow = function() {
-                scope.chart.reflow();
-            };
+                scope.render();
+            },
+            controller: function ($scope, $element, $attrs, WidgetSubscriber) {
 
-            scope.render();
+                WidgetSubscriber.update($scope, $scope.render);
 
-        },
-        controller: function($scope, $element, $attrs, WidgetSubscriber)  {
+                WidgetSubscriber.sizeChange($scope, function () {
+                    $scope.chart.reflow();
+                });
 
-            WidgetSubscriber.update($scope, $scope.render);
-
-            WidgetSubscriber.sizeChange($scope, $scope.reflow);
-
-            WidgetSubscriber.ready($scope, $scope.reflow);
+                WidgetSubscriber.ready($scope, function () {
+                    $scope.chart.reflow();
+                });
+            }
         }
-    }
-});
+    });

@@ -1,8 +1,12 @@
-'use strict';
+(function () {
 
-angular
-    .module("teaparty2.widget")
-    .service('WidgetHelper', function () {
+    'use strict';
+
+    angular
+        .module('teaparty2.widget')
+        .service('WidgetHelper', WidgetHelper);
+
+    function WidgetHelper() {
 
         /**
          * Change font size of text element to fill the parent element
@@ -12,7 +16,7 @@ angular
          * @param parentWidth
          * @param parentHeight
          */
-        this.textFill = function(textElement, parentWidth, parentHeight) {
+        this.textFill = function (textElement, parentWidth, parentHeight) {
             var fontSize = 100, // Max font size
                 minFontSize = 10,
                 paddings = 10,
@@ -25,7 +29,9 @@ angular
                 textWidth = textElement.offsetWidth;
                 fontSize = fontSize - 1;
             } while (
-                (textHeight + paddings > parentHeight || textWidth + paddings > parentWidth)
-                && fontSize > minFontSize);
+            (textHeight + paddings > parentHeight || textWidth + paddings > parentWidth)
+            && fontSize > minFontSize);
         };
-    });
+    }
+
+})();

@@ -1,19 +1,23 @@
-'use strict';
+(function () {
 
-angular
-    .module('teaparty2.dashboard')
-    .controller('DashboardSettingsController', DashboardSettingsController);
+    'use strict';
 
-function DashboardSettingsController($scope, $rootScope, ngDialog, Dashboard) {
+    angular
+        .module('teaparty2.dashboard')
+        .controller('DashboardSettingsController', DashboardSettingsController);
 
-    var self = this;
+    function DashboardSettingsController($scope, $rootScope, ngDialog, Dashboard) {
 
-    self.removeDashboard = function(dashboardName) {
-        Dashboard.delete({name: dashboardName}, function() {
-            $rootScope.$broadcast('dashboardDeletedEvent', {
-                dashboardName: $scope.ngDialogData.dashboard
+        var self = this;
+
+        self.removeDashboard = function (dashboardName) {
+            Dashboard.delete({name: dashboardName}, function () {
+                $rootScope.$broadcast('dashboardDeletedEvent', {
+                    dashboardName: $scope.ngDialogData.dashboard
+                });
+                ngDialog.close();
             });
-            ngDialog.close();
-        });
+        };
     }
-}
+
+})();

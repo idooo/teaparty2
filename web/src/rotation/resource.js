@@ -1,15 +1,19 @@
-'use strict';
+(function () {
 
-angular
-    .module("teaparty2.rotation")
-    .factory('Rotation', function($resource) {
+    'use strict';
+
+    angular
+        .module('teaparty2.rotation')
+        .factory('Rotation', RotationResource);
+
+    function RotationResource($resource) {
         return $resource('/api/rotation/:url', {
                 url: '@url',
                 dashboardID: '@dashboardID'
             },
             {
                 update: {
-                    method:'PUT'
+                    method: 'PUT'
                 },
                 list: {
                     method: 'GET',
@@ -29,4 +33,6 @@ angular
                     method: 'PUT'
                 }
             });
-    });
+    }
+
+})();

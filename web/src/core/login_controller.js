@@ -1,26 +1,26 @@
-'use strict';
+(function () {
 
-angular
-    .module('teaparty2.core')
-    .controller('LoginController', LoginController);
+    'use strict';
 
-function LoginController($rootScope, ngDialog, Auth) {
+    angular
+        .module('teaparty2.core')
+        .controller('LoginController', LoginController);
 
-    var self = this;
+    function LoginController($rootScope, ngDialog, Auth) {
 
-    self.error = '';
+        var self = this;
 
-    self.login = function() {
-        Auth.auth(self.username, self.password, function(isAuthorised, err) {
-            $rootScope.isAuthorised = isAuthorised;
-            $rootScope.$broadcast('userAuthEvent');
+        self.error = '';
 
-            if (isAuthorised) {
-                ngDialog.close();
-            }
-            else {
-                self.error = err;
-            }
-        })
+        self.login = function () {
+            Auth.auth(self.username, self.password, function (isAuthorised, err) {
+                $rootScope.isAuthorised = isAuthorised;
+                $rootScope.$broadcast('userAuthEvent');
+
+                if (isAuthorised) ngDialog.close();
+                else self.error = err;
+            });
+        };
     }
-}
+
+})();

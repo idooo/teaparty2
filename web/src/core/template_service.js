@@ -1,11 +1,17 @@
 // Helper for templates resolving for components and widgets
+(function () {
 
-angular.module("teaparty2.core")
-    .factory('TemplatePath', function () {
+    'use strict';
 
-    return {
-        get: function (path, component) {
-            return "widgets/" + path + "/view/" + (component || path) + ".template";
-        }
-    }
-});
+    angular
+        .module('teaparty2.core')
+        .factory('TemplatePath', function () {
+
+            return {
+                get: function (path, component) {
+                    return 'widgets/' + path + '/view/' + (component || path) + '.template';
+                }
+            };
+        });
+
+})();

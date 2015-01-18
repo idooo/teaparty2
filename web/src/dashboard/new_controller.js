@@ -1,26 +1,28 @@
-'use strict';
+(function () {
 
-angular
-    .module('teaparty2.dashboard')
-    .controller('NewDashboardController', NewDashboardController);
+    'use strict';
 
-function NewDashboardController($rootScope, ngDialog, Dashboard) {
+    angular
+        .module('teaparty2.dashboard')
+        .controller('NewDashboardController', NewDashboardController);
 
-    var self = this;
+    function NewDashboardController($rootScope, ngDialog, Dashboard) {
 
-    self.dashboardName = '';
-    self.error = '';
-    self.addDashboard = addDashboard;
+        var self = this;
 
-    function addDashboard() {
-        var dashboard = new Dashboard({name: self.dashboardName});
-        dashboard.$save(function() {
-            console.log('dashboard added');
-            $rootScope.$broadcast('dashboardAddedEvent', dashboard);
-            ngDialog.close();
-        }, function(err) {
-            console.log('err', err);
-            self.error = err.data;
-        });
+        self.dashboardName = '';
+        self.error = '';
+        self.addDashboard = addDashboard;
+
+        function addDashboard() {
+            var dashboard = new Dashboard({name: self.dashboardName});
+            dashboard.$save(function () {
+                $rootScope.$broadcast('dashboardAddedEvent', dashboard);
+                ngDialog.close();
+            }, function (err) {
+                self.error = err.data;
+            });
+        }
     }
-}
+
+})();
