@@ -1,0 +1,24 @@
+<div class="widget-rag">
+
+    <div class="widget-caption widget-rag__caption">
+        {{widget.caption}}
+    </div>
+
+    <table class="widget-rag__table">
+
+        <tr>
+            <td>{{widget.data[0].value}}</td>
+            <td>{{widget.data[0].text}}</td>
+        </tr>
+        <tr>
+            <td>{{widget.data[1].value}}</td>
+            <td>{{widget.data[1].text}}</td>
+        </tr>
+        <tr>
+            <td>{{widget.data[2].value}}</td>
+            <td>{{widget.data[2].text}}</td>
+        </tr>
+
+    </table>
+
+</div>
