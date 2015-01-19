@@ -1,0 +1,11 @@
+<div class="widget-number">
+
+    <div class="widget-caption">
+        {{widget.caption}}
+    </div>
+
+    <div class="widget-number__data">
+        {{widget.data.value}}
+    </div>
+
+</div>
