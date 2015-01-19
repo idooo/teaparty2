@@ -1,6 +1,6 @@
 <div class="widget-highcharts">
 
-    <span class="widget-highcharts__caption">{{widget.caption}}</span>
+    <span class="widget-caption widget-highcharts__caption">{{widget.caption}}</span>
 
     <span class="spinner" ng-show="rendering"></span>
 
