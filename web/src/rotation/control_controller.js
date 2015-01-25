@@ -12,6 +12,7 @@
 
         self.rotations = [];
         self.dashboards = [];
+        self.selectedRotation = undefined;
 
         self.removeRotation = removeRotation;
         self.createRotation = createRotation;
@@ -19,6 +20,7 @@
         self.setDashboardTimeout = setDashboardTimeout;
         self.addDashboardToRotation = addDashboardToRotation;
         self.isDashboardInRotation = isDashboardInRotation;
+        self.selectRotation = selectRotation;
 
         init();
 
@@ -71,6 +73,10 @@
                 if (rotation.dashboards[i]._id === dashboardID) return true;
             }
             return false;
+        }
+
+        function selectRotation(rotation) {
+            self.selectedRotation = rotation;
         }
     }
 

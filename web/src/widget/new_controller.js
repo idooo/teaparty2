@@ -13,6 +13,8 @@
         self.availableWidgetTypes = [];
         self.widgetType = undefined;
         self.widgetCaption = '';
+        self.error = '';
+
         self.addWidget = addWidget;
 
         Settings.get(function (settings) {
@@ -33,7 +35,7 @@
                 });
                 ngDialog.close();
             }, function (err) {
-                self.error = err.data.error;
+                self.error = err.data ? err.data.error : { message: "Server is unavailable" };
             });
         }
     }

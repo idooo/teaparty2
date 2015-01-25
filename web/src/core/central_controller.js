@@ -10,6 +10,9 @@
 
         var self = this;
 
+        var NG_DIALOG_DEFAULT_THEME = 'ngdialog-theme-default',
+            NG_DIALOG_WIDE_MODIFIER = 'ngdialog-theme-default--wide';
+
         self.dashboards = [];
         self.dashboardOptions = {
             resizable: {enabled: false},
@@ -141,6 +144,7 @@
 
         function showRotationsDialog() {
             ngDialog.open({
+                className: [NG_DIALOG_DEFAULT_THEME, NG_DIALOG_WIDE_MODIFIER].join(' '),
                 template: 'views/modal/rotations_control.html',
                 controller: 'RotationsControlController as ctrl'
             });

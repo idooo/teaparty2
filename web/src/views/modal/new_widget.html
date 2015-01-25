@@ -1,13 +1,23 @@
 <div>
 
-    <h3>new widget</h3>
+    <h3>Add widget</h3>
 
-    caption:
-    <input type="text" ng-model="ctrl.widgetCaption"/>
+     <form ng-submit="ctrl.addWidget()">
 
-    type:
-    <select ng-model="ctrl.widgetType" ng-options="option for option in ctrl.availableWidgetTypes"></select>
+        <fieldset>
+            <label>Caption</label>
+            <input type="text" ng-model="ctrl.widgetCaption"/>
+        </fieldset>
 
-    <button ng-click="ctrl.addWidget()">Create</button>
-    {{ctrl.error}}
+        <fieldset>
+            <label>Type</label>
+            <select ng-model="ctrl.widgetType" ng-options="option for option in ctrl.availableWidgetTypes"></select>
+        </fieldset>
+
+        <input type="submit" value="Add widget"/>
+
+        <span class="form-error-message">{{ctrl.error.message}}</span>
+
+    </form>
+
 </div>

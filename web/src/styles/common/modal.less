@@ -8,7 +8,7 @@
 
 // ===============================================================
 
-.ngdialog.ngdialog-theme-default {
+.ngdialog-theme-default {
 	padding-bottom: 160px;
 	padding-top: 160px;
 
@@ -55,6 +55,19 @@
 		&:hover:before,
 		&:active:before {
 			color: @close_btn_hover_color;
+		}
+	}
+}
+
+// Modifiers
+// ========================================================================
+
+.ngdialog-theme-default {
+
+	&--wide {
+
+		.ngdialog-content {
+			width: 800px;
 		}
 	}
 }
