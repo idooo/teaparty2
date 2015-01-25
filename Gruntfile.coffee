@@ -17,6 +17,7 @@ module.exports = (grunt) ->
 
     settings:
       app: 'web/src'
+      backend: 'core'
       vendor: 'web/vendor'
       widgets: 'widgets'
       dist: 'web/dist'
@@ -74,8 +75,6 @@ module.exports = (grunt) ->
           "<%= settings.dist %>/styles/widgets.css": "<%= settings.widgets %>/**/*.less"
           "<%= settings.dist %>/styles/main.css": "<%= settings.app %>/styles/index.less"
           "<%= settings.dist %>/styles/vendor.css": "<%= settings.vendor %>/**/*.less"
-
-  # ngmin
 
     ngAnnotate:
       build:
@@ -153,8 +152,6 @@ module.exports = (grunt) ->
         tasks: ['copy:distStatic', 'develop']
         options: { nospawn: true }
 
-  # include source
-
     includeSource:
       options:
         basePath: '<%= settings.dist %>/'
@@ -226,6 +223,10 @@ module.exports = (grunt) ->
         options:
             config: 'tools/config/eslint.ng.json'
         src: ['<%= settings.app %>/**/*.js']
+      back:
+        options:
+            config: 'tools/config/eslint.node.json'
+        src: ['<%= settings.backend %>/**/*.js']
 
 
   ###############################################################
