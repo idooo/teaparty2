@@ -1,7 +1,8 @@
+'use strict';
+
 var mongoose = require('mongoose');
 
-var models = ['dashboard', 'widget', 'rotation'],
-    model = {};
+var models = ['dashboard', 'widget', 'rotation'];
 
 module.exports = function(config) {
     var options = {

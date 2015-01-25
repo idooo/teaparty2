@@ -36,47 +36,64 @@
     // Initial app config
     angular
         .module('teaparty2')
-        .config(function ($stateProvider, $urlRouterProvider, gridsterConfig) {
+        .config(configuration)
+        .run(init);
 
-            gridsterConfig.resizable.handles = ['se'];
+    /**
+     * Teaparty2 ng app configuration
+     * @param $stateProvider
+     * @param $urlRouterProvider
+     * @param gridsterConfig
+     */
+    function configuration ($stateProvider, $urlRouterProvider, gridsterConfig) {
 
-            $urlRouterProvider.otherwise('/d/');
+        // Allow widget resize only using bottom right corner
+        gridsterConfig.resizable.handles = ['se'];
 
-            $stateProvider
-                .state('app', {
-                    url: '/d/:dashboard',
-                    views: {
-                        content: {
-                            templateUrl: '/views/layout.html',
-                            controller: 'CentralController as central'
-                        }
+        $urlRouterProvider.otherwise('/d/');
+
+        $stateProvider
+            .state('app', {
+                url: '/d/:dashboard',
+                views: {
+                    content: {
+                        templateUrl: '/views/layout.html',
+                        controller: 'CentralController as central'
                     }
-                })
-                .state('rotation', {
-                    url: '/rotation/:url',
-                    views: {
-                        content: {
-                            templateUrl: '/views/rotation.html',
-                            controller: 'RotationController as rotation'
-                        }
-                    }
-                });
-
-        })
-        .run(function ($rootScope, $http, Settings, Auth) {
-            // Initial auth
-            Auth.updateAuthHeader();
-            Settings.get(function (settings) {
-                if (typeof settings !== 'undefined' && settings.auth === false) {
-                    $rootScope.isAuthorised = true;
-                    Auth.token = 0;
                 }
-                else {
-                    Auth.check(undefined, function (isAuthorised) {
-                        $rootScope.isAuthorised = isAuthorised;
-                    });
+            })
+            .state('rotation', {
+                url: '/rotation/:url',
+                views: {
+                    content: {
+                        templateUrl: '/views/rotation.html',
+                        controller: 'RotationController as rotation'
+                    }
                 }
             });
+    }
+
+    /**
+     * Teaparty2 ng app runtime config
+     * @param $rootScope
+     * @param Settings
+     * @param Auth
+     */
+    function init ($rootScope, Settings, Auth) {
+
+        // Check user tokens on application start, set headers if succeed
+        Auth.updateAuthHeader();
+        Settings.get(function (settings) {
+            if (typeof settings !== 'undefined' && settings.auth === false) {
+                $rootScope.isAuthorised = true;
+                Auth.token = 0;
+            }
+            else {
+                Auth.check(undefined, function (isAuthorised) {
+                    $rootScope.isAuthorised = isAuthorised;
+                });
+            }
         });
+    }
 
 })();
