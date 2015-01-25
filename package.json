@@ -1,6 +1,23 @@
 {
+  "author": "Alex Shteinikov <alex.shteinikov@gmail.com> (http://www.shteinikov.com/)",
   "name": "teaparty2",
-  "version": "0.0.1",
+  "description": "Simple dashboard written in Node.js and AngularJS",
+  "version": "0.8.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/idooo/teaparty2.git"
+  },
+  "keywords": [
+    "teaparty",
+    "teaparty2",
+    "angular dashboard",
+    "teaparty dashboard",
+    "teaparty2 dashboard",
+    "dashboard"
+  ],
+  "engines": {
+    "node": "*"
+  },
   "dependencies": {
     "restify": "~2.8.3",
     "socket.io": "~1.2.1",
@@ -8,15 +25,15 @@
     "node-uuid": "~1.4.2"
   },
   "devDependencies": {
+    "time-grunt": "~1.0.0",
+    "load-grunt-tasks": "~1.0.0",
     "grunt-develop": "~0.4.0",
     "grunt": "~0.4.5",
     "grunt-ng-annotate": "~0.8.0",
     "grunt-express-server": "~0.4.19",
     "grunt-contrib-clean": "~0.6.0",
     "grunt-include-source": "~0.4.5",
-    "time-grunt": "~1.0.0",
     "grunt-contrib-watch": "~0.6.1",
-    "load-grunt-tasks": "~1.0.0",
     "grunt-wiredep": "~2.0.0",
     "grunt-contrib-less": "~0.12.0",
     "grunt-contrib-copy": "~0.7.0",
