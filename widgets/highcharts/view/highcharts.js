@@ -35,15 +35,11 @@ angular.module('teaparty2.widgets')
                     }, 1000)
                 };
 
-                WidgetSubscriber.update($scope, $scope.render);
+                WidgetSubscriber.update($scope, function() { $scope.render(); });
 
-                WidgetSubscriber.sizeChange($scope, function () {
-                    $scope.reflow();
-                });
+                WidgetSubscriber.sizeChange($scope, function () { $scope.reflow(); });
 
-                WidgetSubscriber.ready($scope, function () {
-                    $scope.reflow();
-                });
+                WidgetSubscriber.ready($scope, function () { $scope.reflow(); });
 
                 function startRendering() {
                     $scope.rendering = true;
