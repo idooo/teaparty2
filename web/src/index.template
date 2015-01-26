@@ -13,14 +13,14 @@
         <title>Teaparty2</title>
 
         <!-- build:css styles/main.min.css -->
-            <link rel="stylesheet" href="/styles/main.css">
-            <link rel="stylesheet" href="/styles/widgets.css">
+            <!-- include: "type": "css", "files": "styles/main.css" -->
+            <!-- include: "type": "css", "files": "styles/widgets.css" -->
         <!-- endbuild -->
 
         <!-- build:css styles/vendor.min.css -->
             <!-- bower:css -->
             <!-- endbower -->
-            <link rel="stylesheet" href="/styles/vendor.css">
+            <!-- include: "type": "css", "files": "styles/vendor.css" -->
         <!-- endbuild -->
 
     </head>
