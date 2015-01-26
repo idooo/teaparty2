@@ -10,6 +10,7 @@
         'gridster',
         'LocalStorageModule',
         'btford.socket-io',
+        'ngClipboard',
 
         'teaparty2.core',
         'teaparty2.template',
@@ -43,9 +44,16 @@
      * Teaparty2 ng app configuration
      * @param $stateProvider
      * @param $urlRouterProvider
+     * @param $locationProvider
      * @param gridsterConfig
+     * @param ngClipProvider
      */
-    function configuration ($stateProvider, $urlRouterProvider, gridsterConfig) {
+    function configuration ($stateProvider, $urlRouterProvider, $locationProvider, gridsterConfig, ngClipProvider) {
+
+        // Path to flash object used in copy to clipboard component
+        ngClipProvider.setPath("bower_components/zeroclipboard/dist/ZeroClipboard.swf");
+
+        $locationProvider.html5Mode(true);
 
         // Allow widget resize only using bottom right corner
         gridsterConfig.resizable.handles = ['se'];
