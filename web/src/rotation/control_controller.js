@@ -37,7 +37,7 @@
 
         function removeRotation(rotation) {
             Rotation.delete({url: rotation.url});
-            for (var i=0; i<self.rotations.length; i++) {
+            for (var i = 0; i < self.rotations.length; i++) {
                 if (rotation.url === self.rotations[i].url) return self.rotations.splice(i, 1);
             }
         }
