@@ -102,6 +102,13 @@
                 });
             }
         });
+
+        // Helper for inverse filtering
+        $rootScope.not = function(func) {
+            return function (item) {
+                return !func(item);
+            }
+        };
     }
 
 })();

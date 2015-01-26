@@ -1,0 +1,50 @@
+@import "../variables";
+@import "../mixins";
+
+// Variables
+
+
+// =======================================================================================
+
+.rotations-control {
+
+	&__inner-container {
+		.flex-display();
+	}
+
+		&__rotations {
+			width: 300px;
+		}
+
+
+		&__details {
+			.align-self(stretch);
+			.flex-grow(1);
+		}
+}
+
+.rotations-control-rotation {
+	margin-bottom: 5px;
+
+	&:last-of-type {
+		margin-bottom: 20px;
+	}
+
+	&__url {
+		font-size: 14px;
+		display: inline-block;
+		text-decoration: none;
+		border-bottom: 1px dotted #7c7c7c;
+	}
+
+	&__copy {
+		font-size: 12px;
+		text-decoration: none;
+		border-bottom: 1px dotted #7c7c7c;
+	}
+
+	span {
+		font-size: 12px;
+		vertical-align: super;
+	}
+}

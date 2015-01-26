@@ -1,40 +1,57 @@
-<div>
+<div class="rotations-control">
 
     <h3>Rotations</h3>
 
-    <div>
+    <div class="rotations-control__inner-container">
 
-        <div ng-repeat="rotation in ctrl.rotations"
-             ng-hide="rotation.deleted"
-             ng-click="ctrl.selectRotation(rotation)">
+        <div class="rotations-control__rotations">
 
-            <b>{{rotation.url}}</b>
-            <button ng-click="ctrl.removeRotation(rotation)">remove</button>
+            <div class="rotations-control-rotation"
+                 ng-repeat="rotation in ctrl.rotations">
 
-        </div>
+                <a href="#"
+                   class="rotations-control-rotation__url"
+                   ng-click="ctrl.selectRotation(rotation)">{{::rotation.url}}</a>
 
-        <button ng-click="ctrl.createRotation()">add rotation</button>
-
-    </div>
-
-    <div ng-show="ctrl.selectedRotation">
-
-        <div ng-repeat="dashboard in ctrl.selectedRotation.dashboards">
-            {{dashboard.name}} - {{dashboard.timeout}}
-            <button ng-click="ctrl.removeDashboardFromRotation(rotation, dashboard)">remove</button>
-            <button ng-click="ctrl.setDashboardTimeout(rotation, dashboard, 31)">set timeout</button>
-        </div>
-
-        <div style="font-size: 10px;">
-
-            <div ng-repeat="dashboard in ctrl.dashboards" ng-hide="ctrl.isDashboardInRotation(rotation, dashboard._id)">
-
-                {{dashboard.name}} - {{dashboard._id}}
-
-                <button ng-click="ctrl.addDashboardToRotation(rotation, dashboard)">add</button>
+                <span>{{rotation.dashboards.length}}</span>
 
             </div>
-            <br/>
+
+            <button ng-click="ctrl.createRotation()">Add new rotation</button>
+
+        </div>
+
+        <div class="rotations-control__details"
+             ng-show="ctrl.selectedRotation">
+
+            <a href="#"
+               class="rotations-control-rotation__copy"
+               clip-copy="ctrl.getRotationUrl(rotation)">Copy link to clipboard</a>
+
+            <h4>Dashboards in rotation</h4>
+
+            <div ng-repeat="dashboard in ctrl.selectedRotation.dashboards">
+                {{dashboard.name}} - {{dashboard.timeout}} seconds
+                <button ng-click="ctrl.removeDashboardFromRotation(ctrl.selectedRotation, dashboard)">remove</button>
+                <button ng-click="ctrl.setDashboardTimeout(ctrl.selectedRotation, dashboard, 31)">set timeout</button>
+            </div>
+
+            <h4>Add dashboard to rotation</h4>
+
+            <div style="font-size: 10px;">
+
+                <div ng-repeat="dashboard in ctrl.dashboards | filter:not(ctrl.isDashboardInSelectedRotation)">
+
+                    {{dashboard.name}} - {{dashboard._id}}
+
+                    <button ng-click="ctrl.addDashboardToRotation(ctrl.selectedRotation, dashboard)">add</button>
+
+                </div>
+
+            </div>
+
+            <button class="btn--warning"
+                    ng-click="ctrl.removeRotation(ctrl.selectedRotation)">Delete Rotation</button>
 
         </div>
 
