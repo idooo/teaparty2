@@ -6,15 +6,15 @@
 
     <table class="widget-rag__table">
 
-        <tr>
+        <tr class="widget-rag__row widget-rag__row--top">
             <td>{{widget.data[0].value}}</td>
             <td>{{widget.data[0].text}}</td>
         </tr>
-        <tr>
+        <tr class="widget-rag__row widget-rag__row--middle">
             <td>{{widget.data[1].value}}</td>
             <td>{{widget.data[1].text}}</td>
         </tr>
-        <tr>
+        <tr class="widget-rag__row widget-rag__row--bottom">
             <td>{{widget.data[2].value}}</td>
             <td>{{widget.data[2].text}}</td>
         </tr>

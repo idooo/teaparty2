@@ -1,7 +1,38 @@
+@import "../../imports";
+
 // Variables
+
+@default_color: fade(@text_color, 50%);
+
+@top_color: #e3524f;
+@middle_color: #eca245;
+@bottom_color: #90c564;
 
 // =======================================================================================
 
 .widget-rag {
+
+	&__table {
+
+	}
+
+		&__row {
+			color: @default_color;
+
+			td:first-child {
+				padding-right: 5px;
+				font-size: 16px;
+			}
+
+			td:last-child {
+				font-size: 10px;
+			}
+		}
+
+		&__row--top td:first-child { color: @top_color; }
+
+		&__row--middle td:first-child { color: @middle_color; }
+
+		&__row--bottom td:first-child { color: @bottom_color; }
 
 }

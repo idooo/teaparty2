@@ -5,7 +5,13 @@
     </div>
 
     <div class="widget-number__data">
-        {{widget.data.value}}
+
+        <span>
+
+            {{widget.data.value}}
+
+        </span>
+
     </div>
 
 </div>

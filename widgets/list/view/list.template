@@ -1,6 +1,6 @@
 <div class="widget-list">
 
-    <h3 ng-show="!!widget.caption">{{widget.caption}}</h3>
+    <div class="widget-caption">{{widget.caption}}</div>
 
     <ul class="widget-list-container">
 
