@@ -26,9 +26,6 @@ Teaparty 2 dashboard
 
 To create new widget, please read [this post](https://github.com/idooo/teaparty2/wiki/Creating-widgets) in wiki.
 
-#### Installation
-You will need to rebuild application using `grunt build` (your directive will be added to app’s code) and also restart the application (backend application load widgets references at the start of the application)
-
 ### License
 
 ##### The MIT License (MIT)
