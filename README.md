@@ -24,7 +24,7 @@ Teaparty 2 dashboard
 
 ### Creating new widgets
 
-To create new widget, please read [this post](https://github.com/idooo/teaparty2/wiki/Creating-widgets) in wiki.
+To create a new widget, please read [this post](https://github.com/idooo/teaparty2/wiki/Creating-widgets) in wiki.
 
 ### License
 
