@@ -73,10 +73,10 @@
                     '<li gridster-item row="' + widget.position[0] + '" col="' + widget.position[1] + '" ',
                     'size-x="' + widget.size.x + '" size-y="' + widget.size.y + '" key="' + widget.key + '">',
 
-                    '<widget-container dashboard-name="' + $scope.selectedDashboard.name + '" widget="selectedDashboard.widgets[' + index + ']">',
-                    '<widget-' + widget.type + ' class="widget" widget="selectedDashboard.widgets[' + index + ']">',
-                    '</widget-' + widget.type + '>',
-                    '</widget-container>',
+                        '<widget-container dashboard-name="' + $scope.selectedDashboard.name + '" widget="selectedDashboard.widgets[' + index + ']">',
+                            '<widget-' + widget.type + ' class="widget" widget="selectedDashboard.widgets[' + index + ']">',
+                            '</widget-' + widget.type + '>',
+                        '</widget-container>',
 
                     '</li>'
                 ].join('');
@@ -92,33 +92,6 @@
                 $scope.$broadcast('widgetReadyEvent');
             }, renderTimeout);
         };
-
-        /**
-         * Smart merge gridster options objects
-         * @param destination
-         * @param source
-         * @returns {*}
-         */
-        function mergeGridsterOptions(destination, source) {
-            for (var key in source) {
-                if (source.hasOwnProperty(key)) {
-                    if (key === 'resizable' || key === 'draggable') {
-                        if (typeof destination[key] === 'undefined') {
-                            destination[key] = {};
-                        }
-                        for (var innerKey in source[key]) {
-                            if (source[key].hasOwnProperty(innerKey)) {
-                                destination[key][innerKey] = source[key][innerKey];
-                            }
-                        }
-                    }
-                    else {
-                        destination[key] = source[key];
-                    }
-                }
-            }
-            return destination;
-        }
 
         function onResize(event, element, widget, size) {
 
@@ -143,5 +116,33 @@
             });
         }
     }
+
+    /**
+     * Smart merge gridster options objects
+     * @param destination
+     * @param source
+     * @returns {*}
+     */
+    function mergeGridsterOptions(destination, source) {
+        for (var key in source) {
+            if (source.hasOwnProperty(key)) {
+                if (key === 'resizable' || key === 'draggable') {
+                    if (typeof destination[key] === 'undefined') {
+                        destination[key] = {};
+                    }
+                    for (var innerKey in source[key]) {
+                        if (source[key].hasOwnProperty(innerKey)) {
+                            destination[key][innerKey] = source[key][innerKey];
+                        }
+                    }
+                }
+                else {
+                    destination[key] = source[key];
+                }
+            }
+        }
+        return destination;
+    }
+
 
 })();
