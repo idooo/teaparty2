@@ -32,6 +32,7 @@
         self.showDashboardSettingsDialog = showDashboardSettingsDialog;
 
         self.isHeaderOpen = false;
+        self.isDashboardLocked = true;
 
         Sockets.on('update_widgets', function (data) {
             data.forEach(function (updateObject) {
@@ -114,10 +115,12 @@
             var dashboard = self.dashboards[index];
             Dashboard.get({name: dashboard.name}, function (data) {
                 self.selectedDashboard = data;
+                self.isDashboardLocked = true;
             });
         }
 
         function lockUnlockDashboard() {
+            self.isDashboardLocked = !self.isDashboardLocked;
             self.dashboardOptions.resizable.enabled = !self.dashboardOptions.resizable.enabled;
             self.dashboardOptions.draggable.enabled = !self.dashboardOptions.draggable.enabled;
         }

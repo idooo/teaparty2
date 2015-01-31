@@ -19,10 +19,10 @@
     "node": "*"
   },
   "dependencies": {
-    "restify": "~2.8.3",
-    "socket.io": "~1.2.1",
     "mongoose": "~3.8.20",
-    "node-uuid": "~1.4.2"
+    "node-uuid": "~1.4.2",
+    "restify": "~2.8.3",
+    "socket.io": "~1.2.1"
   },
   "devDependencies": {
     "time-grunt": "~1.0.0",
