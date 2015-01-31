@@ -4,6 +4,8 @@
 
     <div class="rotations-control__inner-container">
 
+        <!-- Rotations list - BEGIN -->
+
         <div class="rotations-control__rotations">
 
             <div class="rotations-control-rotation"
@@ -11,6 +13,7 @@
 
                 <a href="#"
                    class="rotations-control-rotation__url"
+                   ng-class="{'rotations-control-rotation__url--selected' : ctrl.selectedRotation.url === rotation.url }"
                    ng-click="ctrl.selectRotation(rotation)">{{::rotation.url}}</a>
 
                 <span>{{rotation.dashboards.length}}</span>
@@ -21,39 +24,82 @@
 
         </div>
 
+        <!-- Rotations list - END -->
+
+        <!-- Rotations details - BEGIN -->
+
         <div class="rotations-control__details"
              ng-show="ctrl.selectedRotation">
 
             <a href="#"
-               class="btn rotations-control-rotation__copy"
+               class="btn btn--small btn--minor rotations-control-rotation__copy"
                clip-copy="ctrl.getRotationUrl(ctrl.selectedRotation)">Copy link to clipboard</a>
 
-            <h4 class="rotations-control__header">Dashboards in rotation</h4>
+            <!-- Dashboards in rotation - BEGIN -->
 
-            <div ng-repeat="dashboard in ctrl.selectedRotation.dashboards">
-                {{dashboard.name}} - {{dashboard.timeout}} seconds
-                <i class="icon-trash-empty" ng-click="ctrl.removeDashboardFromRotation(ctrl.selectedRotation, dashboard)"></i>
-                <button ng-click="ctrl.setDashboardTimeout(ctrl.selectedRotation, dashboard, 31)">set timeout</button>
-            </div>
+            <table class="rotations-control-dashboards"
+                   ng-show="ctrl.selectedRotation.dashboards.length">
 
-            <h4 class="rotations-control__header">Add dashboard to rotation</h4>
+                <thead>
+                    <tr>
+                        <th>Dashboards in rotation</th>
+                        <th>Timeout</th>
+                        <th></th>
+                    </tr>
+                </thead>
 
-            <div style="font-size: 10px;">
+                <tbody>
 
-                <div ng-repeat="dashboard in ctrl.dashboards | filter:not(ctrl.isDashboardInSelectedRotation)">
+                    <tr ng-repeat="dashboard in ctrl.selectedRotation.dashboards">
+                        <td>{{dashboard.name}}</td>
+                        <td>{{dashboard.timeout || 30}} seconds</td>
 
-                    {{dashboard.name}} - {{dashboard._id}}
+                        <td>
+                            <span class="rotations-control-dashboards__exclude"
+                                  ng-click="ctrl.removeDashboardFromRotation(ctrl.selectedRotation, dashboard)">×</span>
+                        </td>
+                        <!-- <button ng-click="ctrl.setDashboardTimeout(ctrl.selectedRotation, dashboard, 31)">set timeout</button> -->
+                    </tr>
 
-                    <button ng-click="ctrl.addDashboardToRotation(ctrl.selectedRotation, dashboard)">add</button>
+                </tbody>
 
-                </div>
+            </table>
 
-            </div>
+            <!-- Dashboards in rotation - END -->
+
+
+            <!-- Available dashboards - BEGIN -->
+
+            <table class="rotations-control-dashboards"
+                   ng-show="ctrl.selectedRotation.dashboards.length !== ctrl.dashboards.length" >
+
+                <thead>
+                    <tr>
+                        <th>Available dashboards</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr ng-repeat="dashboard in ctrl.dashboards | filter:not(ctrl.isDashboardInSelectedRotation)">
+                        <td>{{dashboard.name}}</td>
+
+                        <td>
+                            <button class="btn--small" ng-click="ctrl.addDashboardToRotation(ctrl.selectedRotation, dashboard)">Add</button>
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
+
+            <!-- Available dashboards - END -->
 
             <button class="btn--warning"
                     ng-click="ctrl.removeRotation(ctrl.selectedRotation)">Delete Rotation</button>
 
         </div>
+
+        <!-- Rotations details - END -->
 
     </div>
 

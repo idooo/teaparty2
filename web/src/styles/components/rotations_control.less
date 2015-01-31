@@ -2,7 +2,8 @@
 @import "../mixins";
 
 // Variables
-
+@exclude_color: @btn_main_bg_color;
+@exclude_hover_color: darken(@exclude_color, 20%);;
 
 // =======================================================================================
 
@@ -23,7 +24,7 @@
 		}
 
 	&__header {
-		margin: 16px 0 6px;
+		margin: 0 0 6px;
 	}
 }
 
@@ -39,12 +40,15 @@
 		display: inline-block;
 		text-decoration: none;
 		border-bottom: 1px dotted #7c7c7c;
+
+		&--selected {
+			font-weight: 600;
+		}
 	}
 
 	&__copy {
-		font-size: 12px;
-		text-decoration: none;
-		border-bottom: 1px dotted #7c7c7c;
+		position: absolute;
+		margin-top: -36px;
 	}
 
 	span {
@@ -52,3 +56,51 @@
 		vertical-align: super;
 	}
 }
+
+	.rotations-control-dashboards {
+		width: 100%;
+		margin-bottom: 20px;
+
+		th {
+			font-size: 12px;
+			padding: 4px;
+			border-bottom: 1px solid rgba(0,0,0,0.1);
+			text-align: left;
+			font-weight: 400;
+		}
+
+		tbody {
+
+			tr:first-child td {
+				padding-top: 8px;
+			}
+
+			tr {
+
+				&:hover {
+					background-color: rgba(0,0,0,0.05);
+				}
+			}
+
+			td {
+				padding: 4px;
+				font-size: 14px;
+			}
+
+			td:first-child {
+				width: 75%;
+			}
+		}
+
+		&__exclude {
+			cursor: pointer;
+			font-size: 16px;
+			line-height: 1;
+			font-weight: 600;
+			color: @exclude_color;
+
+			&:hover {
+				color: @exclude_hover_color;
+			}
+		}
+	}

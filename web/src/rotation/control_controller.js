@@ -73,7 +73,9 @@
         }
 
         function isDashboardInSelectedRotation(dashboard) {
-            if (typeof self.selectedRotation === 'undefined') return false;
+            if (typeof self.selectedRotation === 'undefined' || typeof self.selectedRotation.dashboards === 'undefined') {
+                return false;
+            }
 
             for (var i = 0; i < self.selectedRotation.dashboards.length; i++) {
                 if (self.selectedRotation.dashboards[i]._id === dashboard._id) return true;
