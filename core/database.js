@@ -17,10 +17,12 @@ module.exports = function(config) {
     mongoose.connect(config.database.uri + ':' + config.database.port + '/' + config.database.db, options);
 
     var connection = mongoose.connection;
-    connection.on('error', console.error.bind(console, 'connection error:'));
+    connection.on('error', function(err) {
+        config.logger.error("Database connection error", JSON.stringify(err));
+    });
     connection.once('open', function callback () {
         config.database.isConnected = true;
-        console.log('DB: connected');
+        config.logger.info('DB connected ' + config.database.uri);
     });
 
     models.forEach(function(modelName) {

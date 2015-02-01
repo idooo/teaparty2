@@ -13,5 +13,6 @@
     "db": "teaparty2",
     "username": "admin",
     "password": "admin"
-  }
+  },
+  "log_level": "info"
 }

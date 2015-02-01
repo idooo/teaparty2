@@ -1,4 +1,3 @@
-
 var sanitize = require('./sanitize');
 
 module.exports = {
@@ -26,8 +25,6 @@ module.exports = {
 
         response.status = 'error';
         response.code = code;
-
-        console.log(response);
 
         r.send(code, response);
     }
