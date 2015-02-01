@@ -1,6 +1,12 @@
 @import "../variables";
 @import "../mixins";
 
+// Variables
+
+@important_message_color: @text_color;
+
+// =======================================================================================
+
 .d-dashboard {
 
 	// TODO: Not the best way to lock/unlock widgets
@@ -20,4 +26,11 @@
 	&--unlocked .widget {
 		background-color: @widget_bg_color;
 	}
+}
+
+.dashboard-important-message {
+	color: @important_message_color;
+	text-align: center;
+	padding: 0;
+	margin: 200px 0 0;
 }

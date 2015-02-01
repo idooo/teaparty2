@@ -11,36 +11,39 @@
 
     </div>
 
-    <div class="header-content header-content--right" ng-show="isAuthorised">
+    <div class="header-content" ng-show="isAuthorised">
 
         <a href="#"
            ng-show="central.dashboards.length > 0"
-           ng-click="central.showDashboardSettingsDialog()">Dashboard settings</a>
+           ng-click="::central.showDashboardSettingsDialog()">Dashboard settings</a>
 
-        <a href="#" ng-click="central.lockUnlockDashboard()">
+        <a href="#" ng-click="::central.lockUnlockDashboard()">
             {{central.isDashboardLocked ? 'Unlock dashboard' : 'Lock dashboard'}}
         </a>
 
         <span class="header-content__divider"></span>
 
-        <a href="#" class="" ng-click="central.showNewDashboardDialog()">Add dashboard</a>
-        <a href="#" ng-click="central.showNewWidgetDialog()">Add widget</a>
+        <a href="#" class="" ng-click="::central.showNewDashboardDialog()">Add dashboard</a>
+        <a href="#" ng-click="::central.showNewWidgetDialog()">Add widget</a>
 
         <span class="header-content__divider"></span>
 
-        <a href="#" ng-click="central.showRotationsDialog()">Rotations</a>
+        <a href="#" ng-click="::central.showRotationsDialog()">Rotations</a>
 
     </div>
 
-    <div class="header-content header-content--right" ng-hide="isAuthorised">
-        <a href="#" ng-click="central.showLoginDialog()">Login</a>
+    <div class="header-content" ng-hide="isAuthorised">
+        <a href="#" ng-click="::central.showLoginDialog()">Login</a>
     </div>
 
 </header>
 
 <div>
 
-    <div ng-show="central.dashboards.length === 0">no dashboard</div>
+    <div class="dashboard-important-message"
+         ng-show="!central.isAnyDashboardAvailable() && !central.selectedDashboard">
+        {{central.importantMessage}}
+    </div>
 
     <dashboard
             ng-hide="central.dashboards.length === 0"

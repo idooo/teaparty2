@@ -6,7 +6,7 @@
         .module('teaparty2.core')
         .controller('CentralController', CentralController);
 
-    function CentralController($rootScope, $scope, $state, $stateParams, ngDialog, Dashboard, Sockets) {
+    function CentralController($rootScope, $scope, $state, $stateParams, ngDialog, Dashboard, Sockets, Settings) {
 
         var self = this;
 
@@ -14,6 +14,7 @@
             NG_DIALOG_WIDE_MODIFIER = 'ngdialog-theme-default--wide';
 
         self.dashboards = [];
+        self.importantMessage = '';
         self.dashboardOptions = {
             resizable: {enabled: false},
             draggable: {enabled: false}
@@ -23,6 +24,7 @@
         self.loadDashboard = loadDashboard;
         self.goToDashboard = goToDashboard;
         self.lockUnlockDashboard = lockUnlockDashboard;
+        self.isAnyDashboardAvailable = isAnyDashboardAvailable;
 
         // Modals openers
         self.showNewDashboardDialog = showNewDashboardDialog;
@@ -33,6 +35,7 @@
 
         self.isHeaderOpen = false;
         self.isDashboardLocked = true;
+        self.settings = Settings.get();
 
         Sockets.on('update_widgets', function (data) {
             data.forEach(function (updateObject) {
@@ -123,6 +126,19 @@
             self.isDashboardLocked = !self.isDashboardLocked;
             self.dashboardOptions.resizable.enabled = !self.dashboardOptions.resizable.enabled;
             self.dashboardOptions.draggable.enabled = !self.dashboardOptions.draggable.enabled;
+        }
+
+        function isAnyDashboardAvailable() {
+            if (!self.settings.isDatabaseConnected) {
+                self.importantMessage = "Database connection problem. Check application logs for details";
+                return false;
+            }
+            else if (self.dashboards.length === 0) {
+                self.importantMessage = "You have no dashboards";
+                return false;
+            }
+            self.importantMessage = '';
+            return true;
         }
 
         // Modals

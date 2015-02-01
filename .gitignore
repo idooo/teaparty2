@@ -33,3 +33,5 @@ web/bower_components
 web/dist
 .tmp/
 docs/
+
+config/my.json

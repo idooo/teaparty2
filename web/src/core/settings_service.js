@@ -13,6 +13,7 @@
 
         self.settings = undefined;
 
+        // TODO: rewrite this with no callback
         self.get = function (callback) {
             var http;
 

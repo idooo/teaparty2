@@ -5,6 +5,9 @@ var mongoose = require('mongoose');
 var models = ['dashboard', 'widget', 'rotation'];
 
 module.exports = function(config) {
+
+    config.database.isConnected = false;
+
     var options = {
         db: { native_parser: true },
         server: { poolSize: 5 },

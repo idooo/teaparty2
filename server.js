@@ -1,4 +1,4 @@
-var config = require(process.env.conf || './config/default.json'),
+var config = require(process.env.config || './config/default.json'),
     restify = require('restify'),
     socketio = require('socket.io');
 
@@ -17,5 +17,5 @@ if (process.env.nosync !== "true")
     require('./core/synchronizer')(io, model, config);
 
 server.listen(config.server.port, function () {
-    console.log('socket.io server listening at %s', server.url);
+    console.log('Teaparty2 server is listening at %s', server.url);
 });

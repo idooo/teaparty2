@@ -13,6 +13,7 @@ module.exports = function(server, model, config) {
 
         safeConfig.auth = (typeof config.auth !== 'undefined') ? config.auth : true;
         safeConfig.widgetTypes = Object.keys(config.widgets);
+        safeConfig.isDatabaseConnected = config.database.isConnected;
 
         r.ok(res, safeConfig);
         return next();
