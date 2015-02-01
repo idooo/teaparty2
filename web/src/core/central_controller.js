@@ -130,11 +130,11 @@
 
         function isAnyDashboardAvailable() {
             if (!self.settings.isDatabaseConnected) {
-                self.importantMessage = "Database connection problem. Check application logs for details";
+                self.importantMessage = 'Database connection problem. Check application logs for details';
                 return false;
             }
             else if (self.dashboards.length === 0) {
-                self.importantMessage = "You have no dashboards";
+                self.importantMessage = 'You have no dashboards';
                 return false;
             }
             self.importantMessage = '';
