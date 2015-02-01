@@ -16,7 +16,7 @@ Run Teaparty2 with your shiny config by setting env variable `config` like:
 
 ## Setup
 #### Database
-Teaparty2 stores all data in the [MongoDB](http://www.mongodb.org/) database. You will need to install it and setup it or you can use one of Cloud-based solutions like [MongoLab](https://mongolab.com/) - free plan there is more than enough for dashboard. 
+Teaparty2 stores all data in the [MongoDB](http://www.mongodb.org/) database. You will need to install it and setup or use one of cloud-based solutions like [MongoLab](https://mongolab.com/) - free plan there is more than enough for dashboard. 
 
 #### Auth
 By default there is no auth and everyone can change your dashboards and get access to widgets. Set config property `admin` to `false` and set `admin` credentials (see example below) if you want to restrict dashboards editing.
