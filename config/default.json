@@ -8,11 +8,13 @@
     "port": 8080
   },
   "database": {
-    "uri": "mongodb://ds061620.mongolab.com",
-    "port": 61620,
+    "uri": "mongodb://ds0XXXXX.mongolab.com",
+    "port": 10000,
     "db": "teaparty2",
     "username": "admin",
     "password": "admin"
   },
-  "log_level": "info"
+  "logs": {
+    "level": "info"
+  }
 }

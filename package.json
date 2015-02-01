@@ -19,7 +19,6 @@
     "node": "*"
   },
   "dependencies": {
-    "bunyan-winston-adapter": "^0.2.0",
     "mongoose": "~3.8.20",
     "node-uuid": "~1.4.2",
     "restify": "~2.8.3",
@@ -47,5 +46,8 @@
     "grunt-contrib-concat": "~0.5.0",
     "grunt-jsdoc": "~0.5.7",
     "grunt-eslint": "~4.0.0"
+  },
+  "bin": {
+    "teaparty2": "./bin/teaparty2"
   }
 }

@@ -1,0 +1,8 @@
+#!/bin/sh
+':' //; exec "$(command -v nodejs || command -v node)" "$0" "$@"
+
+if (typeof process.env.config !== 'undefined' && process.env.config.indexOf('/') !== 0) {
+    process.env.config = __dirname + '/' + process.env.config;
+}
+
+require('../server');

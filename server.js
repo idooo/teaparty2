@@ -1,12 +1,25 @@
-var config = require(process.env.config || './config/default.json'),
-    winston = require('winston'),
+try {
+    var config = require(process.env.config || __dirname + '/config/default.json');
+}
+catch (e) {
+    console.error('Error! Cannot find config file "' + process.env.config + '"\nExisting now...');
+    process.exit(1);
+}
+var winston = require('winston'),
     restify = require('restify'),
     socketio = require('socket.io');
 
 config.logger = logger = new (winston.Logger) ({
     transports: [
-        new (winston.transports.Console)({ level: config.log_level, colorize: true }),
-        new (winston.transports.File)({ level: config.log_level, json: false, filename: 'logs/teaparty2.log' })
+        new (winston.transports.Console)({
+            level: (config.logs || {}).level,
+            colorize: true
+        }),
+        new (winston.transports.File)({
+            level: (config.logs || {}).level,
+            json: false,
+            filename: (config.logs || {}).file || __dirname + '/logs/teaparty2.log'
+        })
     ]
 });
 
