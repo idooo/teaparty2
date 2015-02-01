@@ -50,10 +50,31 @@ Teaparty2 will use default config (with invalid DB credentials) located in `teap
   }
 }
 ```
+
+## Pushing data to dashboard
+Right now push is the only way to update widgets' data 
+
+To push data, send post request to `http://<teaparty-url>/api/push/<widget-key>` with a correct data object for this widget's type.
+
+Here is curl example:
+
+``` bash
+curl -H "Content-Type: application/json" -X POST -d '{"value": 35}' http://teaparty.local:8080/api/push/62465070-9fc0-11e4-a490-7fb3618741f2
+```
+
+Also there is [node-teaparty](https://github.com/idooo/node-teaparty) Node.js helper module that can make life easier.
+
+
 ## Browsers support
 Normal browsers and IE10+
 
 ## Build
+Checkout this repo and install everythin you need:
+
+```
+npm install && bower install
+```
+
 Quick build and run develop server: 
 
 ```
