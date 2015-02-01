@@ -35,8 +35,10 @@ server.use(restify.bodyParser());
 require('./core/routing')(server, model, config);
 
 if (process.env.nosync !== "true") {
-    logger.info("Updates via web sockets were disabled");
     require('./core/synchronizer')(io, model, config);
+}
+else {
+    logger.info("Updates via web sockets were disabled");
 }
 
 server.listen(config.server.port, function () {
