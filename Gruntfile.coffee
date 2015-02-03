@@ -106,6 +106,12 @@ module.exports = (grunt) ->
               "styles/*.htc"
             ]
           }
+          {
+            dest: "<%= settings.dist %>/swf/"
+            flatten: true
+            expand: true
+            src: ["web/bower_components/zeroclipboard/dist/ZeroClipboard.swf"]
+          }
         ]
       templates:
         files: [

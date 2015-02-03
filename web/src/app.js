@@ -51,7 +51,7 @@
     function configuration ($stateProvider, $urlRouterProvider, $locationProvider, gridsterConfig, ngClipProvider) {
 
         // Path to flash object used in copy to clipboard component
-        ngClipProvider.setPath('bower_components/zeroclipboard/dist/ZeroClipboard.swf');
+        ngClipProvider.setPath('/swf/ZeroClipboard.swf');
 
         $locationProvider.html5Mode(true);
 
