@@ -1,10 +1,16 @@
 try {
-    var config = require(process.env.config || __dirname + '/config/default.json');
+    var configName = __dirname + '/config/default.json';
+    if (process.env.config) {
+        configName = require('path').resolve(process.cwd(), process.env.config);
+    }
+
+    var config = require(configName);
 }
 catch (e) {
     console.error('Error! Cannot find config file "' + process.env.config + '"\nExisting now...');
     process.exit(1);
 }
+
 var winston = require('winston'),
     restify = require('restify'),
     socketio = require('socket.io');
