@@ -1,5 +1,7 @@
 module.exports.tasks =
 
   develop:
-    server:
+    normal:
       file: 'server.js'
+    mocked:
+      file: 'tools/mocked_server.js'

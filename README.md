@@ -81,6 +81,12 @@ Quick build and run develop server:
 grunt serve
 ```
 
+Quick build and run server with [mocked](https://github.com/idooo/teaparty2/tree/master/tools/mocks/) data: 
+
+```
+grunt mocked
+```
+
 Build AngularJS application, minimise everything static:
 
 ```

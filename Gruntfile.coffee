@@ -23,6 +23,21 @@ module.exports = (grunt) ->
   grunt.initConfig(configs)
 
   ###############################################################
+  # Aliases
+  ###############################################################
+
+  grunt.registerTask 'serve_prepare', [
+    'clean'
+    'ngAnnotate'
+    'less'
+    'includeSource'
+    'wiredep'
+    'copy:distStatic'
+    'copy:templates'
+    'copy:widgetsTemplates'
+  ]
+
+  ###############################################################
   # Jobs
   ###############################################################
 
@@ -32,15 +47,15 @@ module.exports = (grunt) ->
 
   # omg, they gonna serve it!
   grunt.registerTask 'serve', [
-    'clean'
-    'ngAnnotate'
-    'less'
-    'includeSource'
-    'wiredep'
-    'copy:distStatic'
-    'copy:templates'
-    'copy:widgetsTemplates'
-    'develop'
+    'serve_prepare'
+    'develop:normal'
+    'watch'
+  ]
+
+  # wow, they wanna mock!
+  grunt.registerTask 'mocked', [
+    'serve_prepare'
+    'develop:mocked'
     'watch'
   ]
 

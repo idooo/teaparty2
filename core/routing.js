@@ -12,6 +12,6 @@ var routes = [
 
 module.exports = function(server, model, config) {
     routes.forEach(function(routeName) {
-        require('./routing/' + routeName)(server, model, config);
+        require(__dirname + '/routing/' + routeName)(server, model, config);
     });
 };
