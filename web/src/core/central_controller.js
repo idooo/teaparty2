@@ -43,7 +43,8 @@
             });
         });
 
-        $scope.$on('dashboardAddedEvent', function () {
+        $scope.$on('dashboardAddedEvent', function (event, dashboard) {
+            $stateParams.dashboard = dashboard.url;
             $rootScope.dashboards = [];
             init();
         });
