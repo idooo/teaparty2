@@ -12,6 +12,7 @@
 }
 
 	.widget-list-container {
+		transform-origin: top left;
 		list-style-type: none;
 		padding: 0;
 		margin: 0;
@@ -24,12 +25,14 @@
 
 			&__value {
 				color: @value_color;
-				font-size: 24px;
+				font-size: 2vw;
+				margin-right: 0.1vw;
 				font-weight: 600;
 				line-height: 1.2;
 			}
 
 			&__label {
+				font-size: 1.4vw;
 				color: @label_color;
 			}
 		}
