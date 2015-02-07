@@ -1,85 +1,57 @@
 var helpers = require('./../helpers'),
     r = helpers.response,
     auth = helpers.auth,
+    ObjectId = require('mongoose').Types.ObjectId,
     extend = require('util')._extend;
 
 module.exports = function(server, model, config) {
 
     /**
-     * POST: /api/dashboard/:dashboard/widget/
-     * Create new widget for selected :dashboard
+     * POST: /api/dashboard/:dashboardId/widget/:widgetId
+     * Add widget :widgetId to :dashboardId
      *
-     * AUTH: not authorised users can't create widgets
+     * AUTH: not authorised users can't modify dashboards
      *
-     * post body:
-     *  - type
-     *  - caption
-     *  - datasource
      */
-    server.post('/api/dashboard/:dashboard/widget', function(req, res, next) {
+    server.post('/api/dashboard/:dashboardId/widget/:widgetId', function(req, res, next) {
 
         auth.check(req, res, next, config);
 
-        var query  = model.Dashboard.where({ name: req.params.dashboard });
-        query.findOne(function (err, dashboard) {
-            if (dashboard) createWidget(dashboard);
-            else {
-                if (err) r.fail(res, err);
-                else r.fail(res);
+        findDashboard(res, next, req.params.dashboardId, function(dashboard) {
 
-                return next();
-            }
-        });
+            findWidget(res, next, req.params.widgetId, function (widget) {
 
-        function createWidget(dashboard) {
-            var widget = new model.Widget({
-                type: req.params.type,
-                caption: req.params.caption, // TODO: sanitise
-                datasource: req.params.datasource // TODO: validation?
-            });
+                var widget_data = {
+                    size: { "x": 1, "y": 1 },
+                    position: [0, 0],
+                    _id: widget._id
+                };
 
-            widget.save(function (err, data) {
-                if (err) {
-                    r.fail(res, err, 400);
+                dashboard.widgets.push(widget_data);
+
+                dashboard.save(function (err) {
+                    if (err) r.fail(res, err, 400);
+                    else r.ok(res, widget);
+
                     return next();
-                }
-                else addWidgetToDashboard(data, dashboard)
+                });
             });
-        }
-
-        function addWidgetToDashboard(widget, dashboard) {
-            // TODO: find the better way to generate initial position
-            var widget_data = {
-                size: { "x": 1, "y": 1 },
-                position: [0, 0],
-                _id: widget._id
-            };
-
-            dashboard.widgets.push(widget_data);
-
-            dashboard.save(function (err) {
-                if (err) r.fail(res, err, 400);
-                else r.ok(res, widget);
-
-                return next();
-            });
-        }
-
+        });
     });
 
     /**
-     * DELETE: /api/dashboard/:dashboard/widget/:key
-     * Delete widget by :key
+     * DELETE: /api/dashboard/:dashboardId/widget/:widgetId
+     * Remove widget :widget from :dashboardId
      *
-     * AUTH: not authorised users can't delete widgets
+     * AUTH: not authorised users can't modify dashboards
      */
-    server.del('/api/dashboard/:dashboard/widget/:key', function(req, res, next) {
+    server.del('/api/dashboard/:dashboardId/widget/:widgetId', function(req, res, next) {
 
         auth.check(req, res, next, config);
 
-        findWidget(res, next, req.params.key, function(widget) {
+        findWidget(res, next, req.params.widgetId, function(widget) {
 
-            findDashboard(res, next, req.params.dashboard, function(dashboard) {
+            findDashboard(res, next, req.params.dashboardId, function(dashboard) {
 
                 deleteDashboardReference(dashboard, widget._id, function() {
 
@@ -111,10 +83,10 @@ module.exports = function(server, model, config) {
     });
 
     /**
-     * PUT: /api/dashboard/:dashboard/widget/:key
-     * Update widget meta-data (not the data content) by :key
+     * POST: /api/dashboard/:dashboardId/widget/:widgetId/move
+     * Move widget inside the :dashboardId by :widgetId
      *
-     * AUTH: not authorised users can't update widgets settings
+     * AUTH: not authorised users can't move widgets
      *
      * post body:
      *  - object {
@@ -125,13 +97,13 @@ module.exports = function(server, model, config) {
      *              "position": [2,2]
      *           }
      */
-    server.put('/api/dashboard/:dashboard/widget/:key', function(req, res, next) {
+    server.post('/api/dashboard/:dashboardId/widget/:widgetId/move', function(req, res, next) {
 
         auth.check(req, res, next, config);
 
-        findWidget(res, next, req.params.key, function(widget) {
+        findWidget(res, next, req.params.widgetId, function(widget) {
 
-            findDashboard(res, next, req.params.dashboard, function(dashboard) {
+            findDashboard(res, next, req.params.dashboardId, function(dashboard) {
 
                 var obj = validateData(req.params);
                 if (!obj) {
@@ -229,18 +201,18 @@ module.exports = function(server, model, config) {
      * Find widget by key inside the request
      * @param res
      * @param next
-     * @param key
+     * @param _id
      * @param callback (with the 'widget' argument)
      */
-    function findWidget(res, next, key, callback) {
-        var query  = model.Widget.where({ key: key });
+    function findWidget(res, next, _id, callback) {
+        var query  = model.Widget.where({ _id: ObjectId(_id)});
         query.findOne(function (err, widget) {
             if (widget) {
                 if (typeof callback === 'function') callback(widget);
             }
             else {
-                if (err) r.fail(res, err, 400);
-                else r.fail(res);
+                if (err) r.fail(res, err);
+                else r.fail(res, { message: "Widget not found" });
 
                 return next();
             }
@@ -251,18 +223,18 @@ module.exports = function(server, model, config) {
      * Find dashboard by name inside the request
      * @param res
      * @param next
-     * @param name
+     * @param _id
      * @param callback (with the 'dashboard' argument)
      */
-    function findDashboard(res, next, name, callback) {
-        var query  = model.Dashboard.where({ name: name });
+    function findDashboard(res, next, _id, callback) {
+        var query  = model.Dashboard.where({ _id: ObjectId(_id) });
         query.findOne(function (err, dashboard) {
             if (dashboard) {
                 if (typeof callback === 'function') callback(dashboard);
             }
             else {
                 if (err) r.fail(res, err);
-                else r.fail(res);
+                else r.fail(res, { message: "Dashboard not found" });
 
                 return next();
             }

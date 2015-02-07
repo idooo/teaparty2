@@ -45,9 +45,9 @@
      * @param $attrs
      * @param $compile
      * @param $timeout
-     * @param Widget
+     * @param DashboardWidgetService
      */
-    function controller($scope, $element, $attrs, $compile, $timeout, Widget) {
+    function controller($scope, $element, $attrs, $compile, $timeout, DashboardWidgetService) {
 
         var renderTimeout = 1000;
 
@@ -69,17 +69,15 @@
 
             var template = '<div gridster="gridsterOpts">';
             $scope.selectedDashboard.widgets.forEach(function (widget, index) {
-                template += [
-                    '<li gridster-item row="' + widget.position[0] + '" col="' + widget.position[1] + '" ',
-                    'size-x="' + widget.size.x + '" size-y="' + widget.size.y + '" key="' + widget.key + '">',
+                template +=
+                    `<li gridster-item row="${widget.position[0]}" col="${widget.position[1]}"
+                         size-x="${widget.size.x}" size-y="${widget.size.y}" id="${widget._id}">
 
-                        '<widget-container dashboard-name="' + $scope.selectedDashboard.name + '" widget="selectedDashboard.widgets[' + index + ']">',
-                            '<widget-' + widget.type + ' class="widget" widget="selectedDashboard.widgets[' + index + ']">',
-                            '</widget-' + widget.type + '>',
-                        '</widget-container>',
-
-                    '</li>'
-                ].join('');
+                        <widget-container dashboard-id="${$scope.selectedDashboard._id}" widget="selectedDashboard.widgets[${index}]">
+                            <widget-${widget.type} class="widget" widget="selectedDashboard.widgets[${index}]">
+                            </widget-${widget.type}>
+                        </widget-container>
+                    </li>`;
             });
 
             template += '</div>';
@@ -94,24 +92,19 @@
         };
 
         function onResize(event, element, widget, size) {
-
             var gridster = $scope.$$childHead.gridster,
                 height = (gridster.curColWidth - gridster.margins[0] * 2) * size.y,
                 width = (gridster.curRowHeight - gridster.margins[1] * 2) * size.x;
 
-            $scope.$broadcast('widgetSizeChangeEvent:' + widget.key, width, height);
-            Widget.update({
-                dashboard: $scope.selectedDashboard.name,
-                key: widget.key,
+            $scope.$broadcast('widgetSizeChangeEvent:' + widget.id, width, height);
+            DashboardWidgetService.moveWidget($scope.selectedDashboard._id, widget.id, {
                 size: size
             });
         }
 
         function onDrag(event, element, widget, position) {
-            $scope.$broadcast('widgetPositionChangeEvent:' + widget.key);
-            Widget.update({
-                dashboard: $scope.selectedDashboard.name,
-                key: widget.key,
+            $scope.$broadcast('widgetPositionChangeEvent:' + widget.id);
+            DashboardWidgetService.moveWidget($scope.selectedDashboard._id, widget.id, {
                 position: position
             });
         }
@@ -143,6 +136,5 @@
         }
         return destination;
     }
-
 
 })();

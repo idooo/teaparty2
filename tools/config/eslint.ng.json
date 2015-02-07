@@ -6,7 +6,13 @@
     "env": {
         "browser": true
     },
+    "ecmaFeatures": {
+        "templateStrings": true,
+        "blockBindings": true
+    },
     "rules": {
+        "strict": false,
+        "no-unused-vars": false,
         "no-use-before-define": [2, "nofunc"],
         "curly": 0,
         "quotes": [2, "single", "avoid-escape"],

@@ -1,17 +1,15 @@
 (function () {
 
-    'use strict';
-
     angular
         .module('teaparty2.core')
         .controller('CentralController', CentralController);
 
     function CentralController($rootScope, $scope, $state, $stateParams, ngDialog, Dashboard, Sockets, Settings) {
 
-        var self = this;
+        const NG_DIALOG_DEFAULT_THEME = 'ngdialog-theme-default',
+              NG_DIALOG_WIDE_MODIFIER = 'ngdialog-theme-default--wide';
 
-        var NG_DIALOG_DEFAULT_THEME = 'ngdialog-theme-default',
-            NG_DIALOG_WIDE_MODIFIER = 'ngdialog-theme-default--wide';
+        var self = this;
 
         self.dashboards = [];
         self.importantMessage = '';
@@ -56,7 +54,7 @@
 
         $scope.$on('widgetAddedEvent', function (event, data) {
             for (var i = 0; i < self.dashboards.length; i++) {
-                if (self.dashboards[i].name === data.dashboardName) {
+                if (self.dashboards[i]._id === data.dashboardId) {
                     return loadDashboard(i);
                 }
             }
@@ -64,7 +62,7 @@
 
         $scope.$on('widgetDeletedEvent', function (event, data) {
             for (var i = 0; i < self.dashboards.length; i++) {
-                if (self.dashboards[i].name === data.dashboardName) {
+                if (self.dashboards[i]._id === data.dashboardId) {
                     return loadDashboard(i);
                 }
             }

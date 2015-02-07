@@ -1,12 +1,10 @@
 (function () {
 
-    'use strict';
-
     angular
         .module('teaparty2.widget')
         .controller('NewWidgetController', NewWidgetController);
 
-    function NewWidgetController($scope, $rootScope, ngDialog, Settings, Widget) {
+    function NewWidgetController($scope, $rootScope, ngDialog, Settings, Widget, DashboardWidgetService) {
 
         var self = this;
 
@@ -24,19 +22,29 @@
 
         function addWidget() {
             var widget = new Widget({
-                dashboard: $scope.ngDialogData.dashboard.name,
                 type: self.widgetType,
                 caption: self.widgetCaption
             });
 
-            widget.$save(function () {
-                $rootScope.$broadcast('widgetAddedEvent', {
-                    dashboardName: $scope.ngDialogData.dashboard.name
-                });
-                ngDialog.close();
-            }, function (err) {
-                self.error = err.data ? err.data.error : { message: 'Server is unavailable' };
-            });
+            widget.$save(function (createdWidget) {
+
+                DashboardWidgetService.addWidgetToDashboard(
+                    $scope.ngDialogData.dashboard._id,
+                    createdWidget._id,
+                    function(err) {
+                        if (err !== null) return showError(err);
+
+                        $rootScope.$broadcast('widgetAddedEvent', {
+                            dashboardId: $scope.ngDialogData.dashboard._id
+                        });
+                        ngDialog.close();
+                    });
+
+            }, showError);
+        }
+
+        function showError(err) {
+            self.error = err.data ? err.data.error : { message: 'Server is unavailable' };
         }
     }
 

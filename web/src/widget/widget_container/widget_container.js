@@ -1,7 +1,5 @@
 (function () {
 
-    'use strict';
-
     angular
         .module('teaparty2.widget')
         .directive('widgetContainer', widgetContainerDirective);
@@ -13,7 +11,7 @@
             transclude: true,
             scope: {
                 widget: '=',
-                dashboardName: '@'
+                dashboardId: '@'
             },
             templateUrl: 'widget/widget_container/widget_container.template',
             link: link,
@@ -45,7 +43,7 @@
                 template: 'views/modal/widget_settings.html',
                 controller: 'WidgetSettingsController as ctrl',
                 data: {
-                    dashboardName: $scope.dashboardName,
+                    dashboardId: $scope.dashboardId,
                     widget: $scope.widget
                 }
             });
