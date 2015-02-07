@@ -1,4 +1,3 @@
-'use strict';
 
 angular.module('teaparty2.widgets')
     .directive('widgetRag', function(TemplatePath) {
@@ -13,5 +12,6 @@ angular.module('teaparty2.widgets')
         controller: function($scope, $element, $attrs, WidgetSubscriber)  {
             WidgetSubscriber.update($scope);
         }
-    }
+    };
 });
+

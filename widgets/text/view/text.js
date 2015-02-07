@@ -11,7 +11,7 @@ angular.module('teaparty2.widgets')
         },
         templateUrl: TemplatePath.get('text'),
         link: function(scope, element) {
-            scope.textElement = Sizzle('.widget-status__caption-inner > span', element[0])[0];
+            scope.textElement = Sizzle('.widget-text__caption-inner > span', element[0])[0];
         },
         controller: function($scope, $element, $attrs, WidgetSubscriber, WidgetHelper)  {
 
@@ -24,7 +24,6 @@ angular.module('teaparty2.widgets')
             WidgetSubscriber.ready($scope, function() {
                 WidgetHelper.textFill($scope.textElement, $element[0].offsetWidth, $element[0].offsetHeight);
             });
-
         }
     }
 });
