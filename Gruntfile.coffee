@@ -28,6 +28,8 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'serve_prepare', [
     'clean'
+    'concat:ng'
+    '6to5'
     'ngAnnotate'
     'less'
     'includeSource'
@@ -63,6 +65,8 @@ module.exports = (grunt) ->
   grunt.registerTask 'build', [
     'test'
     'clean'
+    'concat:ng'
+    '6to5'
     'ngAnnotate'
     'html2js'
     'less'
@@ -70,7 +74,7 @@ module.exports = (grunt) ->
     'wiredep'
     'copy:distStatic'
     'useminPrepare'
-    'concat'
+    'concat:generated'
     'uglify'
     'cssmin'
     'usemin'
