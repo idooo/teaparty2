@@ -1,5 +1,3 @@
-'use strict';
-
 var mongoose = require('mongoose');
 
 var models = ['dashboard', 'widget', 'rotation'];
@@ -22,7 +20,7 @@ module.exports = function(config) {
     });
     connection.once('open', function callback () {
         config.database.isConnected = true;
-        config.logger.info('DB connected ' + config.database.uri);
+        config.logger.info('DB connected ' + config.database.uri + '/' + config.database.db);
     });
 
     models.forEach(function(modelName) {

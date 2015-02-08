@@ -115,7 +115,7 @@
 
         function loadDashboard(index) {
             var dashboard = self.dashboards[index];
-            Dashboard.get({name: dashboard.name}, function (data) {
+            Dashboard.get({dashboardId: dashboard._id}, function (data) {
                 self.selectedDashboard = data;
                 self.isDashboardLocked = true;
             });

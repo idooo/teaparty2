@@ -1,7 +1,5 @@
 (function () {
 
-    'use strict';
-
     angular
         .module('teaparty2.dashboard')
         .controller('DashboardSettingsController', DashboardSettingsController);
@@ -10,8 +8,8 @@
 
         var self = this;
 
-        self.removeDashboard = function (dashboardName) {
-            Dashboard.delete({name: dashboardName}, function () {
+        self.removeDashboard = function (dashboardId) {
+            Dashboard.delete({dashboardId: dashboardId}, function () {
                 $rootScope.$broadcast('dashboardDeletedEvent', {
                     dashboardName: $scope.ngDialogData.dashboard
                 });

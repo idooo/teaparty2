@@ -1,19 +1,20 @@
 var helpers = require('./../helpers'),
     r = helpers.response,
     auth = helpers.auth,
+    ObjectId = require('mongoose').Types.ObjectId,
     extend = require('util')._extend;
 
 module.exports = function(server, model, config) {
 
     /**
-     * GET: /api/dashboard/:name
-     * Get dashboard and widget by :name
+     * GET: /api/dashboard/:dashboardId
+     * Get dashboard and widget by :dashboardId
      *
      * AUTH: not authorised users can't get private=true dashboards
      */
-    server.get('/api/dashboard/:name', function create(req, res, next) {
+    server.get('/api/dashboard/:dashboardId', function create(req, res, next) {
 
-        var query = { name: req.params.name };
+        var query = { _id: ObjectId(req.params.dashboardId) };
         if (!auth.isAuthorised(req, config)) {
             query.private = { $ne: true }
         }
@@ -61,18 +62,22 @@ module.exports = function(server, model, config) {
     });
 
     /**
-     * POST: /api/dashboard/:name
-     * Create new dashboard with :name
+     * POST: /api/dashboard
+     * Create new dashboard with :dashboardId
      *
      * AUTH: not authorised users can't create dashboards
+     *
+     * post body:
+     *  - name {string}
+     *  - private {boolean}
      */
-    server.post('/api/dashboard/:name', function(req, res, next) {
+    server.post('/api/dashboard', function(req, res, next) {
 
         auth.check(req, res, next, config);
 
         var dashboard = new model.Dashboard({
-            name: req.params.name,
-            private: req.params.private
+            'name': req.params.name,
+            'private': req.params.private
         });
 
         dashboard.save(function (err, data) {
@@ -88,16 +93,16 @@ module.exports = function(server, model, config) {
     });
 
     /**
-     * DELETE: /api/dashboard/:name
+     * DELETE: /api/dashboard/:dashboardId
      * Delete dashboard by name
      *
      * AUTH: not authorised users can't delete dashboards
      */
-    server.del('/api/dashboard/:name', function(req, res, next) {
+    server.del('/api/dashboard/:dashboardId', function(req, res, next) {
 
         auth.check(req, res, next, config);
 
-        var query  = model.Dashboard.where({ name: req.params.name });
+        var query  = model.Dashboard.where({ _id: ObjectId(req.params.dashboardId) });
         query.findOneAndRemove(function (err, dashboard) {
             if (dashboard) r.ok(res);
             else {
