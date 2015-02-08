@@ -35,8 +35,8 @@
          * @param token
          */
         function updateAuthHeader(token) {
-            if (is.not.undefined(token)) {
-                if (is.not.undefined(self.token)) {
+            if (is.undefined(token)) {
+                if (is.undefined(self.token)) {
                     token = self.readTokenFromStorage();
                 }
                 else {
@@ -106,7 +106,7 @@
         function check(token, callback) {
             var http;
 
-            if (is.not.undefined(token)) {
+            if (is.undefined(token)) {
                 token = self.readTokenFromStorage();
                 if (is.null(token)) {
                     self.token = undefined;
