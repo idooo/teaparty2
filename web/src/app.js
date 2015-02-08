@@ -1,7 +1,5 @@
 (function () {
 
-    'use strict';
-
     // Project dependencies
     var modules = [
         'ngResource',
@@ -50,13 +48,13 @@
      */
     function configuration ($stateProvider, $urlRouterProvider, $locationProvider, gridsterConfig, ngClipProvider) {
 
+        // Allow widget resize only using bottom right corner
+        gridsterConfig.resizable.handles = ['se'];
+
         // Path to flash object used in copy to clipboard component
         ngClipProvider.setPath('/swf/ZeroClipboard.swf');
 
         $locationProvider.html5Mode(true);
-
-        // Allow widget resize only using bottom right corner
-        gridsterConfig.resizable.handles = ['se'];
 
         $urlRouterProvider.otherwise('/d/');
 
@@ -92,7 +90,7 @@
         // Check user tokens on application start, set headers if succeed
         Auth.updateAuthHeader();
         Settings.get(function (settings) {
-            if (typeof settings !== 'undefined' && settings.auth === false) {
+            if (is.not.undefined(settings) && settings.auth === false) {
                 $rootScope.isAuthorised = true;
                 Auth.token = 0;
             }

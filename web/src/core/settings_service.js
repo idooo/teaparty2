@@ -1,39 +1,31 @@
 (function () {
 
-    'use strict';
-
     angular
         .module('teaparty2.core')
         .service('Settings', SettingsService);
 
     function SettingsService($http) {
 
-        var self = this,
-            settingsEndpoint = '/api/settings';
+        const ENDPOINT = '/api/settings';
+
+        var self = this;
 
         self.settings = undefined;
 
-        // TODO: rewrite this with no callback
         self.get = function (callback) {
-            var http;
 
-            if (typeof self.settings !== 'undefined') {
-                if (typeof callback === 'function') callback(self.settings);
-                return self.settings;
-            }
+            if (is.not.undefined(self.settings) && is.function(callback)) return callback(self.settings);
 
-            http = $http.get(settingsEndpoint);
+            var http = $http.get(ENDPOINT);
 
             http.success(function (data) {
                 self.settings = data;
-                if (typeof callback === 'function') callback(self.settings);
+                if (is.function(callback)) callback(self.settings);
             });
 
             http.error(function () {
-                if (typeof callback === 'function') callback();
+                if (is.function(callback)) callback();
             });
-
-            return http;
         };
     }
 

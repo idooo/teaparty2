@@ -6,8 +6,13 @@
 
     function CentralController($rootScope, $scope, $state, $stateParams, ngDialog, Dashboard, Sockets, Settings) {
 
-        const NG_DIALOG_DEFAULT_THEME = 'ngdialog-theme-default',
-              NG_DIALOG_WIDE_MODIFIER = 'ngdialog-theme-default--wide';
+        const NG_DIALOG_DEFAULT_THEME = 'ngdialog-theme-default';
+        const NG_DIALOG_WIDE_MODIFIER = 'ngdialog-theme-default--wide';
+
+        const IMPORTANT_MESSAGES = [
+            'Database connection problem. Check application logs for details',
+            'You have no dashboards'
+        ];
 
         var self = this;
 
@@ -19,21 +24,26 @@
         };
         self.selectedDashboard = undefined;
 
-        self.loadDashboard = loadDashboard;
         self.goToDashboard = goToDashboard;
         self.lockUnlockDashboard = lockUnlockDashboard;
         self.isAnyDashboardAvailable = isAnyDashboardAvailable;
 
         // Modals openers
-        self.showNewDashboardDialog = showNewDashboardDialog;
-        self.showNewWidgetDialog = showNewWidgetDialog;
-        self.showRotationsDialog = showRotationsDialog;
-        self.showLoginDialog = showLoginDialog;
-        self.showDashboardSettingsDialog = showDashboardSettingsDialog;
+        self.showNewDashboardDialog = createModalDialog('new_dashboard.html', 'NewDashboardController');
+        self.showNewWidgetDialog = createModalDialog('new_widget.html', 'NewWidgetController', {dashboard: self.selectedDashboard});
+        self.showRotationsDialog = createModalDialog('rotations_control.html', 'RotationsControlController', {}, `${NG_DIALOG_DEFAULT_THEME} ${NG_DIALOG_WIDE_MODIFIER}`);
+        self.showLoginDialog = createModalDialog('login.html', 'LoginController');
+        self.showDashboardSettingsDialog = createModalDialog('dashboard_settings.html', 'DashboardSettingsController', {dashboard: self.selectedDashboard});
 
         self.isHeaderOpen = false;
         self.isDashboardLocked = true;
-        self.settings = Settings.get();
+
+        Settings.get(function(s) { self.settings = s; } );
+
+        init();
+
+        // Bind events
+        // ------------------------------------------------------------------------------------------
 
         Sockets.on('update_widgets', function (data) {
             data.forEach(function (updateObject) {
@@ -53,19 +63,11 @@
         });
 
         $scope.$on('widgetAddedEvent', function (event, data) {
-            for (var i = 0; i < self.dashboards.length; i++) {
-                if (self.dashboards[i]._id === data.dashboardId) {
-                    return loadDashboard(i);
-                }
-            }
+            loadDashboard(data.dashboardId);
         });
 
         $scope.$on('widgetDeletedEvent', function (event, data) {
-            for (var i = 0; i < self.dashboards.length; i++) {
-                if (self.dashboards[i]._id === data.dashboardId) {
-                    return loadDashboard(i);
-                }
-            }
+            loadDashboard(data.dashboardId);
         });
 
         $scope.$on('userAuthEvent', function () {
@@ -74,21 +76,25 @@
             });
         });
 
-        init();
+        // Main functions
+        // ------------------------------------------------------------------------------------------
 
+        /**
+         * Initialisation of controller
+         */
         function init() {
 
             var selectDashboard = function (dashboards) {
-                if (typeof $stateParams.dashboard !== 'undefined' && $stateParams.dashboard) {
-                    for (var i = 0; i < dashboards.length; i++) {
-                        if (dashboards[i].url === $stateParams.dashboard) return loadDashboard(i);
+                if (is.not.undefined($stateParams.dashboard) && $stateParams.dashboard) {
+                    for (let dashboard of dashboards) {
+                        if (dashboard.url === $stateParams.dashboard) return loadDashboard(dashboard);
                     }
                     $state.go('app', {dashboard: ''});
                 }
-                return loadDashboard(0);
+                return loadDashboard();
             };
 
-            if (typeof $rootScope.dashboards === 'undefined' || $rootScope.dashboards.length === 0) {
+            if (is.undefined($rootScope.dashboards) || is.empty($rootScope.dashboards)) {
                 getDashboardsList(function (dashboards) {
                     $rootScope.dashboards = dashboards;
                     selectDashboard(dashboards);
@@ -100,89 +106,105 @@
             }
         }
 
+        /**
+         * Redirect to a specific dashboard
+         * @param url
+         */
         function goToDashboard(url) {
             $state.go('app', {dashboard: url}, {reload: false});
         }
 
+        /**
+         * Get list of dashboards available for the current user
+         * @param callback ([dashboards list])
+         */
         function getDashboardsList(callback) {
             Dashboard.list(function (data) {
                 self.dashboards = data;
-                if (self.dashboards.length && typeof callback === 'function') {
+                if (is.function(callback)) {
                     callback(self.dashboards);
                 }
             });
         }
 
-        function loadDashboard(index) {
-            var dashboard = self.dashboards[index];
+        /**
+         * Load dashboard by 'input'
+         * if 'input' is:
+         *   - undefined - load the first dashboard
+         *   - string - load by id (expecting string representation of ObjectId)
+         *   - object - load this dashboard object
+         *
+         * @param input
+         */
+        function loadDashboard(input) {
+            var dashboard;
+
+            if (is.undefined(input)) {
+                if (is.empty(self.dashboards)) return;
+                dashboard = self.dashboards[0];
+            }
+            else if (is.string(input)) {
+                for (let _dashboard of self.dashboards) {
+                    if (_dashboard._id === input) {
+                        dashboard = _dashboard;
+                        break;
+                    }
+                }
+            }
+            else {
+                dashboard = input;
+            }
+
             Dashboard.get({dashboardId: dashboard._id}, function (data) {
                 self.selectedDashboard = data;
                 self.isDashboardLocked = true;
             });
         }
 
+        /**
+         * Lock/Unlock dashboard by changing Gridster options
+         */
         function lockUnlockDashboard() {
             self.isDashboardLocked = !self.isDashboardLocked;
             self.dashboardOptions.resizable.enabled = !self.dashboardOptions.resizable.enabled;
             self.dashboardOptions.draggable.enabled = !self.dashboardOptions.draggable.enabled;
         }
 
+        /**
+         * Check if dashboards are available
+         * @returns {boolean}
+         */
         function isAnyDashboardAvailable() {
             if (!self.settings.isDatabaseConnected) {
-                self.importantMessage = 'Database connection problem. Check application logs for details';
+                self.importantMessage = IMPORTANT_MESSAGES[0];
                 return false;
             }
-            else if (self.dashboards.length === 0) {
-                self.importantMessage = 'You have no dashboards';
+            else if (is.empty(self.dashboards)) {
+                self.importantMessage = IMPORTANT_MESSAGES[1];
                 return false;
             }
             self.importantMessage = '';
             return true;
         }
 
-        // Modals
-        // ------------------------------------------------------------------------------------------
+        /**
+         * Create a modal dialog open function
+         * @param templateName
+         * @param controllerName
+         * @param data
+         * @param className
+         * @returns {Function}
+         */
+        function createModalDialog(templateName, controllerName, data, className) {
+            var config = {
+                template: `views/modal/${templateName}`,
+                controller: `${controllerName} as ctrl`
+            };
 
-        function showNewDashboardDialog() {
-            ngDialog.open({
-                template: 'views/modal/new_dashboard.html',
-                controller: 'NewDashboardController as ctrl'
-            });
-        }
+            if (is.not.empty(data)) config.data = data;
+            if (is.not.undefined(className)) config.className = className;
 
-        function showNewWidgetDialog() {
-            ngDialog.open({
-                template: 'views/modal/new_widget.html',
-                controller: 'NewWidgetController as ctrl',
-                data: {
-                    dashboard: self.selectedDashboard
-                }
-            });
-        }
-
-        function showRotationsDialog() {
-            ngDialog.open({
-                className: [NG_DIALOG_DEFAULT_THEME, NG_DIALOG_WIDE_MODIFIER].join(' '),
-                template: 'views/modal/rotations_control.html',
-                controller: 'RotationsControlController as ctrl'
-            });
-        }
-
-        function showLoginDialog() {
-            ngDialog.open({
-                template: 'views/modal/login.html',
-                controller: 'LoginController as ctrl'
-            });
-        }
-
-        function showDashboardSettingsDialog() {
-            ngDialog.open({
-                template: 'views/modal/dashboard_settings.html',
-                controller: 'DashboardSettingsController as ctrl',
-                data: {
-                    dashboard: self.selectedDashboard
-                }
-            });
+            return function() { ngDialog.open(config); };
         }
     }
 

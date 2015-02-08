@@ -1,16 +1,16 @@
 (function() {
 
-    'use strict';
-
     angular
         .module('teaparty2.core')
         .service('Auth', AuthService);
 
     function AuthService($http, localStorageService) {
 
-        var self = this,
-            endpoint = '/api/auth',
-            header = 'Authorization-Token';
+        const ENDPOINT = '/api/auth';
+        const HEADER = 'Authorization-Token';
+        const LS_KEY = 'token';
+
+        var self = this;
 
         self.token = undefined;
         self.isAuthorised = false;
@@ -27,7 +27,7 @@
          * @returns {*}
          */
         function readTokenFromStorage() {
-            return localStorageService.get('token');
+            return localStorageService.get(LS_KEY);
         }
 
         /**
@@ -35,15 +35,15 @@
          * @param token
          */
         function updateAuthHeader(token) {
-            if (typeof token === 'undefined') {
-                if (typeof self.token === 'undefined') {
+            if (is.not.undefined(token)) {
+                if (is.not.undefined(self.token)) {
                     token = self.readTokenFromStorage();
                 }
                 else {
                     token = self.token;
                 }
             }
-            $http.defaults.headers.common[header] = token;
+            $http.defaults.headers.common[HEADER] = token;
         }
 
         /**
@@ -55,9 +55,11 @@
         function authorize(token, callback) {
             self.token = token;
             self.isAuthorised = true;
-            localStorageService.set('token', token);
+            localStorageService.set(LS_KEY, token);
             self.updateAuthHeader();
-            if (typeof callback === 'function') callback(self.isAuthorised);
+            if (is.function(callback)) {
+                callback(self.isAuthorised);
+            }
         }
 
         /**
@@ -68,9 +70,9 @@
          function deauthorize(callback, message) {
             self.token = undefined;
             self.isAuthorised = false;
-            localStorageService.remove('token');
+            localStorageService.remove(LS_KEY);
             self.updateAuthHeader();
-            if (typeof callback === 'function') {
+            if (is.function(callback)) {
                 callback(self.isAuthorised, message);
             }
         }
@@ -82,7 +84,7 @@
          * @param callback
          */
          function auth(username, password, callback) {
-            var http = $http.post(endpoint, {
+            var http = $http.post(ENDPOINT, {
                 username: username,
                 password: password
             });
@@ -104,14 +106,14 @@
         function check(token, callback) {
             var http;
 
-            if (typeof token === 'undefined') {
+            if (is.not.undefined(token)) {
                 token = self.readTokenFromStorage();
-                if (token === null) {
+                if (is.null(token)) {
                     self.token = undefined;
                 }
             }
 
-            http = $http.get(endpoint + '/' + token);
+            http = $http.get(`${ENDPOINT}/${token}`);
 
             http.success(function() {
                 self.authorize(token, callback);
