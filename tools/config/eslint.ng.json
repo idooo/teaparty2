@@ -1,17 +1,21 @@
 {
     "globals": {
         "Sizzle": true,
-        "angular": true
+        "angular": true,
+        "is": true
     },
     "env": {
         "browser": true
     },
     "ecmaFeatures": {
         "templateStrings": true,
-        "blockBindings": true
+        "blockBindings": true,
+        "forOf": true,
+        "defaultParams": true
     },
     "rules": {
         "strict": false,
+        "semi": false,
         "no-unused-vars": false,
         "no-use-before-define": [2, "nofunc"],
         "curly": 0,
