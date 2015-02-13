@@ -8,6 +8,7 @@
         "browser": true
     },
     "ecmaFeatures": {
+        "arrowFunctions": true,
         "templateStrings": true,
         "blockBindings": true,
         "forOf": true,

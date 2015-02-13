@@ -4,10 +4,7 @@
         .module('teaparty2.core')
         .controller('CentralController', CentralController);
 
-    function CentralController($rootScope, $scope, $state, $stateParams, ngDialog, Dashboard, Sockets, Settings) {
-
-        const NG_DIALOG_DEFAULT_THEME = 'ngdialog-theme-default';
-        const NG_DIALOG_WIDE_MODIFIER = 'ngdialog-theme-default--wide';
+    function CentralController($rootScope, $scope, $state, $stateParams, ModalsService, Dashboard, Sockets, Settings) {
 
         const IMPORTANT_MESSAGES = [
             'Database connection problem. Check application logs for details',
@@ -28,12 +25,12 @@
         self.lockUnlockDashboard = lockUnlockDashboard;
         self.isAnyDashboardAvailable = isAnyDashboardAvailable;
 
-        // Modals openers
-        self.showNewDashboardDialog = createModalDialog('new_dashboard.html', 'NewDashboardController');
-        self.showNewWidgetDialog = createModalDialog('new_widget.html', 'NewWidgetController', {dashboard: self.selectedDashboard});
-        self.showRotationsDialog = createModalDialog('rotations_control.html', 'RotationsControlController', {}, `${NG_DIALOG_DEFAULT_THEME} ${NG_DIALOG_WIDE_MODIFIER}`);
-        self.showLoginDialog = createModalDialog('login.html', 'LoginController');
-        self.showDashboardSettingsDialog = createModalDialog('dashboard_settings.html', 'DashboardSettingsController', {dashboard: self.selectedDashboard});
+        // Modals
+        self.showNewDashboardDialog = ModalsService.newDashboard;
+        self.showRotationsDialog = ModalsService.rotations;
+        self.showLoginDialog = ModalsService.login;
+        self.showDashboardSettingsDialog = () => ModalsService.dashboardSettings({dashboard: self.selectedDashboard});
+        self.showNewWidgetDialog = () => ModalsService.newWidget({dashboard: self.selectedDashboard});
 
         self.isHeaderOpen = false;
         self.isDashboardLocked = true;
@@ -187,25 +184,6 @@
             return true;
         }
 
-        /**
-         * Create a modal dialog open function
-         * @param templateName
-         * @param controllerName
-         * @param data
-         * @param className
-         * @returns {Function}
-         */
-        function createModalDialog(templateName, controllerName, data, className) {
-            var config = {
-                template: `views/modal/${templateName}`,
-                controller: `${controllerName} as ctrl`
-            };
-
-            if (is.not.empty(data)) config.data = data;
-            if (is.not.undefined(className)) config.className = className;
-
-            return function() { ngDialog.open(config); };
-        }
     }
 
 })();
