@@ -4,32 +4,37 @@
         .module('teaparty2.dashboard')
         .service('DashboardWidgetService', DashboardWidgetService);
 
-    function DashboardWidgetService($http) {
+    function DashboardWidgetService($http, $q) {
         var self = this;
 
         self.addWidgetToDashboard = addWidgetToDashboard;
         self.removeWidgetFromDashboard = removeWidgetFromDashboard;
         self.moveWidget = moveWidget;
 
-        function addWidgetToDashboard(dashboardId, widgetId, callback) {
-            serviceCall('post', getEndpoint(dashboardId, widgetId), undefined, callback);
+        function addWidgetToDashboard(dashboardId, widgetId) {
+            return serviceCallFactory('post', getEndpoint(dashboardId, widgetId));
         }
 
-        function removeWidgetFromDashboard(dashboardId, widgetId, callback) {
-            serviceCall('delete', getEndpoint(dashboardId, widgetId), undefined, callback);
+        function removeWidgetFromDashboard(dashboardId, widgetId) {
+            return serviceCallFactory('delete', getEndpoint(dashboardId, widgetId));
         }
 
-        function moveWidget(dashboardId, widgetId, data, callback) {
-            serviceCall('post', getEndpoint(dashboardId, widgetId) + '/move', data, callback);
+        function moveWidget(dashboardId, widgetId, data) {
+            return serviceCallFactory('post', getEndpoint(dashboardId, widgetId) + '/move', data);
         }
 
-        function serviceCall(methodName, url, data, callback) {
-            var http = $http[methodName](url, data);
-            http.success(function(_data) {
-                if (typeof callback === 'function') callback(null, _data);
-            });
-            http.error(function(err, _data) {
-                if (typeof callback === 'function') callback(err, _data);
+        /**
+         * Generate service call promise
+         * @param methodName
+         * @param url
+         * @param data
+         * @returns {Promise}
+         */
+        function serviceCallFactory(methodName, url, data) {
+            return $q(function(resolve, reject) {
+                var http = $http[methodName](url, data);
+                http.success(_data => resolve(_data));
+                http.error((err, _data) => reject(err, _data));
             });
         }
 

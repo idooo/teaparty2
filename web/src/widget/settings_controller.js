@@ -12,15 +12,13 @@
         self.cloneWidget = cloneWidget;
 
         function removeWidget() {
-            DashboardWidgetService.removeWidgetFromDashboard(
-                $scope.ngDialogData.dashboardId,
-                $scope.ngDialogData.widget._id,
-                function () {
-                    $rootScope.$broadcast('widgetDeletedEvent', {
-                        dashboardId: $scope.ngDialogData.dashboardId
-                    });
-                    ngDialog.close();
+            var promise = DashboardWidgetService.removeWidgetFromDashboard($scope.ngDialogData.dashboardId, $scope.ngDialogData.widget._id);
+            promise.then(function() {
+                $rootScope.$broadcast('widgetDeletedEvent', {
+                    dashboardId: $scope.ngDialogData.dashboardId
                 });
+                ngDialog.close();
+            });
         }
 
         function cloneWidget() {
@@ -31,18 +29,15 @@
             });
 
             widget.$save(function (createdWidget) {
-
-                DashboardWidgetService.addWidgetToDashboard(
-                    $scope.ngDialogData.dashboardId,
-                    createdWidget._id,
-                    function(err) {
-                        if (err !== null) return showError(err);
-
-                        $rootScope.$broadcast('widgetAddedEvent', {
-                            dashboardId: $scope.ngDialogData.dashboardId
-                        });
-                        ngDialog.close();
+                var promise = DashboardWidgetService.addWidgetToDashboard($scope.ngDialogData.dashboardId, createdWidget._id);
+                promise.then(function() {
+                    $rootScope.$broadcast('widgetAddedEvent', {
+                        dashboardId: $scope.ngDialogData.dashboardId
                     });
+                    ngDialog.close();
+
+                }, showError);
+
             }, showError);
         }
 

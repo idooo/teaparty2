@@ -27,18 +27,14 @@
             });
 
             widget.$save(function (createdWidget) {
-
-                DashboardWidgetService.addWidgetToDashboard(
-                    $scope.ngDialogData.dashboard._id,
-                    createdWidget._id,
-                    function(err) {
-                        if (err !== null) return showError(err);
-
-                        $rootScope.$broadcast('widgetAddedEvent', {
-                            dashboardId: $scope.ngDialogData.dashboard._id
-                        });
-                        ngDialog.close();
+                var promise = DashboardWidgetService.addWidgetToDashboard($scope.ngDialogData.dashboard._id, createdWidget._id);
+                promise.then(function() {
+                    $rootScope.$broadcast('widgetAddedEvent', {
+                        dashboardId: $scope.ngDialogData.dashboard._id
                     });
+                    ngDialog.close();
+
+                }, showError);
 
             }, showError);
         }
