@@ -4,7 +4,7 @@
         .module('teaparty2.core')
         .service('Settings', SettingsService);
 
-    function SettingsService($http) {
+    function SettingsService($http, $q) {
 
         const ENDPOINT = '/api/settings';
 
@@ -12,19 +12,18 @@
 
         self.settings = undefined;
 
-        self.get = function (callback) {
+        self.get = function () {
+            return $q(function(resolve, reject) {
+                var http;
 
-            if (is.not.undefined(self.settings) && is.function(callback)) return callback(self.settings);
+                if (is.not.undefined(self.settings)) return resolve(self.settings);
 
-            var http = $http.get(ENDPOINT);
-
-            http.success(function (data) {
-                self.settings = data;
-                if (is.function(callback)) callback(self.settings);
-            });
-
-            http.error(function () {
-                if (is.function(callback)) callback();
+                http = $http.get(ENDPOINT);
+                http.success(function (data) {
+                    self.settings = data;
+                    resolve(self.settings);
+                });
+                http.error(() => reject());
             });
         };
     }

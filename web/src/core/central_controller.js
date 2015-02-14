@@ -35,7 +35,7 @@
         self.isHeaderOpen = false;
         self.isDashboardLocked = true;
 
-        Settings.get(function(s) { self.settings = s; } );
+        Settings.get().then( s => self.settings = s);
 
         init();
 
@@ -50,22 +50,18 @@
 
         $scope.$on('dashboardAddedEvent', function (event, dashboard) {
             $stateParams.dashboard = dashboard.url;
-            $rootScope.dashboards = [];
-            init();
+            init(true);
         });
 
-        $scope.$on('dashboardDeletedEvent', function () {
-            $rootScope.dashboards = [];
-            init();
+        $scope.$on('dashboardDeletedEvent', () => init(true));
+
+        $scope.$on('dashboardUpdatedEvent', function() {
+            getDashboardsList(dashboards => $rootScope.dashboards = dashboards);
         });
 
-        $scope.$on('widgetAddedEvent', function (event, data) {
-            loadDashboard(data.dashboardId);
-        });
+        $scope.$on('widgetAddedEvent', (event, data) => loadDashboard(data.dashboardId));
 
-        $scope.$on('widgetDeletedEvent', function (event, data) {
-            loadDashboard(data.dashboardId);
-        });
+        $scope.$on('widgetDeletedEvent', (event, data) => loadDashboard(data.dashboardId));
 
         $scope.$on('userAuthEvent', function () {
             getDashboardsList(function (dashboards) {
@@ -77,9 +73,13 @@
         // ------------------------------------------------------------------------------------------
 
         /**
-         * Initialisation of controller
+         * Initialisation.
+         * Get the dashboard list (try to get from cache if it's available), cache it and load dashboard
+         * @param cleanCache {boolean}
          */
-        function init() {
+        function init(cleanCache=false) {
+
+            if (cleanCache) $rootScope.dashboards = [];
 
             var selectDashboard = function (dashboards) {
                 if (is.not.undefined($stateParams.dashboard) && $stateParams.dashboard) {
@@ -118,9 +118,7 @@
         function getDashboardsList(callback) {
             Dashboard.list(function (data) {
                 self.dashboards = data;
-                if (is.function(callback)) {
-                    callback(self.dashboards);
-                }
+                if (is.function(callback)) callback(self.dashboards);
             });
         }
 

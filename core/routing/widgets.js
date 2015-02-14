@@ -49,12 +49,9 @@ module.exports = function(server, model, config) {
         auth.check(req, res, next, config);
 
         var query  = model.Widget.where({ _id: ObjectId(req.params.widgetId) });
-        query.findOneAndRemove(function (err, widget) {
-            if (widget) r.ok(res);
-            else {
-                if (err) r.fail(res, err);
-                else r.fail(res, { message: "Widget not found" });
-            }
+        query.findOneAndRemove(function (err) {
+            if (err) r.fail(res, err);
+            else r.ok(res);
             return next();
         });
     });

@@ -89,7 +89,7 @@
 
         // Check user tokens on application start, set headers if succeed
         Auth.updateAuthHeader();
-        Settings.get(function (settings) {
+        Settings.get().then(function (settings) {
             if (is.not.undefined(settings) && settings.auth === false) {
                 $rootScope.isAuthorised = true;
                 Auth.token = 0;
