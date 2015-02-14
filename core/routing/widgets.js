@@ -46,9 +46,16 @@ module.exports = function(server, model, config) {
     server.del('/api/widget/:widgetId', function(req, res, next) {
 
         auth.check(req, res, next, config);
-        r.fail(res, { message: "Not supported yet" }, 400);
-        return next();
 
+        var query  = model.Widget.where({ _id: ObjectId(req.params._id) });
+        query.findOneAndRemove(function (err, widget) {
+            if (widget) r.ok(res);
+            else {
+                if (err) r.fail(res, err);
+                else r.fail(res, { message: "Widget not found" });
+            }
+            return next();
+        });
     });
 
     /**
