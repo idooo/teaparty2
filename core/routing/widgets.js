@@ -1,6 +1,7 @@
 var helpers = require('./../helpers'),
     r = helpers.response,
     auth = helpers.auth,
+    ObjectId = require('mongoose').Types.ObjectId,
     extend = require('util')._extend;
 
 module.exports = function(server, model, config) {
@@ -47,7 +48,7 @@ module.exports = function(server, model, config) {
 
         auth.check(req, res, next, config);
 
-        var query  = model.Widget.where({ _id: ObjectId(req.params._id) });
+        var query  = model.Widget.where({ _id: ObjectId(req.params.widgetId) });
         query.findOneAndRemove(function (err, widget) {
             if (widget) r.ok(res);
             else {
@@ -69,8 +70,23 @@ module.exports = function(server, model, config) {
     server.put('/api/widget/:widgetId', function(req, res, next) {
 
         auth.check(req, res, next, config);
-        r.fail(res, { message: "Not supported yet" }, 400);
-        return next();
 
+        var paramNames = ['caption'],
+            updateObj = {};
+
+        var query = model.Widget.where({ _id: ObjectId(req.params.widgetId)});
+
+        paramNames.forEach(function(paramName) {
+            if (typeof req.params[paramName] !== 'undefined') updateObj[paramName] = req.params[paramName];
+        });
+
+        query.findOneAndUpdate(updateObj, function (err, widget) {
+            if (widget) r.ok(res);
+            else {
+                if (err) r.fail(res, err);
+                else r.fail(res, { message: "Widget not found" });
+            }
+            return next();
+        });
     });
 };
