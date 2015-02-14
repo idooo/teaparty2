@@ -47,12 +47,16 @@ input[type="submit"],
 	.btn--minor {
 		background-color: transparent;
 		color: @btn_main_bg_color;
-		border: 1px solid @btn_main_bg_color;
+		.box-shadow(~"inset 0 0 0 2px @{btn_main_bg_color}");
 
 		&:hover {
-			color: @btn_main_bg_hover_color;
+			color: @btn_main_text_color;
 			border-color: @btn_main_bg_hover_color;
 		}
+	}
+
+	.btn--right {
+		float: right;
 	}
 
 

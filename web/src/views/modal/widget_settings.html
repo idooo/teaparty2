@@ -3,6 +3,11 @@
     <h3>Widget settings</h3>
 
     <fieldset>
+        <label>Caption</label>
+        <input type="text" ng-model="ctrl.caption"/>
+    </fieldset>
+
+    <fieldset>
         <label>Key</label>
         <input type="text" readonly ng-model="ngDialogData.widget.key"/>
     </fieldset>
@@ -12,8 +17,14 @@
         <input type="text" readonly ng-model="ngDialogData.widget.type"/>
     </fieldset>
 
-    <button ng-click="ctrl.cloneWidget()">Clone</button>
+    <div class="form-btn-container">
 
-    <button class="btn--warning" ng-click="ctrl.removeWidget()">Remove</button>
+        <button ng-click="ctrl.updateWidget()">Save</button>
+
+        <button class="btn--minor" ng-click="ctrl.cloneWidget()">Clone</button>
+
+        <button class="btn--warning btn--right" ng-click="ctrl.removeWidget()">Remove</button>
+
+    </div>
 
 </div>

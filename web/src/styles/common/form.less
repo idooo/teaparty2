@@ -1,0 +1,45 @@
+@import "../variables";
+@import "../mixins";
+
+// Form
+// ========================================================================
+
+fieldset {
+	border: none;
+	margin: 0 0 5px;
+	padding: 0;
+}
+
+	label {
+		font-size: 14px;
+		display: block;
+	}
+
+	input[type="text"],
+	input[type="password"] {
+		font-size: 18px;
+		padding: 5px 7px 3px;
+		width: 400px;
+		border: none;
+	}
+
+	input[type="submit"] {
+		margin-top: 10px;
+	}
+
+	input:read-only {
+		background-color: rgb(239, 239, 239);
+	}
+
+
+.form-error-message {
+	color: @error_color;
+	font-size: 14px;
+	padding: 10px;
+}
+
+
+.form-btn-container {
+	.clearfix();
+	margin-top: 20px;
+}

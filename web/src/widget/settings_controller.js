@@ -10,6 +10,19 @@
 
         self.removeWidget = removeWidget;
         self.cloneWidget = cloneWidget;
+        self.updateWidget = updateWidget;
+
+        self.caption = $scope.ngDialogData.widget.caption;
+
+        function updateWidget() {
+            Widget.update({
+                widgetId: $scope.ngDialogData.widget._id,
+                caption: self.caption
+            }, function () {
+                $scope.ngDialogData.widget.caption = self.caption;
+                ngDialog.close();
+            }, showError);
+        }
 
         function removeWidget() {
             var promise = DashboardWidgetService.removeWidgetFromDashboard($scope.ngDialogData.dashboardId, $scope.ngDialogData.widget._id);
