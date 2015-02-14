@@ -15,7 +15,7 @@
 
         self.addWidget = addWidget;
 
-        Settings.get(function (settings) {
+        Settings.get().then(function (settings) {
             self.availableWidgetTypes = settings.widgetTypes;
             if (self.availableWidgetTypes.length !== 0) self.widgetType = self.availableWidgetTypes[0];
         });

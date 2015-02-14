@@ -10,6 +10,9 @@
                 method: 'GET',
                 isArray: true,
                 url: '/api/dashboards'
+            },
+            update: {
+                method: 'PUT'
             }
         });
     }

@@ -1,7 +1,5 @@
 (function () {
 
-    'use strict';
-
     angular
         .module('teaparty2.dashboard')
         .directive('dashboard', dashboardDirective);
@@ -29,7 +27,7 @@
         scope.state = 'locked';
 
         scope.$watch('selectedDashboard', function (newDashboard) {
-            if (typeof newDashboard === 'undefined') return;
+            if (is.undefined(newDashboard)) return;
             scope.renderDashboard();
         });
 

@@ -1,7 +1,5 @@
 (function () {
 
-    'use strict';
-
     angular
         .module('teaparty2.rotation')
         .controller('RotationsControlController', RotationsControlController);

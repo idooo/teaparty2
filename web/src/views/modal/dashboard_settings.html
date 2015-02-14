@@ -2,15 +2,32 @@
 
     <h3>Dashboard settings</h3>
 
-    <form>
+    <fieldset>
+        <label>Name</label>
+        <input type="text" ng-model="ctrl.name"/>
+    </fieldset>
 
-        <fieldset>
-            <label>Name</label>
-            <input type="text" readonly ng-model="ngDialogData.dashboard.name"/>
-        </fieldset>
+    <fieldset>
+        <label>URL</label>
+        <input type="text" readonly value="{{::ctrl.baseUrl}}{{::ngDialogData.dashboard.url}}"/>
+    </fieldset>
 
-    </form>
+    <fieldset>
+        <label>Private</label>
+        <div class="checkbox">
+            <input type="checkbox" value="None" id="privateFlag" name="check" ng-model="ctrl.private" />
+            <label for="privateFlag"></label>
+        </div>
+    </fieldset>
 
-    <button class="btn--warning" ng-click="ctrl.removeDashboard(ngDialogData.dashboard._id)">Remove</button>
+    <div class="form-btn-container">
+
+        <button ng-click="ctrl.updateDashboard()">Update</button>
+
+        <button class="btn--minor" ng-click="ctrl.regenerateUrl()">Regenerate URL</button>
+
+        <button class="btn--warning btn--right" ng-click="ctrl.removeDashboard()">Remove</button>
+
+    </div>
 
 </div>

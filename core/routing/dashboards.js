@@ -115,6 +115,45 @@ module.exports = function(server, model, config) {
     });
 
     /**
+     * PUT: /api/dashboard/:dashboardId
+     * Change dashboard settings
+     *
+     * AUTH: not authorised users can't change dashboard settings
+     *
+     * post body:
+     * - name
+     * - private (boolean)
+     * - url (any value -> url will be regenerated)
+     */
+    server.put('/api/dashboard/:dashboardId', function(req, res, next) {
+
+        auth.check(req, res, next, config);
+
+        var paramNames = ['name', 'private'],
+            regenerateUrlName = 'url',
+            updateObj = {};
+
+        var query = model.Dashboard.where({ _id: ObjectId(req.params.dashboardId)});
+
+        paramNames.forEach(function(paramName) {
+            if (typeof req.params[paramName] !== 'undefined') updateObj[paramName] = req.params[paramName];
+        });
+
+        if (typeof req.params[regenerateUrlName] !== 'undefined') {
+            updateObj[regenerateUrlName] = model.Dashboard.getUrl()
+        }
+
+        query.findOneAndUpdate(updateObj, function (err, dashboard) {
+            if (dashboard) r.ok(res, dashboard);
+            else {
+                if (err) r.fail(res, err);
+                else r.fail(res, { message: "Dashboard not found" });
+            }
+            return next();
+        });
+    });
+
+    /**
      * GET: /api/dashboards
      * Get the list of dashboards
      *

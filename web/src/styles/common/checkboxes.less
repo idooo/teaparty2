@@ -1,0 +1,54 @@
+// Based on http://codepen.io/bbodine1/pen/novBm
+
+@import "../variables";
+@import "../mixins";
+
+// Variables
+@checkbox_bg_color: white;
+@checkbox_color: @btn_main_bg_color;
+
+// ===============================================================
+
+.checkbox {
+	width: 20px;
+	margin-top: 2px;
+	position: relative;
+
+	label {
+		width: 20px;
+		height: 20px;
+		cursor: pointer;
+		position: absolute;
+		top: 0;
+		left: 0;
+		background: @checkbox_bg_color;
+		border-radius: 2px;
+
+		&:after {
+			content: '';
+			width: 60%;
+			height: 40%;
+			position: absolute;
+			top: 4px;
+			left: 4px;
+			border: 3px solid @checkbox_color;
+			border-top: none;
+			border-right: none;
+			background: transparent;
+			opacity: 0;
+			transform: rotate(-45deg);
+		}
+
+		&:hover::after {
+			opacity: 0.5;
+		}
+	}
+
+	input[type=checkbox] {
+		visibility: hidden;
+
+		&:checked + label:after {
+			opacity: 1;
+		}
+	}
+}

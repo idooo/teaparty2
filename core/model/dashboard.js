@@ -37,6 +37,9 @@ module.exports = function(mongoose) {
 
     var Dashboard = mongoose.model(modelName, schema);
 
+    // Expose getUrl method
+    Dashboard.getUrl = getUrl;
+
     return {
         name: modelName,
         model: Dashboard
