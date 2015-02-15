@@ -33,3 +33,5 @@ web/bower_components
 docs/
 
 config/my.json
+
+config/test.json

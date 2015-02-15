@@ -27,7 +27,7 @@ You can set logging level and also change log file location (default is `teapart
 #### Example config
 Teaparty2 will use default config (with invalid DB credentials) located in `teaparty2/config/` if environmental variable `config` was not set during the launch. Here is the example config file:
 
-```
+``` json
 {
   "auth": false,
   "admin": {
@@ -85,6 +85,28 @@ Quick build and run server with [mocked](https://github.com/idooo/teaparty2/tree
 
 ```
 grunt mocked
+```
+To run API integration tests first you must create a spearate Teaparty config with server port `8081`, the different database credentials and `database.clean` parameter enabled (it will wipe all the collection at the start), example config:
+
+``` json
+{
+  "server": {
+    "port": 8081
+  },
+  "database": {
+    "uri": "mongodb://XXXXXX.mongolab.com",
+    "port": XXXXX,
+    "db": "teaparty2_test",
+    "username": "test",
+    "password": "test",
+    "clean": true
+  }
+}
+```
+Then run this command to start Teaparty server and run tests against: 
+
+``` bash
+tools/api_integration_tests.sh <config_path>
 ```
 
 Build AngularJS application, minimise everything static:

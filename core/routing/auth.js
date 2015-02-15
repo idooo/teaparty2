@@ -4,8 +4,8 @@ var uuid = require('node-uuid'),
 module.exports = function(server, model, config) {
 
     var noAuth = config.auth !== true,
-        adminUsername = config.admin.username,
-        adminPassword = config.admin.password;
+        adminUsername = config.admin && config.admin.username,
+        adminPassword = config.admin && config.admin.password;
 
     config.tokens = {};
 

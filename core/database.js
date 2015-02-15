@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var models = ['dashboard', 'widget', 'rotation'];
+var modelsFiles = ['dashboard', 'widget', 'rotation'];
 
 module.exports = function(config) {
 
@@ -12,6 +12,8 @@ module.exports = function(config) {
         user: config.database.username,
         pass: config.database.password
     };
+    var models = [];
+
     mongoose.connect(config.database.uri + ':' + config.database.port + '/' + config.database.db, options);
 
     var connection = mongoose.connection;
@@ -23,10 +25,22 @@ module.exports = function(config) {
         config.logger.info('DB connected ' + config.database.uri + '/' + config.database.db);
     });
 
-    models.forEach(function(modelName) {
+    modelsFiles.forEach(function(modelName) {
         var tmp = require('./model/' + modelName)(mongoose, config);
         models[tmp.name] = tmp.model;
     });
+
+    // Warning!
+    // database.clean option is using for testing
+    // all the collection will be dropped on the start if this flag was specified
+    if (config.database.clean) {
+        config.logger.warn('database.clean flag was specified, all the DB collections will be removed');
+        Object.keys(models).forEach(function(modelName) {
+            models[modelName].remove({}, function(err) {
+               config.logger.warn(modelName + ' collection was removed')
+            });
+        });
+    }
 
     return models;
 };

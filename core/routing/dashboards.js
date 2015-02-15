@@ -63,7 +63,7 @@ module.exports = function(server, model, config) {
 
     /**
      * POST: /api/dashboard
-     * Create new dashboard with :dashboardId
+     * Create new dashboard
      *
      * AUTH: not authorised users can't create dashboards
      *
