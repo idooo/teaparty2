@@ -14,6 +14,7 @@
 
         self.name = $scope.ngDialogData.dashboard.name;
         self.private = $scope.ngDialogData.dashboard.private;
+        self.columns = $scope.ngDialogData.dashboard.columns || 10;
 
         self.baseUrl = $window.location.origin + '/d/';
 
@@ -31,11 +32,20 @@
             Dashboard.update({
                 dashboardId: $scope.ngDialogData.dashboard._id,
                 name: self.name,
+                columns: self.columns,
                 'private': self.private
             }, function () {
+                var data = {};
+
                 $scope.ngDialogData.dashboard.name = self.name;
                 $scope.ngDialogData.dashboard.private = self.private;
-                sendUpdateMessage();
+
+                if ($scope.ngDialogData.dashboard.columns !== self.columns) {
+                    $scope.ngDialogData.dashboard.columns = self.columns;
+                    data.reload = true;
+                }
+
+                sendUpdateMessage(data);
                 ngDialog.close();
             }, showError);
         }
@@ -49,8 +59,8 @@
             });
         }
 
-        function sendUpdateMessage() {
-            $rootScope.$broadcast('dashboardUpdatedEvent');
+        function sendUpdateMessage(data) {
+            $rootScope.$broadcast('dashboardUpdatedEvent', data);
         }
 
         function showError(err) {

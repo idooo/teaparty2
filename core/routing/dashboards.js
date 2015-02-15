@@ -121,15 +121,16 @@ module.exports = function(server, model, config) {
      * AUTH: not authorised users can't change dashboard settings
      *
      * post body:
-     * - name
+     * - name (string)
      * - private (boolean)
+     * - columns (number)
      * - url (any value -> url will be regenerated)
      */
     server.put('/api/dashboard/:dashboardId', function(req, res, next) {
 
         auth.check(req, res, next, config);
 
-        var paramNames = ['name', 'private'],
+        var paramNames = ['name', 'private', 'columns'],
             regenerateUrlName = 'url',
             updateObj = {};
 

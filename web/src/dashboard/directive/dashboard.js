@@ -13,7 +13,7 @@
                 selectedDashboard: '=src',
                 options: '=?'
             },
-            templateUrl: 'dashboard/dashboard/dashboard.template',
+            templateUrl: 'dashboard/directive/dashboard.template',
             link: link,
             controller: controller
         };
@@ -50,7 +50,6 @@
         var renderTimeout = 1000;
 
         $scope.gridsterOpts = {
-            columns: 10,
             resizable: {stop: onResize},
             draggable: {stop: onDrag}
         };
@@ -61,6 +60,8 @@
         };
 
         $scope.renderDashboard = function () {
+
+            $scope.gridsterOpts.columns = $scope.selectedDashboard.columns || 10;
 
             $element.html('');
             if (!$scope.selectedDashboard.widgets.length) return;

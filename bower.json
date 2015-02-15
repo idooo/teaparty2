@@ -13,7 +13,8 @@
     "sizzle": "~2.1.1",
     "zeroclipboard": "~2.2.0",
     "ng-clip": "~0.2.6",
-    "is_js": "~0.4.1"
+    "is_js": "~0.4.1",
+    "angular-slider": "~0.2.14"
   },
   "_comment": {
     "reason": "https://github.com/ManifestWebDesign/angular-gridster/pull/190",

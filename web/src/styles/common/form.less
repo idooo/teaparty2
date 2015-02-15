@@ -1,14 +1,20 @@
 @import "../variables";
 @import "../mixins";
 
+// Variables
+@input_width: 400px;
+
 // Form
 // ========================================================================
 
 fieldset {
 	border: none;
-	margin: 0 0 10px;
+	margin: 0 0 15px;
 	padding: 0;
-}
+
+	slider, [slider] {
+		width: @input_width;
+	}
 
 	label {
 		font-size: 14px;
@@ -19,7 +25,7 @@ fieldset {
 	input[type="password"] {
 		font-size: 18px;
 		padding: 5px 7px 3px;
-		width: 400px;
+		width: @input_width;
 		border: none;
 	}
 
@@ -31,13 +37,13 @@ fieldset {
 		background-color: rgb(239, 239, 239);
 	}
 
+}
 
 .form-error-message {
 	color: @error_color;
 	font-size: 14px;
 	padding: 10px;
 }
-
 
 .form-btn-container {
 	.clearfix();

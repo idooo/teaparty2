@@ -55,8 +55,9 @@
 
         $scope.$on('dashboardDeletedEvent', () => init(true));
 
-        $scope.$on('dashboardUpdatedEvent', function() {
-            getDashboardsList(dashboards => $rootScope.dashboards = dashboards);
+        $scope.$on('dashboardUpdatedEvent', function(event, data) {
+            if (data.reload) init();
+            else getDashboardsList(dashboards => $rootScope.dashboards = dashboards);
         });
 
         $scope.$on('widgetAddedEvent', (event, data) => loadDashboard(data.dashboardId));

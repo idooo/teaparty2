@@ -67,7 +67,7 @@ module.exports = {
 
         var dashboardOut1 = h.get(url);
 
-        h.put(url, {name: 'updatedashboard2', 'private': false});
+        h.put(url, {name: 'updatedashboard2', 'private': false, columns: 18});
 
         var dashboardOut2 = h.get(url);
 
@@ -78,7 +78,9 @@ module.exports = {
         test.equal(dashboardOut1._id.toString(), dashboardOut3._id.toString());
         test.equal(dashboardOut2.name, 'updatedashboard2');
         test.equal(dashboardOut2.private, false);
+        test.equal(dashboardOut2.columns, 18);
         test.notEqual(dashboardOut2.url, dashboardOut3.url);
+        test.notEqual(dashboardOut1.columns, dashboardOut3.columns);
 
         test.done();
     }

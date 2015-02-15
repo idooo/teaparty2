@@ -1,0 +1,68 @@
+@import "../variables";
+@import "../mixins";
+
+// Variables
+@height: 7px;
+@line_color: rgba(0,0,0,0.2);
+@point_color: @btn_main_bg_color;
+
+// ===============================================================
+
+slider, [slider] {
+	display: inline-block;
+	position: relative;
+	height: @height;
+	width: 100%;
+	margin: 25px 0 10px;
+	vertical-align: middle;
+
+	div {
+		white-space: nowrap;
+		position: absolute;
+
+		&.bar {
+			width: 100%;
+			height: 100%;
+			border-radius: @height;
+			background: @line_color;
+			overflow: hidden;
+
+			.selection {
+				width: 0;
+				height: 100%;
+				background: #13b6ff;
+			}
+		}
+
+		&.handle {
+			cursor: pointer;
+			width: 20px;
+			height: 20px;
+			top: -8px;
+			background-color: @point_color;
+			z-index: 2;
+			border-radius: 100%;
+
+			&.active:after {
+				background-color: #f00;
+			}
+		}
+
+		&.bubble {
+			cursor: default;
+			top: -24px;
+			padding: 1px 3px 1px 3px;
+			font-size: 0.7em;
+
+			&.active {
+				display: inline-block;
+			}
+
+			&.limit {
+				top: -14px;
+				font-size: 0.5em;
+				color: #777;
+			}
+		}
+	}
+}

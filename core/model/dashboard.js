@@ -24,6 +24,10 @@ module.exports = function(mongoose) {
             type: String,
             default: getUrl
         },
+        columns: {
+            type: Number,
+            default: 10
+        },
         widgets: Array,
         private: {
             type: Boolean,

@@ -9,6 +9,7 @@
         'LocalStorageModule',
         'btford.socket-io',
         'ngClipboard',
+        'ui.slider',
 
         'teaparty2.core',
         'teaparty2.template',

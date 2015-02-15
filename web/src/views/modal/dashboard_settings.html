@@ -13,6 +13,11 @@
     </fieldset>
 
     <fieldset>
+        <label>Columns</label>
+        <slider floor="4" ceiling="20" step="1" ng-model="ctrl.columns"></slider>
+    </fieldset>
+
+    <fieldset>
         <label>Private</label>
         <div class="checkbox">
             <input type="checkbox" value="None" id="privateFlag" name="check" ng-model="ctrl.private" />
