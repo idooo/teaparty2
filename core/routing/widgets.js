@@ -92,12 +92,14 @@ module.exports = function(server, model, config) {
      */
     server.get('/api/widget/:widgetId', function(req, res, next) {
 
-        auth.check(req, res, next, config);
-
         var query = model.Widget.where({ _id: ObjectId(req.params.widgetId)});
 
         query.findOne(function (err, widget) {
-            if (widget) r.ok(res, widget);
+            if (widget) {
+                var filter;
+                if (!auth.isAuthorised(req, config)) filter = ['key'];
+                r.ok(res, widget, filter);
+            }
             else {
                 if (err) r.fail(res, err);
                 else r.fail(res, { message: "Widget not found" });

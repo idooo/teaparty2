@@ -31,9 +31,13 @@ module.exports = function(server, model, config) {
                 });
 
                 findWidgets(Object.keys(_widgets), function(widgets) {
+                    var filter;
+                    if (!auth.isAuthorised(req, config)) filter = ['key'];
+
                     dashboard.widgets = [];
+
                     widgets.forEach(function(item) {
-                        dashboard.widgets.push(extend(helpers.sanitize(item), _widgets[item._id]));
+                        dashboard.widgets.push(extend(helpers.sanitize(item, filter), _widgets[item._id]));
                     });
 
                     r.ok(res, dashboard);

@@ -2,7 +2,7 @@ var sanitize = require('./sanitize');
 
 module.exports = {
 
-    ok: function(r, response) {
+    ok: function(r, response, keys) {
         if (typeof response === 'undefined') response = {};
         else try {
             response = response.toObject();
@@ -11,7 +11,7 @@ module.exports = {
 
         response.status = 'ok';
 
-        response = sanitize(response);
+        response = sanitize(response, keys);
 
         r.send(200, response);
     },
