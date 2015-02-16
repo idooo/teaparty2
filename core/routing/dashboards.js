@@ -8,7 +8,7 @@ module.exports = function(server, model, config) {
 
     /**
      * GET: /api/dashboard/:dashboardId
-     * Get dashboard and widget by :dashboardId
+     * Get dashboard by :dashboardId
      *
      * AUTH: not authorised users can't get private=true dashboards
      */
