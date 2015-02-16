@@ -30,7 +30,10 @@ function helper() {
             },
             json: params
         });
-        return JSON.parse(res.getBody().toString())
+        if (res.statusCode === 200) {
+            return JSON.parse(res.getBody().toString())
+        }
+        return JSON.parse(res.body.toString());
     }
 
 }
