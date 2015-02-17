@@ -2,25 +2,10 @@ var mongoose = require('mongoose'),
     helpers = require('./../helpers'),
     r = helpers.response,
     auth = helpers.auth,
+    ObjectId = require('mongoose').Types.ObjectId,
     extend = require('util')._extend;
 
 module.exports = function(server, model, config) {
-
-    function findRotation(url, callback, errorCallback) {
-        var query  = model.Rotation.where({ url: url });
-        query.findOne(function (err, rotation) {
-            if (rotation && typeof callback === 'function') return callback(rotation);
-            if (typeof errorCallback === 'function') errorCallback(err);
-        });
-    }
-
-    function getErrorHandler(res, next) {
-        return function(err) {
-            if (err) r.fail(res, err, 400);
-            else r.fail(res);
-            return next();
-        }
-    }
 
     /**
      * POST: /api/rotation
@@ -42,9 +27,17 @@ module.exports = function(server, model, config) {
 
     /**
      * GET: /api/rotation/:url
-     * Get the rotation by key/url
+     * Get the rotation by url
      */
     server.get('/api/rotation/:url', function(req, res, next) {
+
+        function findRotationByUrl(url, callback, errorCallback) {
+            var query = model.Rotation.where({url: url});
+            query.findOne(function (err, rotation) {
+                if (rotation && typeof callback === 'function') return callback(rotation);
+                if (typeof errorCallback === 'function') errorCallback(err);
+            });
+        }
 
         function findDashboards(ids, callback) {
             var query = model.Dashboard.where({ _id: {$in: ids }});
@@ -53,13 +46,12 @@ module.exports = function(server, model, config) {
                     r.fail(res, err);
                     return next();
                 }
-
                 if (typeof callback !== 'undefined') callback(dashboards);
             })
         }
 
         var errorHandler = getErrorHandler(res, next);
-        findRotation(req.params.url,
+        findRotationByUrl(req,
             function(rotation) {
                 var _ids = [],
                     timeouts = {};
@@ -145,16 +137,16 @@ module.exports = function(server, model, config) {
     });
 
     /**
-     * DELETE: /api/rotation/:url
-     * Delete the rotation by key/url
+     * DELETE: /api/rotation/:rotationId
+     * Delete the rotation by rotationId
      *
      * AUTH: not authorised users can't delete rotations
      */
-    server.del('/api/rotation/:url', function(req, res, next) {
+    server.del('/api/rotation/:rotationId', function(req, res, next) {
 
         auth.check(req, res, next, config);
 
-        var query  = model.Rotation.where({ url: req.params.url });
+        var query  = model.Rotation.where({ _id: ObjectId(req.params.rotationId) });
         query.findOneAndRemove(function (err, rotation) {
             if (rotation) r.ok(res);
             else {
@@ -167,23 +159,22 @@ module.exports = function(server, model, config) {
     });
 
     /**
-     * POST: /api/rotation/:url/:dashboardID
-     * Add :dashboardID (ID) to the :url rotation
+     * POST: /api/rotation/:rotationId/:dashboardId
+     * Add :dashboardID (ID) to the :rotationId rotation
      *
      * AUTH: not authorised users can't modify rotations
      */
-    server.post('/api/rotation/:url/:dashboardID', function(req, res, next) {
+    server.post('/api/rotation/:rotationId/:dashboardId', function(req, res, next) {
 
         auth.check(req, res, next, config);
 
         var errorHandler = getErrorHandler(res, next);
 
-        findRotation(req.params.url, function(rotation) {
+        findRotation(req, function(rotation) {
 
-            findDashboard(req.params.dashboardID, function(dashboard) {
-
+            findDashboard(req.params.dashboardId, function(dashboard) {
                 for (var i=0; i<rotation.dashboards.length; i++) {
-                    if (rotation.dashboards[i]._id.toString() === req.params.dashboardID) {
+                    if (rotation.dashboards[i]._id.toString() === req.params.dashboardId) {
                         r.fail(res, {message: "Dashboard already in this rotation"}, 400);
                         return next();
                     }
@@ -206,8 +197,8 @@ module.exports = function(server, model, config) {
         },
         errorHandler);
 
-        function findDashboard(dashboardID, callback, errorCallback) {
-            var query  = model.Dashboard.where({ _id: mongoose.Types.ObjectId(dashboardID) });
+        function findDashboard(dashboardId, callback, errorCallback) {
+            var query  = model.Dashboard.where({ _id: ObjectId(dashboardId) });
             query.findOne(function (err, dashboard) {
                 if (dashboard && typeof callback === 'function') return callback(dashboard);
                 if (typeof errorCallback === 'function') errorCallback(err);
@@ -217,24 +208,24 @@ module.exports = function(server, model, config) {
     });
 
     /**
-     * PUT: /api/rotation/:url/:dashboardID
-     * Change :dashboardID (ID) settings in the :url rotation
+     * PUT: /api/rotation/:rotationId/:dashboardId
+     * Change :dashboardId (ID) settings in the :url rotation
      *
      * AUTH: not authorised users can't modify rotations
      *
      * post params:
      *  - timeout
      */
-    server.put('/api/rotation/:url/:dashboardID', function(req, res, next) {
+    server.put('/api/rotation/:rotationId/:dashboardId', function(req, res, next) {
 
         auth.check(req, res, next, config);
 
         var errorHandler = getErrorHandler(res, next);
 
-        findRotation(req.params.url, function(rotation) {
+        findRotation(req, function(rotation) {
             var found = false;
             for (var i=0; i<rotation.dashboards.length; i++) {
-                if (rotation.dashboards[i]._id.toString() === req.params.dashboardID) {
+                if (rotation.dashboards[i]._id.toString() === req.params.dashboardId) {
                     found = true;
 
                     // TODO: not safe?
@@ -259,21 +250,21 @@ module.exports = function(server, model, config) {
     });
 
     /**
-     * DELETE: /api/rotation/:url/:dashboardID
-     * Remove the :dashboardID (ID) from the :url rotation
+     * DELETE: /api/rotation/:url/:dashboardId
+     * Remove the :dashboardId (ID) from the :url rotation
      *
      * AUTH: not authorised users can't modify rotations
      */
-    server.del('/api/rotation/:url/:dashboardID', function(req, res, next) {
+    server.del('/api/rotation/:rotationId/:dashboardId', function(req, res, next) {
 
         auth.check(req, res, next, config);
 
         var errorHandler = getErrorHandler(res, next);
 
-        findRotation(req.params.url, function(rotation) {
+        findRotation(req, function(rotation) {
             var found = false;
             for (var i=0; i<rotation.dashboards.length; i++) {
-                if (rotation.dashboards[i]._id.toString() === req.params.dashboardID) {
+                if (rotation.dashboards[i]._id.toString() === req.params.dashboardId) {
                     found = true;
                     rotation.dashboards.splice(i, 1);
 
@@ -292,4 +283,33 @@ module.exports = function(server, model, config) {
         },
         errorHandler);
     });
+
+
+    /**
+     * Get rotation based on request rotationId
+     * @param req
+     * @param callback
+     * @param errorCallback
+     */
+    function findRotation(req, callback, errorCallback) {
+        var query  = model.Rotation.where({ _id: ObjectId(req.params.rotationId) });
+        query.findOne(function (err, rotation) {
+            if (rotation && typeof callback === 'function') return callback(rotation);
+            if (typeof errorCallback === 'function') errorCallback(err);
+        });
+    }
+
+    /**
+     * Get error handler in context of request
+     * @param res
+     * @param next
+     * @returns {Function}
+     */
+    function getErrorHandler(res, next) {
+        return function(err) {
+            if (err) r.fail(res, err, 400);
+            else r.fail(res);
+            return next();
+        }
+    }
 };

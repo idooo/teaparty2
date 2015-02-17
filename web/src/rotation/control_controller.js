@@ -34,15 +34,15 @@
         }
 
         function removeRotation(rotation) {
-            Rotation.delete({url: rotation.url});
+            Rotation.delete({rotationId: rotation._id});
             for (var i = 0; i < self.rotations.length; i++) {
-                if (rotation.url === self.rotations[i].url) return self.rotations.splice(i, 1);
+                if (rotation._id === self.rotations[i]._id) return self.rotations.splice(i, 1);
             }
         }
 
         function removeDashboardFromRotation(rotation, dashboard) {
             Rotation.removeDashboard({
-                url: rotation.url,
+                rotationId: rotation._id,
                 dashboardID: dashboard._id
             }, function () {
                 for (var i = 0; i < rotation.dashboards.length; i++) {
@@ -53,7 +53,7 @@
 
         function setDashboardTimeout(rotation, dashboard, timeout) {
             Rotation.updateDashboard({
-                url: rotation.url,
+                rotationId: rotation._id,
                 dashboardID: dashboard._id,
                 timeout: timeout
             }, function () {
@@ -63,7 +63,7 @@
 
         function addDashboardToRotation(rotation, dashboard) {
             Rotation.addDashboard({
-                url: rotation.url,
+                rotationId: rotation._id,
                 dashboardID: dashboard._id
             }, function () {
                 rotation.dashboards.push(dashboard);
