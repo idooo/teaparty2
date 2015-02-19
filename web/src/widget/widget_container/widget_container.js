@@ -37,17 +37,11 @@
      * @param $attrs
      * @param ngDialog
      */
-    function controller($scope, $element, $attrs, ngDialog) {
-        $scope.openWidgetSettingsDialog = function () {
-            ngDialog.open({
-                template: 'views/modal/widget_settings.html',
-                controller: 'WidgetSettingsController as ctrl',
-                data: {
-                    dashboardId: $scope.dashboardId,
-                    widget: $scope.widget
-                }
-            });
-        };
+    function controller($scope, $element, $attrs, ModalService) {
+        $scope.openWidgetSettingsDialog = () => ModalService.newWidget({
+            dashboardId: $scope.dashboardId,
+            widget: $scope.widget
+        });
     }
 
 })();

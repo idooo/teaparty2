@@ -64,7 +64,7 @@
                 url: '/d/:dashboard',
                 views: {
                     content: {
-                        templateUrl: '/views/layout.html',
+                        templateUrl: '/core/views/dashboard.html',
                         controller: 'CentralController as central'
                     }
                 }
@@ -73,7 +73,7 @@
                 url: '/rotation/:url',
                 views: {
                     content: {
-                        templateUrl: '/views/rotation.html',
+                        templateUrl: '/rotation/views/rotation.html',
                         controller: 'RotationController as rotation'
                     }
                 }

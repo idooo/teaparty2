@@ -10,7 +10,7 @@ module.exports.tasks =
           dest: "<%= settings.dist %>"
           src: [
             "*.{ico,png,txt}"
-            "views/**/*.html"
+            "**/*.html"
             "images/**/*"
             "styles/fonts/*"
             "styles/*.htc"

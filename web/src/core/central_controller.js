@@ -4,7 +4,7 @@
         .module('teaparty2.core')
         .controller('CentralController', CentralController);
 
-    function CentralController($rootScope, $scope, $state, $stateParams, ModalsService, Dashboard, Sockets, Settings) {
+    function CentralController($rootScope, $scope, $state, $stateParams, ModalService, Dashboard, Sockets, Settings) {
 
         const IMPORTANT_MESSAGES = [
             'Database connection problem. Check application logs for details',
@@ -26,11 +26,11 @@
         self.isAnyDashboardAvailable = isAnyDashboardAvailable;
 
         // Modals
-        self.showNewDashboardDialog = ModalsService.newDashboard;
-        self.showRotationsDialog = ModalsService.rotations;
-        self.showLoginDialog = ModalsService.login;
-        self.showDashboardSettingsDialog = () => ModalsService.dashboardSettings({dashboard: self.selectedDashboard});
-        self.showNewWidgetDialog = () => ModalsService.newWidget({dashboard: self.selectedDashboard});
+        self.showNewDashboardDialog = ModalService.newDashboard;
+        self.showRotationsDialog = ModalService.rotations;
+        self.showLoginDialog = ModalService.login;
+        self.showDashboardSettingsDialog = () => ModalService.dashboardSettings({dashboard: self.selectedDashboard});
+        self.showNewWidgetDialog = () => ModalService.newWidget({dashboard: self.selectedDashboard});
 
         self.isHeaderOpen = false;
         self.isDashboardLocked = true;

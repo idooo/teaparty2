@@ -2,9 +2,9 @@
 
     angular
         .module('teaparty2.core')
-        .service('ModalsService', ModalsService);
+        .service('ModalService', ModalService);
 
-    function ModalsService(ngDialog) {
+    function ModalService(ngDialog) {
 
         const NG_DIALOG_DEFAULT_THEME = 'ngdialog-theme-default';
         const NG_DIALOG_WIDE_MODIFIER = 'ngdialog-theme-default--wide';
@@ -12,25 +12,29 @@
         var self = this;
         var modals = {
             newDashboard: {
-                template: 'new_dashboard.html',
+                template: 'dashboard/views/new_dashboard_modal.html',
                 controller: 'NewDashboardController'
             },
             rotations: {
-                template: 'rotations_control.html',
+                template: 'rotation/views/rotations_control_modal.html',
                 controller: 'RotationsControlController',
                 className: `${NG_DIALOG_DEFAULT_THEME} ${NG_DIALOG_WIDE_MODIFIER}`
             },
             login: {
-                template: 'login.html',
+                template: 'core/views/login_modal.html',
                 controller: 'LoginController'
             },
             dashboardSettings: {
-                template: 'dashboard_settings.html',
+                template: 'dashboard/views/dashboard_settings_modal.html',
                 controller: 'DashboardSettingsController'
             },
             newWidget: {
-                template: 'new_widget.html',
+                template: 'widget/views/new_widget_modal.html',
                 controller: 'NewWidgetController'
+            },
+            widgetSettings: {
+                template: 'widget/views/widget_settings_modal.html',
+                controller: 'WidgetSettingsController'
             }
         };
 
@@ -53,7 +57,7 @@
          */
         function createModal(templateName, controllerName, className) {
             var config = {
-                template: `views/modal/${templateName}`,
+                template: `${templateName}`,
                 controller: `${controllerName} as ctrl`
             };
 
