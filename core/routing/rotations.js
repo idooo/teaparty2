@@ -77,6 +77,45 @@ module.exports = function(server, model, config) {
     });
 
     /**
+     * PUT: /api/rotation/:rotationId
+     * Change :rotationId settings
+     *
+     * AUTH: not authorised users can't modify rotations
+     *
+     * post params:
+     *  - name
+     */
+    server.put('/api/rotation/:rotationId', function(req, res, next) {
+
+        auth.check(req, res, next, config);
+
+        var paramNames = ['name'],
+            regenerateUrlName = 'url',
+            updateObj = {};
+
+        var query = model.Rotation.where({ _id: ObjectId(req.params.rotationId)});
+
+        paramNames.forEach(function(paramName) {
+            if (typeof req.params[paramName] !== 'undefined') {
+                updateObj[paramName] = req.params[paramName];
+            }
+        });
+
+        if (typeof req.params[regenerateUrlName] !== 'undefined') {
+            updateObj[regenerateUrlName] = model.Rotation.getUrl()
+        }
+
+        query.findOneAndUpdate(updateObj, function (err, rotation) {
+            if (rotation) r.ok(res);
+            else {
+                if (err) r.fail(res, err);
+                else r.fail(res, { message: "Rotation not found" });
+            }
+            return next();
+        });
+    });
+
+    /**
      * GET: /api/rotations
      * Get the rotations list
      *

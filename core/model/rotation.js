@@ -16,6 +16,10 @@ module.exports = function(mongoose) {
             type: Array,
             default: Array
         },
+        name: {
+            type: String,
+            default: ""
+        },
         creation_date: {
             type: Date,
             default: Date.now
@@ -23,6 +27,9 @@ module.exports = function(mongoose) {
     });
 
     var Rotation = mongoose.model(modelName, schema);
+
+    // Expose getUrl method
+    Rotation.getUrl = getUrl;
 
     return {
         name: modelName,
