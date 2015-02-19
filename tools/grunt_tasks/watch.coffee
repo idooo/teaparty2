@@ -14,6 +14,6 @@ module.exports.tasks =
       tasks: ['copy:templates', 'copy:widgetsTemplates', 'develop']
       options: { nospawn: true, reload: false  }
     viewsCopy:
-      files: ['<%= settings.app %>/views/**/*.html']
+      files: ['<%= settings.app %>/**/*.html']
       tasks: ['copy:distStatic', 'develop']
       options: { nospawn: true, reload: false  }

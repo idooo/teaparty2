@@ -6,9 +6,6 @@
 
     function ModalService(ngDialog) {
 
-        const NG_DIALOG_DEFAULT_THEME = 'ngdialog-theme-default';
-        const NG_DIALOG_WIDE_MODIFIER = 'ngdialog-theme-default--wide';
-
         var self = this;
         var modals = {
             newDashboard: {
@@ -17,8 +14,7 @@
             },
             rotations: {
                 template: 'rotation/views/rotations_control_modal.html',
-                controller: 'RotationsControlController',
-                className: `${NG_DIALOG_DEFAULT_THEME} ${NG_DIALOG_WIDE_MODIFIER}`
+                controller: 'RotationsControlController'
             },
             login: {
                 template: 'core/views/login_modal.html',

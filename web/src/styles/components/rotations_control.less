@@ -9,55 +9,19 @@
 
 .rotations-control {
 
-	&__inner-container {
-		.flex-display();
+	&__rotations {
+
 	}
-
-		&__rotations {
-			width: 300px;
-		}
-
-
-		&__details {
-			.align-self(stretch);
-			.flex-grow(1);
-		}
 
 	&__header {
 		margin: 0 0 6px;
 	}
-}
 
-.rotations-control-rotation {
-	margin-bottom: 5px;
-
-	&:last-of-type {
-		margin-bottom: 20px;
+	&__dashboard-header {
+		font-size: 16px;
 	}
 
-	&__url {
-		font-size: 14px;
-		display: inline-block;
-		text-decoration: none;
-		border-bottom: 1px dotted #7c7c7c;
-
-		&--selected {
-			font-weight: 600;
-		}
-	}
-
-	&__copy {
-		position: absolute;
-		margin-top: -36px;
-	}
-
-	span {
-		font-size: 12px;
-		vertical-align: super;
-	}
-}
-
-	.rotations-control-dashboards {
+	table {
 		width: 100%;
 		margin-bottom: 20px;
 
@@ -86,6 +50,29 @@
 				padding: 4px;
 				font-size: 14px;
 			}
+		}
+	}
+}
+
+.rotations-control-rotation {
+	margin-bottom: 5px;
+
+	&:last-of-type {
+		margin-bottom: 20px;
+	}
+
+	&__url {
+		font-size: 14px;
+		display: inline-block;
+		text-decoration: none;
+		border-bottom: 1px dotted #7c7c7c;
+	}
+
+}
+
+	.rotations-control-dashboards {
+
+		tbody {
 
 			td:first-child {
 				width: 75%;

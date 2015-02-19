@@ -15,6 +15,7 @@
                     method: 'DELETE'
                 },
                 update: {
+                    url: '/api/rotation/:rotationId',
                     method: 'PUT'
                 },
                 list: {

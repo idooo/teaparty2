@@ -35,10 +35,10 @@
      * @param $scope
      * @param $element
      * @param $attrs
-     * @param ngDialog
+     * @param ModalService
      */
     function controller($scope, $element, $attrs, ModalService) {
-        $scope.openWidgetSettingsDialog = () => ModalService.newWidget({
+        $scope.openWidgetSettingsDialog = () => ModalService.widgetSettings({
             dashboardId: $scope.dashboardId,
             widget: $scope.widget
         });
