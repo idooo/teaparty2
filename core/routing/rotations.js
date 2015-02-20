@@ -83,7 +83,8 @@ module.exports = function(server, model, config) {
      * AUTH: not authorised users can't modify rotations
      *
      * post params:
-     *  - name
+     *  - name (string)
+     *  - url (any value -> url will be regenerated)
      */
     server.put('/api/rotation/:rotationId', function(req, res, next) {
 
@@ -106,7 +107,7 @@ module.exports = function(server, model, config) {
         }
 
         query.findOneAndUpdate(updateObj, function (err, rotation) {
-            if (rotation) r.ok(res);
+            if (rotation) r.ok(res, rotation);
             else {
                 if (err) r.fail(res, err);
                 else r.fail(res, { message: "Rotation not found" });

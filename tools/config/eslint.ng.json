@@ -11,10 +11,12 @@
         "arrowFunctions": true,
         "templateStrings": true,
         "blockBindings": true,
+        "defaultParams": true,
         "forOf": true,
         "defaultParams": true
     },
     "rules": {
+        "comma-spacing": false,
         "strict": false,
         "semi": false,
         "no-unused-vars": false,

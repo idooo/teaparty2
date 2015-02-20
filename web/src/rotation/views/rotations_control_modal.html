@@ -14,32 +14,32 @@
 
     <div ng-show="ctrl.view == 0">
 
-        <table class="rotations-control__rotations">
+        <table>
 
             <thead>
                 <tr>
                     <th>Rotation name or URL</th>
                     <th>Dashboards</th>
-                    <th></th>
+                    <th>Clipboard</th>
                 </tr>
             </thead>
 
-            <tr class="rotations-control-rotation"
+            <tr class="rotation-item"
                  ng-repeat="rotation in ctrl.rotations">
 
-                <td>
+                <td class="rotation-item__url">
                     <a href="#"
-                       class="rotations-control-rotation__url"
                        ng-click="ctrl.openSettings(rotation)">{{rotation.name || rotation.url}}</a>
                 </td>
 
-                <td>
+                <td class="rotation-item__dashboards">
                     <a href="#"
-                       ng-click="ctrl.openDashboards(rotation)">Dashboards: {{rotation.dashboards.length}}</a>
+                       ng-click="ctrl.openDashboards(rotation)">{{rotation.dashboards | fieldsConcat:'name'}}</a>
                 </td>
 
-                <td>
-                    <a href="#" clip-copy="ctrl.getRotationUrl(rotation)">Copy link to clipboard</a>
+                <td class="rotation-item__copy">
+                    <a href="#"
+                       clip-copy="ctrl.getRotationUrl(rotation)">Copy link</a>
                 </td>
 
             </tr>

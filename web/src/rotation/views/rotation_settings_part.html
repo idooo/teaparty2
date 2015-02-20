@@ -6,7 +6,7 @@
 
 <fieldset>
     <label>URL</label>
-    <input type="text" readonly value="{{::ctrl.selectedRotation.url}}"/>
+    <input type="text" readonly value="{{::ctrl.baseUrl}}{{ctrl.selectedRotation.url}}"/>
 </fieldset>
 
 <div class="form-btn-container">

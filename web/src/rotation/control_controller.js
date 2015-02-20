@@ -8,6 +8,8 @@
 
         var self = this;
 
+        self.baseUrl = $window.location.origin + '/rotation/';
+
         self.rotations = [];
         self.dashboards = [];
         self.selectedRotation = undefined;
@@ -105,11 +107,16 @@
         }
 
         function getRotationUrl(rotation) {
-            return $window.location.origin + '/rotation/' + rotation.url;
+            return self.baseUrl + rotation.url;
         }
 
         function updateRotation() {
-            // TODO: write logic here
+            Rotation.update({
+                rotationId: self.selectedRotation._id,
+                name: self.name
+            }, function () {
+                self.selectedRotation.name = self.name;
+            }, showError);
         }
 
         function regenerateUrl() {
@@ -118,7 +125,6 @@
                 url: true
             }, function (data) {
                 self.selectedRotation.url = data.url;
-                // TODO: write logic here
             }, showError);
         }
 

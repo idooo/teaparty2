@@ -9,10 +9,6 @@
 
 .rotations-control {
 
-	&__rotations {
-
-	}
-
 	&__header {
 		margin: 0 0 6px;
 	}
@@ -54,48 +50,54 @@
 	}
 }
 
-.rotations-control-rotation {
+// Rotations list
+// =======================================================================================
+
+.rotation-item {
 	margin-bottom: 5px;
 
 	&:last-of-type {
 		margin-bottom: 20px;
 	}
 
-	&__url {
-		font-size: 14px;
-		display: inline-block;
+	a {
+		font-size: 12px;
+		display: inline;
 		text-decoration: none;
 		border-bottom: 1px dotted #7c7c7c;
 	}
 
 }
 
-	.rotations-control-dashboards {
+// Rotation details
+// =======================================================================================
 
-		tbody {
+.rotations-control-dashboards {
 
-			td:first-child {
-				width: 75%;
-			}
-		}
+	tbody {
 
-		&__exclude {
-			cursor: pointer;
-			font-size: 16px;
-			line-height: 1;
-			font-weight: 600;
-			color: @exclude_color;
-
-			&:hover {
-				color: @exclude_hover_color;
-			}
-		}
-
-		&__private {
-			background-color: rgba(0, 0, 0, 0.2);
-			font-size: 10px;
-			padding: 1px 7px;
-			border-radius: 2px;
-			color: white;
+		td:first-child {
+			width: 75%;
 		}
 	}
+
+	&__exclude {
+		cursor: pointer;
+		font-size: 16px;
+		line-height: 1;
+		font-weight: 600;
+		color: @exclude_color;
+
+		&:hover {
+			color: @exclude_hover_color;
+		}
+	}
+
+	&__private {
+		background-color: rgba(0, 0, 0, 0.2);
+		font-size: 10px;
+		padding: 1px 7px;
+		border-radius: 2px;
+		color: white;
+	}
+}
