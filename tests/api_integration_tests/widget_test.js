@@ -2,7 +2,7 @@ var h = require('./helpers');
 
 module.exports = {
 
-    newWidget: function (test) {
+    newWidgetAndGetWidget: function (test) {
         var widgetOut1 = h.post('/api/widget', { caption: 'testnewwidget', type: 'text' });
         var widgetOut2 = h.get('/api/widget/' + widgetOut1._id.toString());
 
