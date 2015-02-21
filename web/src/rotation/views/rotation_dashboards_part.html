@@ -17,7 +17,9 @@
                 {{::dashboard.name}}
                 <span class="rotations-control-dashboards__private" ng-show="dashboard.private">Private</span>
             </td>
-            <td>{{dashboard.timeout || 30}} seconds</td>
+            <td>
+                <div timeout value="{{dashboard.timeout}}"></div>
+            </td>
 
             <td>
                 <span class="rotations-control-dashboards__exclude"
