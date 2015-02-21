@@ -35,7 +35,7 @@
             if (self.rotation.dashboards.length <= index) index = 0;
             var dashboard = self.rotation.dashboards[index];
 
-            Dashboard.get({name: dashboard.name}, function (data) {
+            Dashboard.get({dashboardId: dashboard._id}, function (data) {
                 self.selectedDashboard = data;
 
                 $timeout(function () {
