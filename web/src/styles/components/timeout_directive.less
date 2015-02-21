@@ -1,0 +1,28 @@
+@import "../variables";
+@import "../mixins";
+
+// Variables
+@popover_bg_color: white;
+@item_hover_background_color: rgba(0,0,0,0.2);
+
+// =======================================================================================
+
+.timeout-select {
+
+}
+
+	.timeout-select-popover {
+		background-color: @popover_bg_color;
+		position: absolute;
+		.flex-display();
+		
+		&__item {
+			display: inline-block;
+			padding: 10px 20px;
+			cursor: pointer;
+
+			&:hover {
+				background-color: @item_hover_background_color;
+			}
+		}
+	}

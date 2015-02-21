@@ -29,16 +29,19 @@
 
                 <td class="rotation-item__url">
                     <a href="#"
+                       class="context-link"
                        ng-click="ctrl.openSettings(rotation)">{{rotation.name || rotation.url}}</a>
                 </td>
 
                 <td class="rotation-item__dashboards">
                     <a href="#"
+                       class="context-link"
                        ng-click="ctrl.openDashboards(rotation)">{{rotation.dashboards | fieldsConcat:'name'}}</a>
                 </td>
 
                 <td class="rotation-item__copy">
                     <a href="#"
+                       class="context-link"
                        clip-copy="ctrl.getRotationUrl(rotation)">Copy link</a>
                 </td>
 

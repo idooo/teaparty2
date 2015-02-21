@@ -45,10 +45,10 @@
         {{central.importantMessage}}
     </div>
 
-    <dashboard
+    <dashboard-container
             ng-hide="central.dashboards.length === 0"
             options="central.dashboardOptions"
             src="central.selectedDashboard"
-            widgets="central.selectedDashboard.widgets"></dashboard>
+            widgets="central.selectedDashboard.widgets"></dashboard-container>
 
 </div>

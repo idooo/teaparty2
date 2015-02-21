@@ -16,7 +16,6 @@
 
         self.createRotation = createRotation;
         self.removeDashboardFromRotation = removeDashboardFromRotation;
-        self.setDashboardTimeout = setDashboardTimeout;
         self.addDashboardToRotation = addDashboardToRotation;
         self.isDashboardInSelectedRotation = isDashboardInSelectedRotation;
 
@@ -57,16 +56,6 @@
                 for (var i = 0; i < rotation.dashboards.length; i++) {
                     if (rotation.dashboards[i]._id === dashboard._id) return rotation.dashboards.splice(i, 1);
                 }
-            });
-        }
-
-        function setDashboardTimeout(rotation, dashboard, timeout) {
-            Rotation.updateDashboard({
-                rotationId: rotation._id,
-                dashboardID: dashboard._id,
-                timeout: timeout
-            }, function () {
-                dashboard.timeout = timeout;
             });
         }
 

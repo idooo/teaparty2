@@ -18,14 +18,12 @@
                 <span class="rotations-control-dashboards__private" ng-show="dashboard.private">Private</span>
             </td>
             <td>
-                <div timeout value="{{dashboard.timeout}}"></div>
+                <timeout rotation="ctrl.selectedRotation" dashboard="dashboard"></timeout>
             </td>
-
             <td>
                 <span class="rotations-control-dashboards__exclude"
                       ng-click="ctrl.removeDashboardFromRotation(ctrl.selectedRotation, dashboard)">×</span>
             </td>
-            <!-- <button ng-click="ctrl.setDashboardTimeout(ctrl.selectedRotation, dashboard, 31)">set timeout</button> -->
         </tr>
 
     </tbody>

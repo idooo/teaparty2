@@ -1,5 +1,15 @@
-<div>
+<div class="timeout-select">
 
-    {{value}} seconds
+    <a class="context-link" href="#" ng-click="togglePopover()">{{dashboard.timeout}}</a> seconds
+
+    <div class="timeout-select-popover" ng-show="isPopoverOpened">
+
+        <div class="timeout-select-popover__item"
+             ng-repeat="item in [15, 30, 45, 60]"
+             ng-click="setDashboardTimeout(rotation, dashboard, item)">
+            {{item}}
+        </div>
+
+    </div>
 
 </div>

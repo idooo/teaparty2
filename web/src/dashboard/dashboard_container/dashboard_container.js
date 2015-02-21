@@ -2,9 +2,9 @@
 
     angular
         .module('teaparty2.dashboard')
-        .directive('dashboard', dashboardDirective);
+        .directive('dashboardContainer', dashboardContainerDirective);
 
-    function dashboardDirective() {
+    function dashboardContainerDirective() {
         return {
             restrict: 'EA',
             replace: true,
@@ -13,7 +13,7 @@
                 selectedDashboard: '=src',
                 options: '=?'
             },
-            templateUrl: 'dashboard/directive/dashboard.template',
+            templateUrl: 'dashboard/dashboard_container/dashboard_container.template',
             link: link,
             controller: controller
         };
