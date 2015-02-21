@@ -1,3 +1,10 @@
+/**
+ * This is module communication module between server side and client
+ * to send messages about widget data updates via Web Sockets
+ * @param io
+ * @param model
+ * @param config
+ */
 module.exports = function(io, model, config) {
 
     var lastCheck = -1,
@@ -9,7 +16,10 @@ module.exports = function(io, model, config) {
 
     setInterval(function() {
         getDataFromWidgets(function(data) {
-            if (data.length) io.sockets.emit('update_widgets', data);
+            if (data.length) {
+                io.sockets.emit('widgets_update', data);
+                config.logger.debug("Socket emit: widgets_update", JSON.stringify(data));
+            }
         });
     }, 5000);
 
@@ -26,17 +36,15 @@ module.exports = function(io, model, config) {
             var clearWidgetsData = [];
             widgets.forEach(function(widget) {
                 clearWidgetsData.push({
-                    key: widget.key,
+                    _id: widget._id.toString(),
                     data: widget.data
                 })
             });
-            config.logger.debug("Updated widgets data", JSON.stringify(clearWidgetsData));
+
+            if (typeof callback === 'function' && lastCheck !== -1) callback(clearWidgetsData);
 
             lastCheck = new Date();
             inProgress = false;
-
-            if (typeof callback === 'function') callback(clearWidgetsData);
         });
     }
-
 };

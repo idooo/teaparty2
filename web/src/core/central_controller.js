@@ -39,14 +39,8 @@
 
         init();
 
-        // Bind events
+        // Bind event handlers
         // ------------------------------------------------------------------------------------------
-
-        Sockets.on('update_widgets', function (data) {
-            data.forEach(function (updateObject) {
-                $scope.$broadcast('widgetUpdateEvent:' + updateObject.key, updateObject.data);
-            });
-        });
 
         $scope.$on('dashboardAddedEvent', function (event, dashboard) {
             $stateParams.dashboard = dashboard.url;

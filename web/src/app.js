@@ -85,8 +85,9 @@
      * @param $rootScope
      * @param Settings
      * @param Auth
+     * @param Sockets
      */
-    function init ($rootScope, Settings, Auth) {
+    function init ($rootScope, Settings, Auth, Sockets) {
 
         // Check user tokens on application start, set headers if succeed
         Auth.updateAuthHeader();
@@ -108,6 +109,9 @@
                 return !func(item);
             };
         };
+
+        // Bluff for visibility
+        Sockets.init();
     }
 
 })();

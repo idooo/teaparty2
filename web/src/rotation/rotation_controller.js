@@ -1,11 +1,10 @@
 (function () {
-    'use strict';
 
     angular
         .module('teaparty2.rotation')
         .controller('RotationController', RotationController);
 
-    function RotationController($timeout, $state, $stateParams, Rotation, Dashboard) {
+    function RotationController($scope, $window, $timeout, $state, $stateParams, Rotation, Dashboard) {
 
         var self = this;
 
@@ -20,15 +19,18 @@
         init();
 
         function init() {
-            self.rotation = Rotation.get({
-                url: $stateParams.url
-            }, function (response) {
-                if (response.dashboards.length > 0) {
-                    loadDashboardByIndex(0);
-                }
-            }, function () {
-                $state.go('app');
-            });
+            self.rotation = Rotation.get({ url: $stateParams.url },
+                function (response) {
+
+                    // Reload page with rotation if anything was changed there
+                    $scope.$on(`rotationUpdateEvent:${response._id}`, function (event, rotation) {
+                        $window.location.reload();
+                    });
+
+                    if (is.not.empty(response.dashboards)) loadDashboardByIndex(0);
+                },
+                () => $state.go('app')
+            );
         }
 
         function loadDashboardByIndex(index) {

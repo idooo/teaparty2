@@ -187,7 +187,10 @@ module.exports = function(server, model, config) {
 
         var query  = model.Rotation.where({ _id: ObjectId(req.params.rotationId) });
         query.findOneAndRemove(function (err, rotation) {
-            if (rotation) r.ok(res);
+            if (rotation) {
+                r.ok(res);
+                notify(rotation);
+            }
             else {
                 if (err) r.fail(res, err, 400);
                 else r.fail(res);
@@ -225,11 +228,11 @@ module.exports = function(server, model, config) {
                 });
 
                 rotation.save(function(err) {
-                    if (!err) {
-                        r.ok(res);
-                        return next();
-                    }
-                    errorHandler(err);
+                    if (err) return errorHandler(err);
+
+                    r.ok(res);
+                    notify(rotation);
+                    return next();
                 })
             },
             errorHandler);
@@ -274,7 +277,9 @@ module.exports = function(server, model, config) {
 
                     rotation.save(function(err) {
                         if (err) return errorHandler(err);
+
                         r.ok(res);
+                        notify(rotation);
                         return next();
                     })
                 }
@@ -309,7 +314,9 @@ module.exports = function(server, model, config) {
 
                     rotation.save(function(err) {
                         if (err) return errorHandler(err);
+
                         r.ok(res);
+                        notify(rotation);
                         return next();
                     })
                 }
@@ -323,6 +330,14 @@ module.exports = function(server, model, config) {
         errorHandler);
     });
 
+    function notify(rotation) {
+        try {
+            config.sync.rotationWasChanged(rotation);
+        }
+        catch (e) {
+            config.logger.warn('Rotation update: Web sockets notification failure');
+        }
+    }
 
     /**
      * Get rotation based on request rotationId

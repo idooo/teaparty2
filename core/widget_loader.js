@@ -28,5 +28,7 @@ module.exports = function(config) {
         });
     });
 
+    config.widgets = widgets;
+
     return widgets;
 };
