@@ -330,6 +330,10 @@ module.exports = function(server, model, config) {
         errorHandler);
     });
 
+    /**
+     * Use websockets to notify that rotation was changed
+     * @param rotation
+     */
     function notify(rotation) {
         try {
             config.sync.rotationWasChanged(rotation);
