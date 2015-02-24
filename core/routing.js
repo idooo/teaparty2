@@ -8,6 +8,7 @@ var routes = [
     'auth',
     'push',
     'rotations',
+    'rotations_control',
     'redirect'
 ];
 

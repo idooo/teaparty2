@@ -335,12 +335,7 @@ module.exports = function(server, model, config) {
      * @param rotation
      */
     function notify(rotation) {
-        try {
-            config.sync.rotationWasChanged(rotation);
-        }
-        catch (e) {
-            config.logger.warn('Rotation update: Web sockets notification failure');
-        }
+        config.sync.rotationUpdate(rotation);
     }
 
     /**
