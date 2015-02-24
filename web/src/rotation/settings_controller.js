@@ -2,9 +2,9 @@
 
     angular
         .module('teaparty2.rotation')
-        .controller('RotationsControlController', RotationsControlController);
+        .controller('RotationsSettingsController', rotationsSettingsController);
 
-    function RotationsControlController($window, Rotation, Dashboard) {
+    function rotationsSettingsController($window, Rotation, Dashboard) {
 
         var self = this;
 

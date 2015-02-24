@@ -1,0 +1,26 @@
+<div>
+
+    <select ng-options="rotation.label for rotation in control.rotations track by rotation._id"
+            ng-model="control.selectedRotation"></select>
+
+    <button ng-click="control.pauseRotation(control.selectedRotation.url)">
+        Pause
+    </button>
+
+    <button ng-click="control.resumeRotation(control.selectedRotation.url)">
+        Resume
+    </button>
+
+    <div>
+
+        <div ng-repeat="dashboard in control.selectedRotation.dashboards">
+            {{::dashboard.name}}
+            <button class="btn--minor btn--small"
+                    ng-click="control.changeDashboard(control.selectedRotation.url, dashboard._id)">
+                Select
+            </button>
+        </div>
+
+    </div>
+
+</div>

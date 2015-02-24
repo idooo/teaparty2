@@ -13,8 +13,8 @@
                 controller: 'NewDashboardController'
             },
             rotations: {
-                template: 'rotation/views/rotations_control_modal.html',
-                controller: 'RotationsControlController'
+                template: 'rotation/views/rotations_modal.html',
+                controller: 'RotationsSettingsController'
             },
             login: {
                 template: 'core/views/login_modal.html',

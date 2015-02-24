@@ -1,6 +1,6 @@
 (function () {
 
-    // Project dependencies
+    // Project third-party dependencies
     var modules = [
         'ngResource',
         'ui.router',
@@ -9,29 +9,26 @@
         'LocalStorageModule',
         'btford.socket-io',
         'ngClipboard',
-        'ui.slider',
+        'ui.slider'
+    ];
 
+    // Application modules list
+    var appModules = [
         'teaparty2.core',
         'teaparty2.template',
+        'teaparty2.control',
         'teaparty2.dashboard',
         'teaparty2.rotation',
         'teaparty2.widget',
-
         'teaparty2.widgets',
         'teaparty2.widgets.template'
     ];
 
-    // Init app and modules
-    angular.module('teaparty2', modules);
+    // Init modules
+    appModules.forEach((moduleName) => angular.module(moduleName, []));
 
-    angular.module('teaparty2.core', []);
-    angular.module('teaparty2.dashboard', []);
-    angular.module('teaparty2.rotation', []);
-    angular.module('teaparty2.widget', []);
-    angular.module('teaparty2.template', []);
-
-    angular.module('teaparty2.widgets', []);
-    angular.module('teaparty2.widgets.template', []);
+    // Init app
+    angular.module('teaparty2', modules.concat(appModules));
 
     // Initial app config
     angular
@@ -75,6 +72,15 @@
                     content: {
                         templateUrl: '/rotation/views/rotation.html',
                         controller: 'RotationController as rotation'
+                    }
+                }
+            })
+            .state('control', {
+                url: '/control',
+                views: {
+                    content: {
+                        templateUrl: '/control/views/control.html',
+                        controller: 'ControlController as control'
                     }
                 }
             });
