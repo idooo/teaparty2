@@ -1,6 +1,6 @@
 <div class="timeout-select">
 
-    <a class="context-link" href="#" ng-click="togglePopover()">{{dashboard.timeout}}</a> seconds
+    <a class="context-link" href="#" ng-click="togglePopover()">{{dashboard.timeout || 30}}</a> seconds
 
     <div class="timeout-select-popover" ng-show="isPopoverOpened">
 

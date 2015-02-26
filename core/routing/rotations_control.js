@@ -19,7 +19,10 @@ module.exports = function(server, model, config) {
         var errorHandler = getErrorHandler(res, next);
 
         findRotation(req, function(rotation) {
-            config.sync.rotationPause({rotationId: rotation._id});
+            config.sync.rotationControl({
+                type: 'pause',
+                _id: rotation._id
+            });
             r.ok(res);
             return next();
         }, errorHandler)
@@ -38,7 +41,10 @@ module.exports = function(server, model, config) {
         var errorHandler = getErrorHandler(res, next);
 
         findRotation(req, function(rotation) {
-            config.sync.rotationResume({rotationId: rotation._id});
+            config.sync.rotationControl({
+                type: 'resume',
+                _id: rotation._id
+            });
             r.ok(res);
             return next();
         }, errorHandler)
@@ -61,13 +67,14 @@ module.exports = function(server, model, config) {
             findDashboard(req, function() {
 
                 var data = {
-                    rotationId: rotation._id,
+                    type: 'selectDashboard',
+                    _id: rotation._id,
                     dashboardId: req.params.dashboardId
                 };
 
                 for (var i=0; i<rotation.dashboards.length; i++) {
                     if (rotation.dashboards[i]._id.toString() === req.params.dashboardId) {
-                        config.sync.rotationChangeDashboard(data);
+                        config.sync.rotationControl(data);
                         r.ok(res);
                         return next();
                     }

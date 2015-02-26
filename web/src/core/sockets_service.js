@@ -24,6 +24,8 @@
                 $rootScope.$broadcast(`rotationUpdateEvent:${data._id}`, data);
             });
 
+            self.socketFactory.on('rotation_control', function (data) {
+                $rootScope.$broadcast(`rotationControlEvent:${data._id}`, data);
+            });
         });
-
 })();

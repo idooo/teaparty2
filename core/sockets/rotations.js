@@ -3,9 +3,7 @@ module.exports = function(io, model, config) {
     config.sync = config.sync || {};
 
     config.sync.rotationUpdate = getSocketBinding('rotation_update');
-    config.sync.rotationPause = getSocketBinding('rotation_pause');
-    config.sync.rotationResume = getSocketBinding('rotation_resume');
-    config.sync.rotationChangeDashboard = getSocketBinding('rotation_change_dashboard');
+    config.sync.rotationControl = getSocketBinding('rotation_control');
 
     function getSocketBinding(emitName) {
         return function(data) {
