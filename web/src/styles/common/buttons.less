@@ -2,8 +2,18 @@
 @import "../mixins";
 
 // Variables
+
+@btn_main_bg_color: @color1;
 @btn_main_bg_hover_color: lighten(@btn_main_bg_color, 10%);
+@btn_main_text_color: white;
+
+@btn_warning_bg_color: @warning_color;
 @btn_warning_bg_hover_color: lighten(@btn_warning_bg_color, 10%);
+@btn_warning_text_color: white;
+
+@btn_success_bg_color: @success_color;
+@btn_success_bg_hover_color: lighten(@btn_success_bg_color, 10%);
+@btn_success_text_color: white;
 
 // ===============================================================
 
@@ -11,9 +21,9 @@ button,
 input[type="submit"],
 .btn {
 	display: inline-block;
-	padding: 8px 14px;
 	cursor: pointer;
-	font-size: 12px;
+	padding: 10px 20px;
+	font-size: 16px;
 	background-color: @btn_main_bg_color;
 	color: @btn_main_text_color;
 	border: none;
@@ -28,6 +38,11 @@ input[type="submit"],
 	&:hover {
 		background-color: @btn_main_bg_hover_color;
 	}
+
+	@media @desktop {
+		padding: 8px 14px;
+		font-size: 12px;
+	}
 }
 
 	.btn--warning {
@@ -36,6 +51,15 @@ input[type="submit"],
 
 		&:hover {
 			background-color: @btn_warning_bg_hover_color;
+		}
+	}
+
+	.btn--success {
+		background-color: @btn_success_bg_color;
+		color: @btn_success_text_color;
+
+		&:hover {
+			background-color: @btn_success_bg_hover_color;
 		}
 	}
 
@@ -58,6 +82,17 @@ input[type="submit"],
 	.btn--right {
 		float: right;
 	}
+
+	.btn--wide {
+		width: 100%;
+
+		@media @tablet {
+			width: auto;
+			min-width: 300px;
+		}
+	}
+
+
 
 
 

@@ -1,19 +1,21 @@
 // Font
 @font_family: 'Open Sans', sans-serif;
 
+// Colors
+@color0: #2f2f2f;
+@color1: #9b59b6;
+@color2: #c0392b;
+@color3: #27ae60;
+@color4: #f39c12;
+
 // Global
-@background_color: #2f2f2f;
+@background_color: @color0;
 @text_color: #fff - @background_color;
 
-@error_color: #c0392b;
+@error_color: @color2;
 @warning_color: @error_color;
 
-// Buttons
-@btn_main_bg_color: #9b59b6;
-@btn_main_text_color: white;
-
-@btn_warning_bg_color: @warning_color;
-@btn_warning_text_color: white;
+@success_color: @color3;
 
 // Widgets
 @widget_bg_color: lighten(@background_color, 10%);
@@ -21,3 +23,14 @@
 // Modals
 @modal_bg_color: lighten(@background_color, 70%);
 @modal_text_color: #444;
+
+// Media queries
+@xs-min: 500px;
+@sm-min: 768px;
+@md-min: 992px;
+@lg-min: 1200px;
+
+@phone: 	~"only screen and (min-width: @{xs-min})";
+@tablet: 	~"only screen and (min-width: @{sm-min})";
+@desktop:   ~"only screen and (min-width: @{md-min})";
+@large:     ~"only screen and (min-width: @{lg-min})";

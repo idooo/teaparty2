@@ -1,23 +1,36 @@
-<div>
+<div class="control-container">
 
-    <select ng-options="rotation.label for rotation in control.rotations track by rotation._id"
-            ng-model="control.selectedRotation"></select>
+    <h1 class="control-container__header">Teaparty control center</h1>
 
-    <button ng-click="control.pauseRotation(control.selectedRotation.url)">
-        Pause
-    </button>
+    <div ng-show="!isAuthorised">
+        <button class="btn--wide" ng-click="::control.showLoginDialog()">Login</button>
+    </div>
 
-    <button ng-click="control.resumeRotation(control.selectedRotation.url)">
-        Resume
-    </button>
+    <div ng-show="isAuthorised">
 
-    <div>
+        <select ng-options="rotation.label for rotation in control.rotations track by rotation._id"
+                ng-model="control.selectedRotation"></select>
 
-        <div ng-repeat="dashboard in control.selectedRotation.dashboards">
-            {{::dashboard.name}}
-            <button class="btn--minor btn--small"
+        <div class="control-container__pr-container">
+
+            <button class="btn--success"
+                    ng-click="control.pauseRotation(control.selectedRotation.url)">
+                Pause
+            </button>
+
+            <button ng-click="control.resumeRotation(control.selectedRotation.url)">
+                Resume
+            </button>
+
+        </div>
+
+        <h2 class="control-container__header control-container__header--second">Change dashboard</h2>
+
+        <div class="control-container__dashboard"
+             ng-repeat="dashboard in control.selectedRotation.dashboards">
+            <button class="btn--wide"
                     ng-click="control.changeDashboard(control.selectedRotation.url, dashboard._id)">
-                Select
+                {{::dashboard.name}}
             </button>
         </div>
 

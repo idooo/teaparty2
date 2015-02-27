@@ -4,7 +4,7 @@
         .module('teaparty2.control')
         .controller('ControlController', controlController);
 
-    function controlController(Rotation, RotationControlService) {
+    function controlController($rootScope, ModalService, Rotation, RotationControlService) {
 
         var self = this;
 
@@ -15,6 +15,12 @@
         self.pauseRotation = RotationControlService.pauseRotation;
         self.resumeRotation = RotationControlService.resumeRotation;
         self.changeDashboard = RotationControlService.changeDashboard;
+
+        self.showLoginDialog = ModalService.login;
+
+        $rootScope.$on('ngDialog.closed', function (e, $dialog) {
+            if ($rootScope.isAuthorised) init();
+        });
 
         init();
 

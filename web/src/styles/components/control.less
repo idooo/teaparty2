@@ -1,0 +1,52 @@
+// Shared classes for widgets
+
+@import "../variables";
+@import "../mixins";
+
+// Variables
+@dashboard_color: lighten(@background_color, 20%);
+
+// =======================================================================================
+
+.control-container {
+	padding: 20px;
+	max-width: 500px;
+	margin: 0 auto;
+
+	&__header {
+		text-align: center;
+		color: @text_color;
+		font-size: 6vw;
+		font-weight: 100;
+
+		&--second {
+			font-size: 4vw;
+		}
+
+		@media @tablet {
+			font-size: 26px;
+		}
+	}
+
+	&__pr-container {
+		margin: 20px 0;
+		text-align: center;
+
+		button {
+			width: 48%;
+		}
+	}
+
+	&__dashboard {
+		margin-bottom: 10px;
+
+		button {
+			background-color: @dashboard_color;
+		}
+	}
+
+	@media @tablet {
+		text-align: center;
+	}
+
+}
