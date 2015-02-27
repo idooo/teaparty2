@@ -9,7 +9,8 @@
         'LocalStorageModule',
         'btford.socket-io',
         'ngClipboard',
-        'ui.slider'
+        'ui.slider',
+        'ngTouch'
     ];
 
     // Application modules list

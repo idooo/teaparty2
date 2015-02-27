@@ -2,9 +2,9 @@
   "name": "teaparty2web",
   "version": "0.0.1",
   "dependencies": {
-    "angular": "~1.3.6",
+    "angular": "~1.3.14",
     "angular-ui-router": "~0.2.13",
-    "angular-resource": "~1.3.6",
+    "angular-resource": "~1.3.14",
     "angular-socket-io": "~0.7.0",
     "socket.io-client": "~1.2.1",
     "angular-local-storage": "~0.1.5",
@@ -14,7 +14,8 @@
     "zeroclipboard": "~2.2.0",
     "ng-clip": "~0.2.6",
     "is_js": "~0.4.1",
-    "angular-slider": "~0.2.14"
+    "angular-slider": "~0.2.14",
+    "angular-touch": "~1.3.14"
   },
   "_comment": {
     "reason": "https://github.com/ManifestWebDesign/angular-gridster/pull/190",
