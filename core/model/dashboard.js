@@ -36,16 +36,11 @@ module.exports = function(mongoose) {
         }
     });
 
-    var Dashboard = mongoose.model(modelName, schema);
-
-    // Expose getUrl method
-    Dashboard.getUrl = getUrl;
-
     /**
      * Find dashboard by _id
      * @param _id
      */
-    Dashboard.find = function(_id) {
+    schema.statics.get = function(_id) {
         var self = this;
         return new Promise(function (resolve, reject) {
             try {
@@ -63,6 +58,11 @@ module.exports = function(mongoose) {
             });
         });
     };
+
+    // Expose getUrl method
+    schema.statics.getUrl = getUrl;
+
+    var Dashboard = mongoose.model(modelName, schema);
 
     return {
         name: modelName,

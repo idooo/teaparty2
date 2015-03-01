@@ -37,17 +37,11 @@ module.exports = function(mongoose, config) {
         }
     });
 
-    var Widget = mongoose.model(modelName, schema);
-
-    Widget.schema.path('type').validate(function (value) {
-        return typeof config.widgets[value] !== 'undefined'
-    }, 'Invalid type');
-
     /**
      * Find widget by _id
      * @param _id
      */
-    Widget.find = function(_id) {
+    schema.statics.get = function(_id) {
         var self = this;
         return new Promise(function (resolve, reject) {
             try {
@@ -66,9 +60,61 @@ module.exports = function(mongoose, config) {
         });
     };
 
+    /**
+     * Add widget reference to dashboard
+     * @param dashboard
+     * @returns {Promise}
+     */
+    schema.methods.addToDashboard = function(dashboard) {
+        var self = this;
+        return new Promise(function (resolve, reject) {
+            var widget_data = {
+                size: { "x": 1, "y": 1 },
+                position: [0, 0],
+                _id: self._id
+            };
+
+            dashboard.widgets.push(widget_data);
+            dashboard.save(function (err) {
+                if (err) reject(err);
+                else resolve(self);
+            });
+        });
+    };
+
+    /**
+     * Remove widget reference from the dashboard
+     * @param dashboard
+     * @returns {Promise}
+     */
+    schema.methods.removeFromDashboard = function(dashboard) {
+        var self = this;
+        return new Promise(function (resolve, reject) {
+            var _id = self._id.toString();
+
+            for (var i = 0; i < dashboard.widgets.length; i++) {
+                if (dashboard.widgets[i]._id.toString() === _id) {
+                    dashboard.widgets.splice(i, 1);
+                }
+            }
+
+            dashboard.save(function (err) {
+                if (err) reject(err);
+                else resolve(self);
+            });
+        });
+    };
+
+    var Widget = mongoose.model(modelName, schema);
+
+    Widget.schema.path('type').validate(function (value) {
+        return typeof config.widgets[value] !== 'undefined'
+    }, 'Invalid type');
+
     return {
         name: modelName,
         model: Widget
     };
+
 };
 

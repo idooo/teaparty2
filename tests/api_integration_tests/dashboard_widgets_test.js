@@ -59,6 +59,25 @@ module.exports = {
         test.deepEqual(dashboard.widgets[0].position, [2, 1]);
 
         test.done();
+    },
+
+    moveWidgetFromOneDashToAnother: function (test) {
+        var r = createWidgetAndDashboard('testmove1dashboard1', 'testwidget999');
+        var dashboard2 = h.post('/api/dashboard', { name: 'testmove1dashboard2' });
+
+        // Add widget to dashboard 1
+        h.post(r.url);
+
+        // move to dashboard 2
+        h.post(r.url + '/move/' + dashboard2._id.toString());
+
+        var dashboard1 = h.get('/api/dashboard/' + r.dashboard._id.toString());
+        dashboard2 = h.get('/api/dashboard/' + dashboard2._id.toString());
+
+        test.equal(dashboard2.widgets[0]._id.toString(), r.widget._id.toString());
+        test.ok(dashboard1.widgets.length === 0);
+
+        test.done();
     }
 
 };

@@ -26,10 +26,10 @@ module.exports = function(mongoose) {
         }
     });
 
-    var Rotation = mongoose.model(modelName, schema);
-
     // Expose getUrl method
-    Rotation.getUrl = getUrl;
+    schema.statics.getUrl = getUrl;
+
+    var Rotation = mongoose.model(modelName, schema);
 
     return {
         name: modelName,

@@ -20,24 +20,17 @@ module.exports = function(server, model, config) {
 
         var dashboard;
 
-        model.Dashboard.find(req.params.dashboardId)
+        model.Dashboard.get(req.params.dashboardId)
             .then(function (_dashboard) {
                 dashboard = _dashboard;
-                return model.Widget.find(req.params.widgetId)
+                return model.Widget.get(req.params.widgetId)
             })
             .then(function (widget) {
-                var widget_data = {
-                    size: { "x": 1, "y": 1 },
-                    position: [0, 0],
-                    _id: widget._id
-                };
-
-                dashboard.widgets.push(widget_data);
-                dashboard.save(function (err) {
-                    if (err) r.fail(res, err, 400);
-                    else r.ok(res, widget);
-                    return next();
-                });
+                return widget.addToDashboard(dashboard);
+            })
+            .then(function (widget) {
+                r.ok(res, widget);
+                return next();
             })
             .catch(function(err) {
                 r.fail(res, err);
@@ -58,14 +51,14 @@ module.exports = function(server, model, config) {
         var dashboard,
             widget;
 
-        model.Dashboard.find(req.params.dashboardId)
+        model.Dashboard.get(req.params.dashboardId)
             .then(function (_dashboard) {
                 dashboard = _dashboard;
-                return model.Widget.find(req.params.widgetId);
+                return model.Widget.get(req.params.widgetId);
             })
             .then(function(_widget) {
                 widget = _widget;
-                return deleteDashboardReference(dashboard, widget);
+                return widget.removeFromDashboard(dashboard);
             })
             .then(function() {
                 widget.remove(function(err){
@@ -78,23 +71,6 @@ module.exports = function(server, model, config) {
                 r.fail(res, err);
                 return next();
             });
-
-        function deleteDashboardReference(dashboard, widget) {
-            return new Promise(function (resolve, reject) {
-                var _id = widget._id.toString();
-
-                for (var i = 0; i < dashboard.widgets.length; i++) {
-                    if (dashboard.widgets[i]._id.toString() === _id) {
-                        dashboard.widgets.splice(i, 1);
-                    }
-                }
-
-                dashboard.save(function (err) {
-                    if (err) reject(err);
-                    else resolve();
-                });
-            });
-        }
     });
 
     /**
@@ -118,10 +94,10 @@ module.exports = function(server, model, config) {
 
         var dashboard;
 
-        model.Dashboard.find(req.params.dashboardId)
+        model.Dashboard.get(req.params.dashboardId)
             .then(function (_dashboard) {
                 dashboard = _dashboard;
-                return model.Widget.find(req.params.widgetId);
+                return model.Widget.get(req.params.widgetId);
             })
             .then(function(widget) {
                 var data = validateData(req.params);
@@ -218,4 +194,43 @@ module.exports = function(server, model, config) {
         }
 
     });
+
+     /**
+     * POST: /api/dashboard/:dashboardId/widget/:widgetId/move/:dashboardDestId
+     * Move widget from :dashboardId to :dashboardDestId by :widgetId
+     *
+     * AUTH: not authorised users can't move widgets
+     */
+    server.post('/api/dashboard/:dashboardId/widget/:widgetId/move/:dashboardDestId', function(req, res, next) {
+
+        auth.check(req, res, next, config);
+
+        var dashboardSrc,
+            dashboardDest;
+
+        model.Dashboard.get(req.params.dashboardId)
+            .then(function(dashboard) {
+                dashboardSrc = dashboard;
+                return model.Dashboard.get(req.params.dashboardDestId)
+            })
+            .then(function(dashboard) {
+                dashboardDest = dashboard;
+                return model.Widget.get(req.params.widgetId);
+            })
+            .then(function(widget) {
+                return widget.removeFromDashboard(dashboardSrc);
+            })
+            .then(function(widget) {
+                return widget.addToDashboard(dashboardDest);
+            })
+            .then(function() {
+                r.ok(res);
+                return next();
+            })
+            .catch(function(err) {
+                r.fail(res, err);
+                return next();
+            });
+    });
+
 };
