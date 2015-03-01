@@ -28,12 +28,9 @@
     // Init modules
     appModules.forEach((moduleName) => angular.module(moduleName, []));
 
-    // Init app
-    angular.module('teaparty2', modules.concat(appModules));
-
     // Initial app config
     angular
-        .module('teaparty2')
+        .module('teaparty2', modules.concat(appModules))
         .config(configuration)
         .run(init);
 

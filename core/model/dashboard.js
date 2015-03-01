@@ -1,9 +1,6 @@
-/**
- * Dashboard model
- * @module core/model/Dashboard
- **/
-
 var uuid = require('node-uuid'),
+    Promise = require('promise'),
+    ObjectId = require('mongoose').Types.ObjectId,
     modelName = 'Dashboard';
 
 function getUrl() {
@@ -43,6 +40,29 @@ module.exports = function(mongoose) {
 
     // Expose getUrl method
     Dashboard.getUrl = getUrl;
+
+    /**
+     * Find dashboard by _id
+     * @param _id
+     */
+    Dashboard.find = function(_id) {
+        var self = this;
+        return new Promise(function (resolve, reject) {
+            try {
+                var query  = self.where({ _id: ObjectId(_id) });
+            }
+            catch (err) {
+                reject(err);
+            }
+            query.findOne(function (err, dashboard) {
+                if (dashboard) resolve(dashboard);
+                else {
+                    if (err) reject(err);
+                    else reject({ message: "Dashboard not found" });
+                }
+            });
+        });
+    };
 
     return {
         name: modelName,

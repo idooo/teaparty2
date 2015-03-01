@@ -1,6 +1,7 @@
 var helpers = require('./../helpers'),
     r = helpers.response,
     auth = helpers.auth,
+    Promise = require('promise'),
     ObjectId = require('mongoose').Types.ObjectId,
     extend = require('util')._extend;
 
@@ -17,10 +18,14 @@ module.exports = function(server, model, config) {
 
         auth.check(req, res, next, config);
 
-        findDashboard(res, next, req.params.dashboardId, function(dashboard) {
+        var dashboard;
 
-            findWidget(res, next, req.params.widgetId, function (widget) {
-
+        model.Dashboard.find(req.params.dashboardId)
+            .then(function (_dashboard) {
+                dashboard = _dashboard;
+                return model.Widget.find(req.params.widgetId)
+            })
+            .then(function (widget) {
                 var widget_data = {
                     size: { "x": 1, "y": 1 },
                     position: [0, 0],
@@ -28,15 +33,16 @@ module.exports = function(server, model, config) {
                 };
 
                 dashboard.widgets.push(widget_data);
-
                 dashboard.save(function (err) {
                     if (err) r.fail(res, err, 400);
                     else r.ok(res, widget);
-
                     return next();
                 });
+            })
+            .catch(function(err) {
+                r.fail(res, err);
+                return next();
             });
-        });
     });
 
     /**
@@ -49,37 +55,46 @@ module.exports = function(server, model, config) {
 
         auth.check(req, res, next, config);
 
-        findWidget(res, next, req.params.widgetId, function(widget) {
+        var dashboard,
+            widget;
 
-            findDashboard(res, next, req.params.dashboardId, function(dashboard) {
+        model.Dashboard.find(req.params.dashboardId)
+            .then(function (_dashboard) {
+                dashboard = _dashboard;
+                return model.Widget.find(req.params.widgetId);
+            })
+            .then(function(_widget) {
+                widget = _widget;
+                return deleteDashboardReference(dashboard, widget);
+            })
+            .then(function() {
+                widget.remove(function(err){
+                    if (err) r.fail(res, err, 400);
+                    else r.ok(res);
+                    return next();
+                });
+            })
+            .catch(function(err) {
+                r.fail(res, err);
+                return next();
+            });
 
-                deleteDashboardReference(dashboard, widget._id, function() {
+        function deleteDashboardReference(dashboard, widget) {
+            return new Promise(function (resolve, reject) {
+                var _id = widget._id.toString();
 
-                    widget.remove(function(err){
-                        if (err) r.fail(res, err, 400);
-                        else r.ok(res);
+                for (var i = 0; i < dashboard.widgets.length; i++) {
+                    if (dashboard.widgets[i]._id.toString() === _id) {
+                        dashboard.widgets.splice(i, 1);
+                    }
+                }
 
-                        return next();
-                    });
+                dashboard.save(function (err) {
+                    if (err) reject(err);
+                    else resolve();
                 });
             });
-        });
-
-        function deleteDashboardReference(dashboard, _id, callback) {
-            _id = _id.toString();
-
-            for (var i=0; i<dashboard.widgets.length; i++) {
-                if (dashboard.widgets[i]._id.toString() === _id) {
-                    dashboard.widgets.splice(i, 1);
-                }
-            }
-
-            dashboard.save(function(err) {
-                if (err) r.fail(res, err, 400);
-                else if (typeof callback === 'function') callback();
-            });
         }
-
     });
 
     /**
@@ -101,22 +116,29 @@ module.exports = function(server, model, config) {
 
         auth.check(req, res, next, config);
 
-        findWidget(res, next, req.params.widgetId, function(widget) {
+        var dashboard;
 
-            findDashboard(res, next, req.params.dashboardId, function(dashboard) {
-
-                var obj = validateData(req.params);
-                if (!obj) {
+        model.Dashboard.find(req.params.dashboardId)
+            .then(function (_dashboard) {
+                dashboard = _dashboard;
+                return model.Widget.find(req.params.widgetId);
+            })
+            .then(function(widget) {
+                var data = validateData(req.params);
+                if (!data) {
                     r.fail(res, {message: "Configuration object is not valid"}, 400);
                     return next();
                 }
-
-                updateDashboardReference(dashboard, widget._id, obj, function() {
-                    r.ok(res);
-                    return next();
-                });
+                return updateDashboardReference(dashboard, widget, data);
+            })
+            .then(function() {
+                r.ok(res);
+                return next();
+            })
+            .catch(function(err) {
+                r.fail(res, err);
+                return next();
             });
-        });
 
         /**
          * Check if size or position data was changed
@@ -138,26 +160,26 @@ module.exports = function(server, model, config) {
         /**
          * Update widgets reference in the dashboard and save it to the db
          * @param dashboard
-         * @param _id
+         * @param widget
          * @param obj
-         * @param callback
          * @returns {*|EmbeddedDocument}
          */
-        function updateDashboardReference(dashboard, _id, obj, callback) {
-            _id = _id.toString();
-
-            for (var i=0; i<dashboard.widgets.length; i++) {
-                if (dashboard.widgets[i]._id.toString() === _id) {
-                    if (wasDataChanged(dashboard.widgets[i], obj)) {
-                        dashboard.widgets.set(i, extend(dashboard.widgets[i], obj));
-                        return dashboard.save(function(err, data) {
-                            if (err) r.fail(res, err, 400);
-                            else if (typeof callback === 'function') callback(data);
-                        });
+        function updateDashboardReference(dashboard, widget, obj) {
+            return new Promise(function (resolve, reject) {
+                var _id = widget._id.toString();
+                for (var i=0; i<dashboard.widgets.length; i++) {
+                    if (dashboard.widgets[i]._id.toString() === _id) {
+                        if (wasDataChanged(dashboard.widgets[i], obj)) {
+                            dashboard.widgets.set(i, extend(dashboard.widgets[i], obj));
+                            return dashboard.save(function(err, data) {
+                                if (err) reject(err);
+                                else resolve(data);
+                            });
+                        }
                     }
                 }
-            }
-            if (typeof callback === 'function') callback();
+                resolve()
+            });
         }
 
         /**
@@ -196,49 +218,4 @@ module.exports = function(server, model, config) {
         }
 
     });
-
-    /**
-     * Find widget by key inside the request
-     * @param res
-     * @param next
-     * @param _id
-     * @param callback (with the 'widget' argument)
-     */
-    function findWidget(res, next, _id, callback) {
-        var query  = model.Widget.where({ _id: ObjectId(_id)});
-        query.findOne(function (err, widget) {
-            if (widget) {
-                if (typeof callback === 'function') callback(widget);
-            }
-            else {
-                if (err) r.fail(res, err);
-                else r.fail(res, { message: "Widget not found" });
-
-                return next();
-            }
-        });
-    }
-
-    /**
-     * Find dashboard by name inside the request
-     * @param res
-     * @param next
-     * @param _id
-     * @param callback (with the 'dashboard' argument)
-     */
-    function findDashboard(res, next, _id, callback) {
-        var query  = model.Dashboard.where({ _id: ObjectId(_id) });
-        query.findOne(function (err, dashboard) {
-            if (dashboard) {
-                if (typeof callback === 'function') callback(dashboard);
-            }
-            else {
-                if (err) r.fail(res, err);
-                else r.fail(res, { message: "Dashboard not found" });
-
-                return next();
-            }
-        });
-    }
-
 };

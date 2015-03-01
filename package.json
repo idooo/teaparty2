@@ -11,7 +11,7 @@
     "teaparty",
     "teaparty2",
     "angular dashboard",
-    "teaparty dnpmashboard",
+    "teaparty dashboard",
     "teaparty2 dashboard",
     "dashboard"
   ],
@@ -21,6 +21,7 @@
   "dependencies": {
     "mongoose": "~3.8.20",
     "node-uuid": "~1.4.2",
+    "promise": "^6.1.0",
     "restify": "~2.8.3",
     "socket.io": "~1.2.1",
     "winston": "^0.8.3"
