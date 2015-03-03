@@ -23,6 +23,11 @@
 
         <button class="btn--minor" ng-click="ctrl.cloneWidget()">Clone</button>
 
+        <button class="btn--minor"
+                popover
+                items="ctrl.availableDashboards"
+                select="ctrl.moveToDashboard">Move to...</button>
+
         <span class="form-error-message">{{ctrl.error.message}}</span>
 
         <button class="btn--warning btn--right" ng-click="ctrl.removeWidget()">Remove</button>

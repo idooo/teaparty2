@@ -8,12 +8,24 @@
 
         var self = this;
 
+        self.availableDashboards = [];
+
         self.removeWidget = removeWidget;
         self.cloneWidget = cloneWidget;
         self.updateWidget = updateWidget;
+        self.moveToDashboard = moveToDashboard;
 
         self.caption = $scope.ngDialogData.widget.caption;
 
+        $rootScope.dashboards.map(function(dashboard) {
+            if (dashboard._id !== $scope.ngDialogData.dashboardId) {
+                self.availableDashboards.push(dashboard.name);
+            }
+        });
+
+        /**
+         * Update widget data
+         */
         function updateWidget() {
             Widget.update({
                 widgetId: $scope.ngDialogData.widget._id,
@@ -24,6 +36,9 @@
             }, showError);
         }
 
+        /**
+         * Surprise. Removing widget
+         */
         function removeWidget() {
             var promise = DashboardWidgetService.removeWidgetFromDashboard($scope.ngDialogData.dashboardId, $scope.ngDialogData.widget._id);
             promise
@@ -38,6 +53,9 @@
                 });
         }
 
+        /**
+         * Create a copy of widget in the same dashboard
+         */
         function cloneWidget() {
 
             var widget = new Widget({
@@ -56,6 +74,33 @@
                 }, showError);
 
             }, showError);
+        }
+
+        /**
+         * Move widget tot dashboard by dashboard name
+         * @param dashboardName
+         */
+        function moveToDashboard(dashboardName) {
+            for (let dashboard of $rootScope.dashboards) {
+                if (dashboard.name === dashboardName) {
+                    var promise = DashboardWidgetService.moveWidgetToDashboard(
+                        $scope.ngDialogData.dashboardId,
+                        dashboard._id,
+                        $scope.ngDialogData.widget._id
+                    );
+
+                    promise.then(function() {
+                        $rootScope.$broadcast('widgetAddedEvent', {
+                            dashboardId: dashboard._id
+                        });
+                        $rootScope.$broadcast('widgetDeletedEvent', {
+                            dashboardId: $scope.ngDialogData.dashboardId
+                        });
+                        ngDialog.close();
+                    });
+                    return;
+                }
+            }
         }
 
         function showError(err) {
