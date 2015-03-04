@@ -19,6 +19,7 @@ fieldset {
 	label {
 		font-size: 14px;
 		display: block;
+		font-weight: 600;
 	}
 
 	input[type="text"],
@@ -35,6 +36,13 @@ fieldset {
 
 	input:read-only {
 		background-color: rgb(239, 239, 239);
+	}
+}
+
+// Inline fieldset
+fieldset.inline {
+	& > * {
+		display: inline-block;
 	}
 }
 

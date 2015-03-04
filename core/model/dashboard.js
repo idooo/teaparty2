@@ -1,5 +1,6 @@
 var uuid = require('node-uuid'),
     Promise = require('promise'),
+    rangeCheck = require('range_check'),
     ObjectId = require('mongoose').Types.ObjectId,
     modelName = 'Dashboard';
 
@@ -7,7 +8,7 @@ function getUrl() {
     return uuid.v1().replace(/-/g, '');
 }
 
-module.exports = function(mongoose) {
+module.exports = function(mongoose, config) {
 
     var schema = mongoose.Schema({
         name: {
@@ -33,18 +34,26 @@ module.exports = function(mongoose) {
         creation_date: {
             type: Date,
             default: Date.now
-        }
+        },
+        IPWhitelistPolicy: {
+            type: Boolean,
+            default: false
+        },
+        IPAddressRange: Array
     });
 
     /**
      * Find dashboard by _id
      * @param _id
+     * @param authorised {Boolean}
      */
-    schema.statics.get = function(_id) {
+    schema.statics.get = function(_id, authorised) {
         var self = this;
         return new Promise(function (resolve, reject) {
             try {
-                var query  = self.where({ _id: ObjectId(_id) });
+                var query = { _id: ObjectId(_id) };
+                if (!authorised) query.private = { $ne: true };
+                query = self.where(query);
             }
             catch (err) {
                 reject(err);
@@ -57,6 +66,28 @@ module.exports = function(mongoose) {
                 }
             });
         });
+    };
+
+    schema.methods.isIPinRange = function(IPAddr) {
+        var self = this;
+        var addressRange = [];
+        self.IPAddressRange.forEach(function(range) {
+            if (typeof range === 'string') addressRange.push(range);
+        });
+
+        var inRange = rangeCheck.inRange(IPAddr, addressRange);
+        if (!self.IPWhitelistPolicy) inRange = !inRange;
+
+        if (!inRange) {
+            var msg = [
+                'IP blocked: ', IPAddr,'. Reason: whitelist = ',
+                self.IPWhitelistPolicy.toString(), ', Range = ', addressRange.join(','),
+                ', Dashboard = ', self.name
+            ].join('');
+
+            config.logger.debug(msg);
+        }
+        return inRange;
     };
 
     // Expose getUrl method

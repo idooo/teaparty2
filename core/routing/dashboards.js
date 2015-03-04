@@ -1,6 +1,7 @@
 var helpers = require('./../helpers'),
     r = helpers.response,
     auth = helpers.auth,
+    Promise = require('promise'),
     ObjectId = require('mongoose').Types.ObjectId,
     extend = require('util')._extend;
 
@@ -14,54 +15,59 @@ module.exports = function(server, model, config) {
      */
     server.get('/api/dashboard/:dashboardId', function create(req, res, next) {
 
-        var query = { _id: ObjectId(req.params.dashboardId) };
-        if (!auth.isAuthorised(req, config)) {
-            query.private = { $ne: true }
-        }
+        var isAuthorised = auth.isAuthorised(req, config),
+            dashboard,
+            _widgets = {};
 
-        query = model.Dashboard.where(query);
-        query.findOne(function (err, dashboard) {
-            if (dashboard) {
-                var _widgets = {};
-                dashboard.widgets.forEach(function(w) {
+        model.Dashboard.get(req.params.dashboardId, isAuthorised)
+            .then(function(_dashboard) {
+                dashboard = _dashboard;
+
+                if (!isAuthorised && !dashboard.isIPinRange(req.connection.remoteAddress)) {
+                    r.fail(res, {message: "IP address was blocked for this dashboard"}, 403);
+                    return next();
+                }
+
+                dashboard.widgets.forEach(function (w) {
                     _widgets[w._id] = {
                         position: w.position,
                         size: w.size
                     }
                 });
 
-                findWidgets(Object.keys(_widgets), function(widgets) {
-                    var filter;
-                    if (!auth.isAuthorised(req, config)) filter = ['key'];
-
-                    dashboard.widgets = [];
-
-                    widgets.forEach(function(item) {
-                        dashboard.widgets.push(extend(helpers.sanitize(item, filter), _widgets[item._id]));
-                    });
-
-                    r.ok(res, dashboard);
-                    return next();
-                });
-            }
-            else {
-                if (err) r.fail(res, err, 400);
-                else r.fail(res);
-
-                return next();
-            }
-        });
-
-        function findWidgets(ids, callback) {
-            var query = model.Widget.where({ _id: {$in: ids }});
-            query.find(function (err, widgets) {
-                if (err) {
-                    r.fail(res, err);
-                    return next();
-                }
-
-                if (typeof callback !== 'undefined') callback(widgets);
+                return findWidgets(Object.keys(_widgets));
             })
+            .then(function(widgets) {
+                var filter;
+                if (!auth.isAuthorised(req, config)) filter = ['key'];
+
+                dashboard.widgets = [];
+
+                widgets.forEach(function(item) {
+                    dashboard.widgets.push(extend(helpers.sanitize(item, filter), _widgets[item._id]));
+                });
+
+                r.ok(res, dashboard);
+                return next();
+            })
+            .catch(function(err) {
+                r.fail(res, err);
+                return next();
+            });
+
+        /**
+         * Get list of widgets by their IDs
+         * @param ids
+         * @returns {Promise}
+         */
+        function findWidgets(ids) {
+            return new Promise(function (resolve, reject) {
+                var query = model.Widget.where({ _id: {$in: ids }});
+                query.find(function (err, widgets) {
+                    if (err) reject(err);
+                    else resolve(widgets);
+                });
+            });
         }
     });
 
@@ -129,12 +135,13 @@ module.exports = function(server, model, config) {
      * - private (boolean)
      * - columns (number)
      * - url (any value -> url will be regenerated)
+     * - IPAddressRange (string)
      */
     server.put('/api/dashboard/:dashboardId', function(req, res, next) {
 
         auth.check(req, res, next, config);
 
-        var paramNames = ['name', 'private', 'columns'],
+        var paramNames = ['name', 'private', 'columns', 'IPAddressRange', 'IPWhitelistPolicy'],
             regenerateUrlName = 'url',
             updateObj = {};
 
@@ -146,6 +153,15 @@ module.exports = function(server, model, config) {
 
         if (typeof req.params[regenerateUrlName] !== 'undefined') {
             updateObj[regenerateUrlName] = model.Dashboard.getUrl()
+        }
+
+        // Get IP address range list string and format it to array
+        if (typeof updateObj['IPAddressRange'] !== 'undefined') {
+            if (!Array.isArray(updateObj['IPAddressRange'])) {
+                updateObj['IPAddressRange'] = updateObj['IPAddressRange'].split(',').map(function (item) {
+                    return item.trim();
+                });
+            }
         }
 
         query.findOneAndUpdate(updateObj, function (err, dashboard) {
@@ -166,8 +182,10 @@ module.exports = function(server, model, config) {
      */
     server.get('/api/dashboards', function(req, res, next) {
 
-        var query = {};
-        if (!auth.isAuthorised(req, config)) {
+        var isAuthorised = auth.isAuthorised(req, config),
+            query = {};
+
+        if (!isAuthorised) {
             query.private = { $ne: true }
         }
 
@@ -177,7 +195,9 @@ module.exports = function(server, model, config) {
                 var sanitized = [];
 
                 dashboards.forEach(function(_dashboard) {
-                    sanitized.push(helpers.sanitize(_dashboard));
+                    if (isAuthorised || _dashboard.isIPinRange(req.connection.remoteAddress)) {
+                        sanitized.push(helpers.sanitize(_dashboard));
+                    }
                 });
 
                 r.ok(res, sanitized.sort(function(a, b) { return a.name > b.name }));

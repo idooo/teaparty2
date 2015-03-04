@@ -15,6 +15,8 @@
         self.name = $scope.ngDialogData.dashboard.name;
         self.private = $scope.ngDialogData.dashboard.private;
         self.columns = $scope.ngDialogData.dashboard.columns || 10;
+        self.IPAddressRange = $scope.ngDialogData.dashboard.IPAddressRange;
+        self.IPWhitelistPolicy = $scope.ngDialogData.dashboard.IPWhitelistPolicy;
 
         self.baseUrl = $window.location.origin + '/d/';
 
@@ -33,12 +35,16 @@
                 dashboardId: $scope.ngDialogData.dashboard._id,
                 name: self.name,
                 columns: self.columns,
-                'private': self.private
+                'private': self.private,
+                IPAddressRange: self.IPAddressRange,
+                IPWhitelistPolicy: self.IPWhitelistPolicy
             }, function () {
                 var data = {};
 
                 $scope.ngDialogData.dashboard.name = self.name;
                 $scope.ngDialogData.dashboard.private = self.private;
+                $scope.ngDialogData.dashboard.IPWhitelistPolicy = self.IPWhitelistPolicy;
+                $scope.ngDialogData.dashboard.IPAddressRange = self.IPAddressRange;
 
                 if ($scope.ngDialogData.dashboard.columns !== self.columns) {
                     $scope.ngDialogData.dashboard.columns = self.columns;

@@ -17,12 +17,27 @@
         <slider floor="4" ceiling="20" step="1" ng-model="ctrl.columns"></slider>
     </fieldset>
 
-    <fieldset>
-        <label>Private</label>
+    <fieldset class="inline">
         <div class="checkbox">
             <input type="checkbox" value="None" id="privateFlag" name="check" ng-model="ctrl.private" />
             <label for="privateFlag"></label>
         </div>
+        <label>Private</label>
+    </fieldset>
+
+    <h4>IP Address blocking</h4>
+
+    <fieldset class="inline">
+        <div class="checkbox">
+            <input type="checkbox" value="None" id="whiteListFlag" name="check" ng-model="ctrl.IPWhitelistPolicy" />
+            <label for="whiteListFlag"></label>
+        </div>
+        <label>Whitelist</label>
+    </fieldset>
+
+    <fieldset>
+        <label>IP Address Range</label>
+        <input type="text" ng-model="ctrl.IPAddressRange"/>
     </fieldset>
 
     <div class="form-btn-container">

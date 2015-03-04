@@ -75,12 +75,25 @@ module.exports = {
 
         var dashboardOut3 = h.get(url);
 
+        h.put(url, {IPAddressRange: '127.0.0.1/20, 200.0.1.2/10'});
+
+        var dashboardOut4 = h.get(url);
+
+        h.put(url, {IPWhitelistPolicy: true});
+
+        var dashboardOut5 = h.get(url);
+
         test.equal(dashboardOut1._id.toString(), dashboardOut3._id.toString());
         test.equal(dashboardOut2.name, 'updatedashboard2');
         test.equal(dashboardOut2.private, false);
         test.equal(dashboardOut2.columns, 18);
         test.notEqual(dashboardOut2.url, dashboardOut3.url);
         test.notEqual(dashboardOut1.columns, dashboardOut3.columns);
+
+        test.equal(dashboardOut4.IPAddressRange.length, 2);
+        test.equal(dashboardOut4.IPAddressRange[1], '200.0.1.2/10');
+
+        test.ok(dashboardOut5.IPWhitelistPolicy);
 
         test.done();
     }
