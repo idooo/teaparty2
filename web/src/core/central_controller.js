@@ -4,7 +4,7 @@
         .module('teaparty2.core')
         .controller('CentralController', CentralController);
 
-    function CentralController($rootScope, $scope, $state, $stateParams, ModalService, Dashboard, Sockets, Settings) {
+    function CentralController($rootScope, $scope, $state, $stateParams, ModalService, Dashboard, Settings, Auth) {
 
         const IMPORTANT_MESSAGES = [
             'Database connection problem. Check application logs for details',
@@ -24,6 +24,7 @@
         self.goToDashboard = goToDashboard;
         self.lockUnlockDashboard = lockUnlockDashboard;
         self.isAnyDashboardAvailable = isAnyDashboardAvailable;
+        self.logout = logout;
 
         // Modals
         self.showNewDashboardDialog = ModalService.newDashboard;
@@ -177,6 +178,15 @@
             return true;
         }
 
+        /**
+         * Log out
+         */
+        function logout() {
+            Auth.deauthorize();
+            $rootScope.dashboards = undefined;
+            $rootScope.isAuthorised = false;
+            $state.go('app', {dashboard: ''});
+        }
     }
 
 })();
