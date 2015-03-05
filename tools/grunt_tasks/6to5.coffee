@@ -1,6 +1,6 @@
 module.exports.tasks =
 
-  "6to5":
+  babel:
     dist:
       files:
         '<%= settings.dist %>/scripts/app.js': '<%= settings.dist %>/scripts/app.js'

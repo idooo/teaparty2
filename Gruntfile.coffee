@@ -29,7 +29,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'serve_prepare', [
     'clean'
     'concat:ng'
-    '6to5'
+    'babel'
     'ngAnnotate'
     'less'
     'includeSource'
@@ -66,7 +66,7 @@ module.exports = (grunt) ->
     'test'
     'clean'
     'concat:ng'
-    '6to5'
+    'babel'
     'ngAnnotate'
     'html2js'
     'less'

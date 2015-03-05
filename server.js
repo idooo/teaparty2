@@ -1,3 +1,7 @@
+require("babel/register")({
+    extensions: [".es6", ".es"]
+});
+
 var restify = require('restify'),
     socketio = require('socket.io');
 
