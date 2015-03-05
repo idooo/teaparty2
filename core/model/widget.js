@@ -16,8 +16,7 @@ module.exports = function(mongoose, config) {
             default: 'New Widget'
         },
         datasource: {
-            type: String,
-            default: 'push'
+            type: mongoose.Schema.Types.ObjectId
         },
         settings: {
             type: Object,

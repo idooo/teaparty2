@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var modelsFiles = ['dashboard', 'widget', 'rotation'];
+var modelsFiles = ['dashboard', 'widget', 'rotation', 'datasource'];
 
 module.exports = function(config) {
 

@@ -20,7 +20,8 @@ catch (e) {
 var logger = require('./core/logging')(config),
     server = restify.createServer(),
     io = socketio.listen(server.server),
-    model = require('./core/database')(config);
+    model = require('./core/database')(config),
+    datasources = require('./core/datasources')(config, model);
 
 server.use(restify.bodyParser());
 
