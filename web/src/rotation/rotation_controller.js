@@ -82,6 +82,8 @@
             Dashboard.get({dashboardId: dashboard._id}, function (data) {
                 self.selectedDashboard = data;
                 setDashboardTimer(index);
+            }, function() {
+                loadDashboardByIndex(index + 1);
             });
         }
     }

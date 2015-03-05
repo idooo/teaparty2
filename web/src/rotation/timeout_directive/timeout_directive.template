@@ -2,9 +2,9 @@
 
     <a class="context-link" href="#" ng-click="togglePopover()">{{dashboard.timeout || 30}}</a> seconds
 
-    <div class="timeout-select-popover" ng-show="isPopoverOpened">
+    <div class="popover" ng-show="isPopoverOpened">
 
-        <div class="timeout-select-popover__item"
+        <div class="popover__item"
              ng-repeat="item in [15, 30, 45, 60]"
              ng-click="setDashboardTimeout(rotation, dashboard, item)">
             {{item}}

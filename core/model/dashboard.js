@@ -68,6 +68,11 @@ module.exports = function(mongoose, config) {
         });
     };
 
+    /**
+     * Is IP address in dashboard's IP range settings
+     * @param IPAddr
+     * @returns {Boolean}
+     */
     schema.methods.isIPinRange = function(IPAddr) {
         var self = this;
         var addressRange = [];

@@ -141,7 +141,9 @@ module.exports = function(server, model, config) {
 
         auth.check(req, res, next, config);
 
-        var paramNames = ['name', 'private', 'columns', 'IPAddressRange', 'IPWhitelistPolicy'],
+        var IPAddressRange = 'IPAddressRange';
+
+        var paramNames = ['name', 'private', 'columns', IPAddressRange, 'IPWhitelistPolicy'],
             regenerateUrlName = 'url',
             updateObj = {};
 
@@ -156,12 +158,15 @@ module.exports = function(server, model, config) {
         }
 
         // Get IP address range list string and format it to array
-        if (typeof updateObj['IPAddressRange'] !== 'undefined') {
-            if (!Array.isArray(updateObj['IPAddressRange'])) {
-                updateObj['IPAddressRange'] = updateObj['IPAddressRange'].split(',').map(function (item) {
+        if (typeof updateObj[IPAddressRange] !== 'undefined') {
+            if (!Array.isArray(updateObj[IPAddressRange])) {
+                updateObj[IPAddressRange] = updateObj[IPAddressRange].split(',').map(function (item) {
                     return item.trim();
                 });
             }
+            updateObj[IPAddressRange] = updateObj[IPAddressRange].filter(function(item) {
+                return item.trim().length > 0;
+            })
         }
 
         query.findOneAndUpdate(updateObj, function (err, dashboard) {

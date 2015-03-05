@@ -15,7 +15,8 @@
         <tr ng-repeat="dashboard in ctrl.selectedRotation.dashboards">
             <td>
                 {{::dashboard.name}}
-                <span class="rotations-control-dashboards__private" ng-show="dashboard.private">Private</span>
+                <span class="rotations-control-dashboards__flag" ng-show="dashboard.private">Private</span>
+                <span class="rotations-control-dashboards__flag" ng-show="!!dashboard.IPAddressRange.length">IP restrictions</span>
             </td>
             <td>
                 <timeout rotation="ctrl.selectedRotation" dashboard="dashboard"></timeout>
@@ -62,7 +63,8 @@
 <!-- Available dashboards - END -->
 
 <p class="disclaimer">
-    * Private dashboards will be not displayed in rotation because of security reasons
+    * Private dashboards will be not displayed in rotation for unauthorised users<br>
+    * Dashboards with IP restrictions may be not displayed for them as well
 </p>
 
 
