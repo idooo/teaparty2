@@ -16,16 +16,19 @@ module.exports = function(server, model, config) {
 
         auth.check(req, res, next, config);
 
-        var errorHandler = getErrorHandler(res, next);
-
-        findRotation(req, function(rotation) {
-            config.sync.rotationControl({
-                type: 'pause',
-                _id: rotation._id
+        model.Rotation.getByUrl(req.params.url)
+            .then(function(rotation) {
+                config.sync.rotationControl({
+                    type: 'pause',
+                    _id: rotation._id
+                });
+                r.ok(res);
+                return next();
+            })
+            .catch(function(err) {
+                r.fail(res, err);
+                return next();
             });
-            r.ok(res);
-            return next();
-        }, errorHandler)
     });
 
      /**
@@ -38,16 +41,19 @@ module.exports = function(server, model, config) {
 
         auth.check(req, res, next, config);
 
-        var errorHandler = getErrorHandler(res, next);
-
-        findRotation(req, function(rotation) {
-            config.sync.rotationControl({
-                type: 'resume',
-                _id: rotation._id
+        model.Rotation.getByUrl(req.params.url)
+            .then(function(rotation) {
+                config.sync.rotationControl({
+                    type: 'resume',
+                    _id: rotation._id
+                });
+                r.ok(res);
+                return next();
+            })
+            .catch(function(err) {
+                r.fail(res, err);
+                return next();
             });
-            r.ok(res);
-            return next();
-        }, errorHandler)
     });
 
     /**
@@ -60,12 +66,14 @@ module.exports = function(server, model, config) {
 
         auth.check(req, res, next, config);
 
-        var errorHandler = getErrorHandler(res, next);
+        var rotation;
 
-        findRotation(req, function(rotation) {
-
-            findDashboard(req, function() {
-
+        model.Rotation.getByUrl(req.params.url)
+            .then(function(_rotation) {
+                rotation = _rotation;
+                return model.Dashboard.get(req.params.dashboardId);
+            })
+            .then(function() {
                 var data = {
                     type: 'selectDashboard',
                     _id: rotation._id,
@@ -82,54 +90,11 @@ module.exports = function(server, model, config) {
 
                 r.fail(res, {message: "Dashboard not in the rotation"}, 400);
                 return next();
-            },
-            errorHandler);
-
-        }, errorHandler);
+            })
+            .catch(function(err) {
+                r.fail(res, err);
+                return next();
+            });
 
     });
-
-
-    /**
-     * Get rotation based on request url
-     * @param req
-     * @param callback
-     * @param errorCallback
-     */
-    function findRotation(req, callback, errorCallback) {
-        var query  = model.Rotation.where({ url: req.params.url });
-        query.findOne(function (err, rotation) {
-            if (rotation && typeof callback === 'function') return callback(rotation);
-            if (typeof errorCallback === 'function') errorCallback(err);
-        });
-    }
-
-    /**
-     * Get dashboard based on request dashboardId
-     * @param req
-     * @param callback
-     * @param errorCallback
-     */
-    function findDashboard(req, callback, errorCallback) {
-        var query  = model.Dashboard.where({ _id: ObjectId(req.params.dashboardId) });
-        query.findOne(function (err, dashboard) {
-            if (dashboard && typeof callback === 'function') return callback(dashboard);
-            if (typeof errorCallback === 'function') errorCallback(err);
-        });
-    }
-
-
-    /**
-     * Get error handler in context of request
-     * @param res
-     * @param next
-     * @returns {Function}
-     */
-    function getErrorHandler(res, next) {
-        return function (err) {
-            if (err) r.fail(res, err, 400);
-            else r.fail(res);
-            return next();
-        }
-    }
 };

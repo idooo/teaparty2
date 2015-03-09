@@ -31,48 +31,40 @@ module.exports = function(server, model, config) {
      */
     server.get('/api/rotation/:url', function(req, res, next) {
 
-        function findRotationByUrl(url, callback, errorCallback) {
-            var query = model.Rotation.where({url: url});
-            query.findOne(function (err, rotation) {
-                if (rotation && typeof callback === 'function') return callback(rotation);
-                if (typeof errorCallback === 'function') errorCallback(err);
-            });
-        }
+        var rotation,
+            timeouts = {};
 
-        function findDashboards(ids, callback) {
-            var query = model.Dashboard.where({ _id: {$in: ids }});
-            query.find(function (err, dashboards) {
-                if (err) {
-                    r.fail(res, err);
-                    return next();
-                }
-                if (typeof callback !== 'undefined') callback(dashboards);
+        model.Rotation.getByUrl(req.params.url)
+            .then(function(_rotation) {
+
+                var _ids = [];
+
+                rotation = _rotation;
+                rotation.dashboards.forEach(function(dashboard) {
+                    _ids.push(dashboard._id);
+                    timeouts[dashboard._id.toString()] = dashboard.timeout;
+                });
+
+                return model.Dashboard.getDashboards(_ids);
             })
-        }
+            .then(function(rawDashboards) {
 
-        var errorHandler = getErrorHandler(res, next);
-        findRotationByUrl(req.params.url, function(rotation) {
-            var _ids = [],
-                timeouts = {};
-
-            rotation.dashboards.forEach(function(dashboard) {
-                _ids.push(dashboard._id);
-                timeouts[dashboard._id.toString()] = dashboard.timeout;
-            });
-
-            findDashboards(_ids, function(rawDashboards) {
                 var dashboards = [];
                 rawDashboards.forEach(function(rawDashboard) {
                     var _dashboard = helpers.sanitize(rawDashboard, ['widgets']);
                     _dashboard.timeout = timeouts[rawDashboard._id.toString()];
                     dashboards.push(_dashboard);
                 });
+
                 rotation.dashboards = dashboards;
+
                 r.ok(res, rotation);
                 return next();
+            })
+            .catch(function(err) {
+                r.fail(res, err);
+                return next();
             });
-        },
-        errorHandler);
     });
 
     /**
@@ -119,27 +111,26 @@ module.exports = function(server, model, config) {
      * GET: /api/rotations
      * Get the rotations list
      *
-     * AUTH: not authorised users can't get rotations list
+     * AUTH: unauthorised users can't get rotations list
      */
     server.get('/api/rotations', function(req, res, next) {
 
         auth.check(req, res, next, config);
 
-        loadDashboards(function(formattedDashboards) {
+        var formattedDashboards = {};
 
-            var query  = model.Rotation.where();
-            query.find(function (err, rotations) {
-                if (err) {
-                    r.fail(res, err);
-                    return next();
-                }
-
+        model.Dashboard.getDashboards()
+            .then(function(_dashboards) {
+                _dashboards.forEach(function(dashboard) {
+                    formattedDashboards[dashboard._id.toString()] = dashboard;
+                });
+                return model.Rotation.getRotations();
+            })
+            .then(function(rotations) {
                 var formattedRotations = [];
-
                 rotations.forEach(function(rotation) {
                     var dashboards = [];
                     rotation.dashboards.forEach(function(rawDashboard) {
-
                         var _strID = rawDashboard._id.toString();
                         if (formattedDashboards[_strID] !== 'undefined') {
                             var _dashboard = helpers.sanitize(formattedDashboards[_strID], ['widgets']);
@@ -150,29 +141,13 @@ module.exports = function(server, model, config) {
                     rotation.dashboards = dashboards;
                     formattedRotations.push(helpers.sanitize(rotation));
                 });
-
                 r.ok(res, formattedRotations);
                 return next();
-            });
-        });
-
-        function loadDashboards(callback) {
-            var query = model.Dashboard.where();
-            query.find(function (err, dashboards) {
-                if (err) {
-                    r.fail(res, err);
-                    return next();
-                }
-
-                var formattedDashboards = {};
-
-                dashboards.forEach(function(dashboard) {
-                    formattedDashboards[dashboard._id.toString()] = dashboard;
-                });
-
-                if (typeof callback !== 'undefined') callback(formattedDashboards);
             })
-        }
+            .catch(function(err) {
+                r.fail(res, err);
+                return next();
+            });
     });
 
     /**
@@ -210,42 +185,38 @@ module.exports = function(server, model, config) {
 
         auth.check(req, res, next, config);
 
-        var errorHandler = getErrorHandler(res, next);
+        var rotation;
 
-        findRotation(req, function(rotation) {
+        model.Rotation.get(req.params.rotationId)
+            .then(function(_rotation) {
+                rotation = _rotation;
+                return model.Dashboard.get(req.params.dashboardId);
+            })
+            .then(function(dashboard) {
 
-            findDashboard(req.params.dashboardId, function(dashboard) {
                 for (var i=0; i<rotation.dashboards.length; i++) {
                     if (rotation.dashboards[i]._id.toString() === req.params.dashboardId) {
                         r.fail(res, {message: "Dashboard already in this rotation"}, 400);
                         return next();
                     }
                 }
-
                 rotation.dashboards.push({
                     _id: dashboard._id,
                     timeout: 30
                 });
-
                 rotation.save(function(err) {
-                    if (err) return errorHandler(err);
-
-                    r.ok(res);
-                    notify(rotation);
+                    if (err) r.fail(res);
+                    else {
+                        r.ok(res);
+                        notify(rotation);
+                    }
                     return next();
                 })
-            },
-            errorHandler);
-        },
-        errorHandler);
-
-        function findDashboard(dashboardId, callback, errorCallback) {
-            var query  = model.Dashboard.where({ _id: ObjectId(dashboardId) });
-            query.findOne(function (err, dashboard) {
-                if (dashboard && typeof callback === 'function') return callback(dashboard);
-                if (typeof errorCallback === 'function') errorCallback(err);
+            })
+            .catch(function(err) {
+                r.fail(res, err);
+                return next();
             });
-        }
 
     });
 
@@ -262,40 +233,43 @@ module.exports = function(server, model, config) {
 
         auth.check(req, res, next, config);
 
-        var errorHandler = getErrorHandler(res, next);
+        model.Rotation.get(req.params.rotationId)
+            .then(function(rotation) {
+                var found = false;
+                for (var i=0; i<rotation.dashboards.length; i++) {
+                    if (rotation.dashboards[i]._id.toString() === req.params.dashboardId) {
+                        found = true;
 
-        findRotation(req, function(rotation) {
-            var found = false;
-            for (var i=0; i<rotation.dashboards.length; i++) {
-                if (rotation.dashboards[i]._id.toString() === req.params.dashboardId) {
-                    found = true;
+                        // TODO: not safe?
+                        rotation.dashboards.set(i, extend(rotation.dashboards[i], {
+                            timeout: parseInt(req.params.timeout, 10)
+                        }));
 
-                    // TODO: not safe?
-                    rotation.dashboards.set(i, extend(rotation.dashboards[i], {
-                        timeout: parseInt(req.params.timeout, 10)
-                    }));
-
-                    rotation.save(function(err) {
-                        if (err) return errorHandler(err);
-
-                        r.ok(res);
-                        notify(rotation);
-                        return next();
-                    })
+                        rotation.save(function(err) {
+                            if (err) r.fail(res);
+                            else {
+                                r.ok(res);
+                                notify(rotation);
+                            }
+                            return next();
+                        })
+                    }
                 }
-            }
 
-            if (!found) {
-                r.fail(res, {message: "No dashboard with this id in rotation"}, 404);
+                if (!found) {
+                    r.fail(res, {message: "No dashboard with this id in rotation"}, 404);
+                    return next();
+                }
+            })
+            .catch(function(err) {
+                r.fail(res, err);
                 return next();
-            }
-        },
-        errorHandler);
+            });
     });
 
     /**
-     * DELETE: /api/rotation/:url/:dashboardId
-     * Remove the :dashboardId (ID) from the :url rotation
+     * DELETE: /api/rotation/:rotationId/:dashboardId
+     * Remove the :dashboardId (ID) from the :rotationId rotation
      *
      * AUTH: not authorised users can't modify rotations
      */
@@ -303,31 +277,34 @@ module.exports = function(server, model, config) {
 
         auth.check(req, res, next, config);
 
-        var errorHandler = getErrorHandler(res, next);
+        model.Rotation.get(req.params.rotationId)
+            .then(function(rotation) {
+                var found = false;
+                for (var i = 0; i < rotation.dashboards.length; i++) {
+                    if (rotation.dashboards[i]._id.toString() === req.params.dashboardId) {
+                        found = true;
+                        rotation.dashboards.splice(i, 1);
 
-        findRotation(req, function(rotation) {
-            var found = false;
-            for (var i=0; i<rotation.dashboards.length; i++) {
-                if (rotation.dashboards[i]._id.toString() === req.params.dashboardId) {
-                    found = true;
-                    rotation.dashboards.splice(i, 1);
-
-                    rotation.save(function(err) {
-                        if (err) return errorHandler(err);
-
-                        r.ok(res);
-                        notify(rotation);
-                        return next();
-                    })
+                        rotation.save(function (err) {
+                           if (err) r.fail(res);
+                            else {
+                                r.ok(res);
+                                notify(rotation);
+                            }
+                            return next();
+                        })
+                    }
                 }
-            }
 
-            if (!found) {
-                r.fail(res, {message: "No dashboard with this id in rotation"}, 404);
+                if (!found) {
+                    r.fail(res, {message: "No dashboard with this id in rotation"}, 404);
+                    return next();
+                }
+            })
+            .catch(function(err) {
+                r.fail(res, err);
                 return next();
-            }
-        },
-        errorHandler);
+            });
     });
 
     /**
@@ -336,33 +313,5 @@ module.exports = function(server, model, config) {
      */
     function notify(rotation) {
         config.sync.rotationUpdate(rotation);
-    }
-
-    /**
-     * Get rotation based on request rotationId
-     * @param req
-     * @param callback
-     * @param errorCallback
-     */
-    function findRotation(req, callback, errorCallback) {
-        var query  = model.Rotation.where({ _id: ObjectId(req.params.rotationId) });
-        query.findOne(function (err, rotation) {
-            if (rotation && typeof callback === 'function') return callback(rotation);
-            if (typeof errorCallback === 'function') errorCallback(err);
-        });
-    }
-
-    /**
-     * Get error handler in context of request
-     * @param res
-     * @param next
-     * @returns {Function}
-     */
-    function getErrorHandler(res, next) {
-        return function(err) {
-            if (err) r.fail(res, err, 400);
-            else r.fail(res);
-            return next();
-        }
     }
 };

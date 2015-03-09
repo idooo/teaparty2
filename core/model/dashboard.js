@@ -46,6 +46,7 @@ module.exports = function(mongoose, config) {
      * Find dashboard by _id
      * @param _id
      * @param authorised {Boolean}
+     * @returns {Promise}
      */
     schema.statics.get = function(_id, authorised) {
         var self = this;
@@ -63,6 +64,28 @@ module.exports = function(mongoose, config) {
                 else {
                     if (err) reject(err);
                     else reject({ message: "Dashboard not found" });
+                }
+            });
+        });
+    };
+
+    /**
+     * Get list of dashboards by IDs
+     * @param ids {Array}
+     * @returns {Promise}
+     */
+    schema.statics.getDashboards = function(ids) {
+        var self = this;
+        return new Promise(function (resolve, reject) {
+            var query = {};
+            if (typeof ids !== 'undefined') query = { _id: {$in: ids }};
+
+            query = self.where(query);
+            query.find(function (err, dashboards) {
+                if (dashboards) resolve(dashboards);
+                else {
+                    if (err) reject(err);
+                    else reject([]);
                 }
             });
         });
