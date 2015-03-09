@@ -1,8 +1,8 @@
 var helpers = require('./../helpers'),
     r = helpers.response,
     auth = helpers.auth,
-    ObjectId = require('mongoose').Types.ObjectId,
-    extend = require('util')._extend;
+    Promise = require('promise'),
+    ObjectId = require('mongoose').Types.ObjectId;
 
 module.exports = function(server, model, config) {
 
@@ -59,16 +59,17 @@ module.exports = function(server, model, config) {
     /**
      * PUT: /api/widget/:widgetId
      *
-     * AUTH: not authorised users can't change widget settings
+     * AUTH: unauthorised users can't change widget settings
      *
      * post body:
      * - caption
+     * - datasource
      */
     server.put('/api/widget/:widgetId', function(req, res, next) {
 
         auth.check(req, res, next, config);
 
-        var paramNames = ['caption'],
+        var paramNames = ['caption', 'datasource'],
             updateObj = {};
 
         var query = model.Widget.where({ _id: ObjectId(req.params.widgetId)});

@@ -43,6 +43,8 @@ module.exports = function(mongoose, config) {
     schema.statics.get = function(_id) {
         var self = this;
         return new Promise(function (resolve, reject) {
+            if (!_id) return reject({ message: "Widget ID not specified" });
+
             try {
                 var query = self.where({_id: ObjectId(_id)});
             }
