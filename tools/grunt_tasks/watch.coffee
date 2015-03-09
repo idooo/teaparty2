@@ -3,7 +3,7 @@ module.exports.tasks =
   watch:
     js:
       files: ['<%= settings.app %>/**/*.js', '<%= settings.widgets %>/**/view/*.js']
-      tasks: ['concat:ng', '6to5', 'ngAnnotate', 'develop']
+      tasks: ['concat:ng', 'babel', 'ngAnnotate', 'develop']
       options: { nospawn: true, reload: false }
     less:
       files: ['<%= settings.app %>/**/*.less', '<%= settings.widgets %>/**/*.less', ]

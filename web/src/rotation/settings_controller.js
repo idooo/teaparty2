@@ -120,8 +120,9 @@
         function removeRotation(rotation) {
             Rotation.delete({rotationId: rotation._id});
             for (var i = 0; i < self.rotations.length; i++) {
-                if (rotation._id === self.rotations[i]._id) return self.rotations.splice(i, 1);
+                if (rotation._id === self.rotations[i]._id) self.rotations.splice(i, 1);
             }
+            deselectRotation();
         }
 
         function showError(err) {

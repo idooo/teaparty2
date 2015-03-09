@@ -80,6 +80,7 @@
          * Move widget tot dashboard by dashboard name
          * @param dashboardName
          */
+        /*eslint-disable no-loop-func */
         function moveToDashboard(dashboardName) {
             for (let dashboard of $rootScope.dashboards) {
                 if (dashboard.name === dashboardName) {
@@ -89,7 +90,7 @@
                         $scope.ngDialogData.widget._id
                     );
 
-                    promise.then(function() {
+                    return promise.then(function() {
                         $rootScope.$broadcast('widgetAddedEvent', {
                             dashboardId: dashboard._id
                         });
@@ -98,10 +99,10 @@
                         });
                         ngDialog.close();
                     });
-                    return;
                 }
             }
         }
+        /*eslint-enable no-loop-func */
 
         function showError(err) {
             self.error = err.data ? err.data.error : { message: 'Server is unavailable' };
