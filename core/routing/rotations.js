@@ -160,19 +160,17 @@ module.exports = function(server, model, config) {
 
         auth.check(req, res, next, config);
 
-        var query  = model.Rotation.where({ _id: ObjectId(req.params.rotationId) });
-        query.findOneAndRemove(function (err, rotation) {
-            if (rotation) {
+        model.Rotation.delete(req.params.rotationId)
+            .then(function() {
                 r.ok(res);
                 notify(rotation);
-            }
-            else {
-                if (err) r.fail(res, err, 400);
-                else r.fail(res);
-            }
+                return next();
+            })
+            .catch(function(err) {
+                r.fail(res, err);
+                return next();
+            });
 
-            return next();
-        });
     });
 
     /**

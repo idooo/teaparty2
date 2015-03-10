@@ -1,6 +1,7 @@
 var uuid = require('node-uuid'),
     Promise = require('promise'),
     ObjectId = require('mongoose').Types.ObjectId,
+    abstract = require('./abstract'),
     modelName = 'Widget';
 
 module.exports = function(mongoose, config) {
@@ -40,26 +41,7 @@ module.exports = function(mongoose, config) {
      * Find widget by _id
      * @param _id
      */
-    schema.statics.get = function(_id) {
-        var self = this;
-        return new Promise(function (resolve, reject) {
-            if (!_id) return reject({ message: "Widget ID not specified" });
-
-            try {
-                var query = self.where({_id: ObjectId(_id)});
-            }
-            catch (err) {
-                reject(err);
-            }
-            query.findOne(function (err, widget) {
-                if (widget) resolve(widget);
-                else {
-                    if (err) reject(err);
-                    else reject({ message: "Widget not found" });
-                }
-            });
-        });
-    };
+    schema.statics.get = abstract.get(modelName);
 
     /**
      * Add widget reference to dashboard
@@ -105,6 +87,13 @@ module.exports = function(mongoose, config) {
             });
         });
     };
+
+    /**
+     * Remove widget by _id
+     * @param _id
+     * @returns {Promise}
+     */
+    schema.statics.delete = abstract.delete();
 
     var Widget = mongoose.model(modelName, schema);
 

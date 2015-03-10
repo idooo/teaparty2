@@ -138,7 +138,7 @@ module.exports = function(server, model, config) {
          * @param dashboard
          * @param widget
          * @param obj
-         * @returns {*|EmbeddedDocument}
+         * @returns {Promise}
          */
         function updateDashboardReference(dashboard, widget, obj) {
             return new Promise(function (resolve, reject) {

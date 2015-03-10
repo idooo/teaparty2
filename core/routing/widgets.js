@@ -48,12 +48,16 @@ module.exports = function(server, model, config) {
 
         auth.check(req, res, next, config);
 
-        var query  = model.Widget.where({ _id: ObjectId(req.params.widgetId) });
-        query.findOneAndRemove(function (err) {
-            if (err) r.fail(res, err);
-            else r.ok(res);
-            return next();
-        });
+        model.Widget.delete(req.params.widgetId)
+            .then(function() {
+                r.ok(res);
+                return next();
+            })
+            .catch(function(err) {
+                r.fail(res, err);
+                return next();
+            });
+
     });
 
     /**

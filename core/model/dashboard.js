@@ -2,6 +2,7 @@ var uuid = require('node-uuid'),
     Promise = require('promise'),
     rangeCheck = require('range_check'),
     ObjectId = require('mongoose').Types.ObjectId,
+    abstract = require('./abstract'),
     modelName = 'Dashboard';
 
 function getUrl() {
@@ -48,48 +49,21 @@ module.exports = function(mongoose, config) {
      * @param authorised {Boolean}
      * @returns {Promise}
      */
-    schema.statics.get = function(_id, authorised) {
-        var self = this;
-        return new Promise(function (resolve, reject) {
-            try {
-                var query = { _id: ObjectId(_id) };
-                if (!authorised) query.private = { $ne: true };
-                query = self.where(query);
-            }
-            catch (err) {
-                reject(err);
-            }
-            query.findOne(function (err, dashboard) {
-                if (dashboard) resolve(dashboard);
-                else {
-                    if (err) reject(err);
-                    else reject({ message: "Dashboard not found" });
-                }
-            });
-        });
-    };
+    schema.statics.get = abstract.get(modelName, true, {'private': { $ne: true }});
 
     /**
      * Get list of dashboards by IDs
      * @param ids {Array}
      * @returns {Promise}
      */
-    schema.statics.getDashboards = function(ids) {
-        var self = this;
-        return new Promise(function (resolve, reject) {
-            var query = {};
-            if (typeof ids !== 'undefined') query = { _id: {$in: ids }};
+    schema.statics.getDashboards = abstract.getList();
 
-            query = self.where(query);
-            query.find(function (err, dashboards) {
-                if (dashboards) resolve(dashboards);
-                else {
-                    if (err) reject(err);
-                    else reject([]);
-                }
-            });
-        });
-    };
+    /**
+     * Remove dashboard by _id
+     * @param _id
+     * @returns {Promise}
+     */
+    schema.statics.delete = abstract.delete();
 
     /**
      * Is IP address in dashboard's IP range settings

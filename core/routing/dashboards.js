@@ -112,16 +112,16 @@ module.exports = function(server, model, config) {
 
         auth.check(req, res, next, config);
 
-        var query  = model.Dashboard.where({ _id: ObjectId(req.params.dashboardId) });
-        query.findOneAndRemove(function (err, dashboard) {
-            if (dashboard) r.ok(res);
-            else {
-                if (err) r.fail(res, err, 400);
-                else r.fail(res);
-            }
+        model.Dashboard.delete(req.params.dashboardId)
+            .then(function() {
+                r.ok(res);
+                return next();
+            })
+            .catch(function(err) {
+                r.fail(res, err);
+                return next();
+            });
 
-            return next();
-        });
     });
 
     /**
