@@ -1,4 +1,5 @@
-var modelName = 'Datasource';
+var modelName = 'Datasource',
+    abstract = require('./abstract');
 
 module.exports = function(mongoose, config) {
 
@@ -17,6 +18,13 @@ module.exports = function(mongoose, config) {
             type: mongoose.Schema.Types.ObjectId,
             required: true
         },
+        creation_date: {
+            type: Date,
+            default: Date.now
+        },
+        last_update_date: {
+            type: Date
+        },
         interval: {
             type: Number,
             default: 10
@@ -26,27 +34,22 @@ module.exports = function(mongoose, config) {
     /**
      * Find datasource by _id
      * @param _id
+     * @returns {Promise}
      */
-    schema.statics.get = function(_id) {
-        var self = this;
-        return new Promise(function (resolve, reject) {
-            if (!_id) return reject({ message: "Datasource ID not specified" });
+    schema.statics.get = abstract.get(modelName);
 
-            try {
-                var query = self.where({_id: ObjectId(_id)});
-            }
-            catch (err) {
-                reject(err);
-            }
-            query.findOne(function (err, datasource) {
-                if (datasource) resolve(datasource);
-                else {
-                    if (err) reject(err);
-                    else reject({ message: "Datasource not found" });
-                }
-            });
-        });
-    };
+    /**
+     * Get list of datasources
+     * @returns {Promise}
+     */
+    schema.statics.getDatasources = abstract.getList();
+
+    /**
+     * Remove rotation by _id
+     * @param _id
+     * @returns {Promise}
+     */
+    schema.statics.delete = abstract.delete(modelName);
 
     var Datasource = mongoose.model(modelName, schema);
 

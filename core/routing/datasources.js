@@ -2,8 +2,7 @@ var helpers = require('./../helpers'),
     r = helpers.response,
     auth = helpers.auth,
     Promise = require('promise'),
-    ObjectId = require('mongoose').Types.ObjectId,
-    extend = require('util')._extend;
+    ObjectId = require('mongoose').Types.ObjectId;
 
 module.exports = function(server, model, config) {
 
@@ -14,6 +13,38 @@ module.exports = function(server, model, config) {
     server.get('/api/datasources/types', function(req, res, next) {
         r.ok(res, { datasourcesTypes: config.datasourcesTypes });
         return next();
+    });
+
+    /**
+     * GET: /api/datasources
+     * Get the list of all datasources
+     */
+    server.get('/api/datasources', function(req, res, next) {
+        model.Datasource.getDatasources()
+            .then(function(datasources) {
+                r.ok(res, datasources);
+                return next();
+            })
+            .catch(function(err) {
+                r.fail(res, err);
+                return next();
+            });
+    });
+
+    /**
+     * GET: /api/datasource/:datasourceId
+     * Get datasource by :datasourceId
+     */
+    server.get('/api/datasource/:datasourceId', function(req, res, next) {
+        model.Datasource.get(req.params.datasourceId)
+            .then(function(datasource) {
+                r.ok(res, datasource);
+                return next();
+            })
+            .catch(function(err) {
+                r.fail(res, err);
+                return next();
+            });
     });
 
     /**
@@ -55,6 +86,28 @@ module.exports = function(server, model, config) {
                     else r.ok(res, data);
                     return next();
                 });
+            })
+            .catch(function(err) {
+                r.fail(res, err);
+                return next();
+            });
+
+    });
+
+    /**
+     * DELETE: /api/datasource/:datasourceId
+     * Remove datasource by :datasourceId
+     *
+     * AUTH: unauthorised users can't remove datasources
+     */
+    server.del('/api/datasource/:datasourceId', function(req, res, next) {
+
+        auth.check(req, res, next, config);
+
+        model.Datasource.delete(req.params.datasourceId)
+            .then(function() {
+                r.ok(res);
+                return next();
             })
             .catch(function(err) {
                 r.fail(res, err);
