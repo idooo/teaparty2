@@ -8,7 +8,12 @@
     </fieldset>
 
     <fieldset>
-        <label>URL</label>
+        <label>
+            URL
+            <a href="#"
+               class="context-link"
+               clip-copy="ctrl.getDashboardUrl()">Copy link</a>
+        </label>
         <input type="text" readonly value="{{::ctrl.baseUrl}}{{ngDialogData.dashboard.url}}"/>
     </fieldset>
 

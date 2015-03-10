@@ -5,7 +5,12 @@
 </fieldset>
 
 <fieldset>
-    <label>URL</label>
+    <label>
+        URL
+        <a href="#"
+           class="context-link"
+           clip-copy="ctrl.getRotationUrl(ctrl.selectedRotation)">Copy link</a>
+    </label>
     <input type="text" readonly value="{{::ctrl.baseUrl}}{{ctrl.selectedRotation.url}}"/>
 </fieldset>
 

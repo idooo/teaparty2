@@ -11,6 +11,7 @@
         self.removeDashboard = removeDashboard;
         self.updateDashboard = updateDashboard;
         self.regenerateUrl = regenerateUrl;
+        self.getDashboardUrl = getDashboardUrl;
 
         self.name = $scope.ngDialogData.dashboard.name;
         self.private = $scope.ngDialogData.dashboard.private;
@@ -54,6 +55,10 @@
                 sendUpdateMessage(data);
                 ngDialog.close();
             }, showError);
+        }
+
+        function getDashboardUrl() {
+            return self.baseUrl + $scope.ngDialogData.dashboard.url;
         }
 
         function removeDashboard() {
