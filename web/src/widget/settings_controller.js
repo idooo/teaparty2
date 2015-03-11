@@ -41,16 +41,12 @@
          */
         function removeWidget() {
             var promise = DashboardWidgetService.removeWidgetFromDashboard($scope.ngDialogData.dashboardId, $scope.ngDialogData.widget._id);
-            promise
-                .then(function() {
-                    return Widget.delete({ widgetId: $scope.ngDialogData.widget._id})
-                })
-                .then(function() {
-                    $rootScope.$broadcast('widgetDeletedEvent', {
-                        dashboardId: $scope.ngDialogData.dashboardId
-                    });
-                    ngDialog.close();
+            promise.then(function() {
+                $rootScope.$broadcast('widgetDeletedEvent', {
+                    dashboardId: $scope.ngDialogData.dashboardId
                 });
+                ngDialog.close();
+            });
         }
 
         /**

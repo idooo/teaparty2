@@ -21,7 +21,9 @@ module.exports = {
 
                 try {
                     var query = { _id: ObjectId(_id) };
-                    if (!authorised && checkAuth) query = extend(query, failedCheckObject);
+                    if (typeof authorised !== 'undefined' && !authorised && checkAuth) {
+                        query = extend(query, failedCheckObject);
+                    }
                     query = self.where(query);
                 }
                 catch (err) {
@@ -71,7 +73,7 @@ module.exports = {
             var self = this;
             return new Promise(function (resolve, reject) {
                 try {
-                    var query = self.where({_id: ObjectId(_id)});
+                    var query = self.where({_id: (typeof _id === 'string') ? ObjectId(_id): _id});
                 }
                 catch (err) {
                     reject(err);
@@ -79,7 +81,7 @@ module.exports = {
                 query.findOneAndRemove(function (err, data) {
                     if (data === null) reject({message: "Object with that _id doesn't exist"});
                     if (err) reject(err);
-                    else resolve();
+                    else resolve(data);
                 });
             });
         }
