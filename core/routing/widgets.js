@@ -49,7 +49,8 @@ module.exports = function(server, model, config) {
         auth.check(req, res, next, config);
 
         model.Widget.delete(req.params.widgetId)
-            .then(function() {
+            .then(function(widget) {
+                if (widget.datasource) model.Datasource.delete({_id: ObjectId(widget.datasource)});
                 r.ok(res);
                 return next();
             })

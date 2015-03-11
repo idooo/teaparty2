@@ -1,5 +1,4 @@
-var uuid = require('node-uuid'),
-    r = require('./../helpers/response');
+var r = require('./../helpers/response');
 
 module.exports = function(server, model, config) {
 
@@ -12,8 +11,10 @@ module.exports = function(server, model, config) {
         var safeConfig = {};
 
         safeConfig.auth = (typeof config.auth !== 'undefined') ? config.auth : true;
-        safeConfig.widgetTypes = Object.keys(config.widgets);
         safeConfig.isDatabaseConnected = config.database.isConnected;
+
+        safeConfig.widgetTypes = Object.keys(config.widgets);
+        safeConfig.datasourcesTypes = config.datasourcesTypes;
 
         r.ok(res, safeConfig);
         return next();

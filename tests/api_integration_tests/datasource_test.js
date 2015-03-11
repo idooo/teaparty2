@@ -2,14 +2,6 @@ var h = require('./helpers');
 
 module.exports = {
 
-    getDatasourcesTypes: function (test) {
-        var result = h.get('/api/datasources/types');
-        test.ok(result.datasourcesTypes.length > 0);
-        test.ok(result.datasourcesTypes.indexOf('PULL') !== -1);
-
-        test.done();
-    },
-
     newDatasourceAndGetDatasource: function (test) {
         var res = createWidgetAndDatasource({
             type: 'PULL',

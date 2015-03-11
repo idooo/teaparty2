@@ -61,11 +61,12 @@ module.exports = function(server, model, config) {
                 return widget.removeFromDashboard(dashboard);
             })
             .then(function() {
-                widget.remove(function(err){
-                    if (err) r.fail(res, err, 400);
-                    else r.ok(res);
-                    return next();
-                });
+                return model.Widget.delete(widget._id);
+            })
+            .then(function() {
+                if (widget.datasource) model.Datasource.delete({_id: widget.datasource});
+                r.ok(res);
+                return next();
             })
             .catch(function(err) {
                 r.fail(res, err);

@@ -2,7 +2,7 @@
 
     <h3>Add widget</h3>
 
-     <form ng-submit="ctrl.addWidget()">
+    <form ng-submit="ctrl.addWidget()">
 
         <fieldset>
             <label>Caption</label>
@@ -11,8 +11,28 @@
 
         <fieldset>
             <label>Type</label>
-            <select ng-model="ctrl.widgetType" ng-options="option for option in ctrl.availableWidgetTypes"></select>
+            <select ng-model="ctrl.widgetType"
+                    ng-options="option for option in ctrl.availableWidgetTypes"></select>
         </fieldset>
+
+        <fieldset>
+            <label>Datasource</label>
+            <select ng-model="ctrl.datasourceType"
+                    ng-options="option for option in ctrl.availableDatasourcesTypes"></select>
+        </fieldset>
+
+        <!-- PULL datasource -->
+
+        <div ng-show="ctrl.datasourceType == 'PULL'">
+
+            <fieldset>
+                <label>URL</label>
+                <input type="text" ng-model="ctrl.pullURL"/>
+            </fieldset>
+
+        </div>
+
+        <!-- END -->
 
         <input type="submit" value="Add widget"/>
 

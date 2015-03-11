@@ -7,15 +7,6 @@ var helpers = require('./../helpers'),
 module.exports = function(server, model, config) {
 
     /**
-     * GET: /api/datasources/types
-     * Get the list of available datasources
-     */
-    server.get('/api/datasources/types', function(req, res, next) {
-        r.ok(res, { datasourcesTypes: config.datasourcesTypes });
-        return next();
-    });
-
-    /**
      * GET: /api/datasources
      * Get the list of all datasources
      */

@@ -21,6 +21,7 @@
         'teaparty2.dashboard',
         'teaparty2.rotation',
         'teaparty2.widget',
+        'teaparty2.datasource',
         'teaparty2.widgets',
         'teaparty2.widgets.template'
     ];
