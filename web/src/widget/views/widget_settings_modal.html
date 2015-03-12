@@ -1,37 +1,56 @@
 <div>
 
-    <h3>Widget settings</h3>
+    <h3>
+        <span ng-show="ctrl.view == 0">Widget settings</span>
+        <span ng-show="ctrl.view != 0">
+            <a href="#" ng-click="ctrl.closeDatasourceSettings()">Widget settings</a> -
+            {{::ngDialogData.widget.datasource}}
+        </span>
+    </h3>
 
-    <fieldset>
-        <label>Caption</label>
-        <input type="text" ng-model="ctrl.caption"/>
-    </fieldset>
+    <div ng-show="ctrl.view == 0">
 
-    <fieldset>
-        <label>Key</label>
-        <input type="text" readonly ng-model="ngDialogData.widget.key"/>
-    </fieldset>
+        <fieldset>
+            <label>Caption</label>
+            <input type="text" ng-model="ctrl.caption"/>
+        </fieldset>
 
-    <fieldset>
-        <label>Type</label>
-        <input type="text" readonly ng-model="ngDialogData.widget.type"/>
-    </fieldset>
+        <fieldset>
+            <label>Key</label>
+            <input type="text" readonly ng-model="ngDialogData.widget.key"/>
+        </fieldset>
 
-    <div class="form-btn-container">
+        <fieldset>
+            <label>Type</label>
+            <input type="text" readonly ng-model="ngDialogData.widget.type"/>
+        </fieldset>
 
-        <button ng-click="ctrl.updateWidget()">Update</button>
+        <fieldset ng-show="!!ngDialogData.widget.datasource">
+            <label>Datasource</label>
+            <a href="#" ng-click="ctrl.openDatasourceSettings()">{{::ngDialogData.widget.datasource}}</a>
+        </fieldset>
 
-        <button class="btn--minor" ng-click="ctrl.cloneWidget()">Clone</button>
+        <div class="form-btn-container">
 
-        <button class="btn--minor"
-                popover
-                items="ctrl.availableDashboards"
-                select="ctrl.moveToDashboard">Move to...</button>
+            <button ng-click="ctrl.updateWidget()">Update</button>
 
-        <span class="form-error-message">{{ctrl.error.message}}</span>
+            <button class="btn--minor" ng-click="ctrl.cloneWidget()">Clone</button>
 
-        <button class="btn--warning btn--right" ng-click="ctrl.removeWidget()">Remove</button>
+            <button class="btn--minor"
+                    popover
+                    items="ctrl.availableDashboards"
+                    select="ctrl.moveToDashboard">Move to...</button>
+
+            <span class="form-error-message">{{ctrl.error.message}}</span>
+
+            <button class="btn--warning btn--right" ng-click="ctrl.removeWidget()">Remove</button>
+
+        </div>
 
     </div>
+
+    <div ng-show="ctrl.view == 1"
+         ng-include="'widget/views/widget_datasource_part.html'"></div>
+
 
 </div>

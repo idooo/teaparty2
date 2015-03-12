@@ -4,7 +4,7 @@
         .module('teaparty2.widget')
         .controller('WidgetSettingsController', WidgetSettingsController);
 
-    function WidgetSettingsController($scope, $rootScope, ngDialog, Widget, DashboardWidgetService) {
+    function WidgetSettingsController($scope, $rootScope, ngDialog, Widget, Datasource, DashboardWidgetService) {
 
         var self = this;
 
@@ -16,6 +16,14 @@
         self.moveToDashboard = moveToDashboard;
 
         self.caption = $scope.ngDialogData.widget.caption;
+        self.datasource = undefined;
+
+        // 0 - widget settings
+        // 1 - datasource info
+        self.view = 0;
+
+        self.openDatasourceSettings = openDatasourceSettings;
+        self.closeDatasourceSettings = closeDatasourceSettings;
 
         $rootScope.dashboards.map(function(dashboard) {
             if (dashboard._id !== $scope.ngDialogData.dashboardId) {
@@ -102,6 +110,17 @@
 
         function showError(err) {
             self.error = err.data ? err.data.error : { message: 'Server is unavailable' };
+        }
+
+        function openDatasourceSettings() {
+            self.view = 1;
+            Datasource.get({datasourceId: $scope.ngDialogData.widget.datasource}, function(datasource) {
+                self.datasource = datasource;
+            })
+        }
+
+        function closeDatasourceSettings() {
+            self.view = 0;
         }
     }
 

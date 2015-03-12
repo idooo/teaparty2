@@ -6,6 +6,12 @@
             return $resource('/api/datasource',
                 {
                     datasourceId: '@datasourceId'
+                },
+                {
+                    get: {
+                        url: '/api/datasource/:datasourceId',
+                        method: 'GET'
+                    }
                 }
             );
         });

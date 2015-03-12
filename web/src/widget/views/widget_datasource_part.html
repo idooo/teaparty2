@@ -1,0 +1,28 @@
+<div>
+
+    <fieldset>
+        <label>Type</label>
+        <input type="text" readonly ng-model="ctrl.datasource.type"/>
+    </fieldset>
+
+    <fieldset>
+        <label>URL</label>
+        <input type="text" readonly ng-model="ctrl.datasource.url"/>
+    </fieldset>
+
+    <fieldset>
+        <label>Last update date</label>
+        <input type="text" readonly value="{{ctrl.datasource.last_update_date || 'Never'}}"/>
+    </fieldset>
+
+    <fieldset>
+        <label>Last update status</label>
+        <input type="text" readonly value="{{ctrl.datasource.last_update_status || 'No status'}}"/>
+    </fieldset>
+
+    <fieldset>
+        <label>Raw data</label>
+        <textarea class="code" readonly ng-model="ctrl.datasource.raw_data"></textarea>
+    </fieldset>
+
+</div>
