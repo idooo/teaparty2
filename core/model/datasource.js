@@ -22,8 +22,14 @@ module.exports = function(mongoose, config) {
             type: Date,
             default: Date.now
         },
+        raw_data: {
+            type: String
+        },
         last_update_date: {
             type: Date
+        },
+        last_update_status: {
+            type: String
         },
         interval: {
             type: Number,

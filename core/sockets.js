@@ -7,7 +7,7 @@ var exportObj = {},
 module.exports = function(io, model, config) {
 
     if (process.env.nosync === "true") {
-        config.logger.info("Updates via web sockets were disabled");
+        config.logger.warn("Updates via web sockets were disabled");
         return exportObj;
     }
 
