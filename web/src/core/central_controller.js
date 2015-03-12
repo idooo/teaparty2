@@ -63,6 +63,7 @@
             getDashboardsList(function (dashboards) {
                 $rootScope.dashboards = dashboards;
             });
+            loadDashboard(self.selectedDashboard._id);
         });
 
         // Main functions
