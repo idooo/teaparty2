@@ -31,6 +31,9 @@ module.exports = function(mongoose, config) {
         last_update_status: {
             type: String
         },
+        last_error: {
+            type: String
+        },
         interval: {
             type: Number,
             default: 10
@@ -56,6 +59,14 @@ module.exports = function(mongoose, config) {
      * @returns {Promise}
      */
     schema.statics.delete = abstract.delete(modelName);
+
+    schema.methods.register = function() {
+        config.datasources[this.type].registerDatasource(this);
+    };
+
+    schema.methods.deregister = function() {
+        config.datasources[this.type].deregisterDatasource(this);
+    };
 
     var Datasource = mongoose.model(modelName, schema);
 

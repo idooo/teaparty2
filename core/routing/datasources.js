@@ -56,7 +56,7 @@ module.exports = function(server, model, config) {
         var type = req.params.type;
         if (type) type = type.toUpperCase();
 
-        if (config.datasourcesTypes.indexOf(type) === -1) {
+        if (config.datasources.types.indexOf(type) === -1) {
             r.fail(res, {
                 message: "Datasource type is invalid. Available types: " + config.datasourcesTypes.join()
             }, 400);
@@ -74,7 +74,10 @@ module.exports = function(server, model, config) {
 
                 datasource.save(function (err, data) {
                     if (err) r.fail(res, err, 400);
-                    else r.ok(res, data);
+                    else {
+                        datasource.register();
+                        r.ok(res, data);
+                    }
                     return next();
                 });
             })
@@ -96,8 +99,9 @@ module.exports = function(server, model, config) {
         auth.check(req, res, next, config);
 
         model.Datasource.delete(req.params.datasourceId)
-            .then(function() {
+            .then(function(datasource) {
                 r.ok(res);
+                datasource.deregister();
                 return next();
             })
             .catch(function(err) {

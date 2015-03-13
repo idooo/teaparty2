@@ -50,7 +50,12 @@ module.exports = function(server, model, config) {
 
         model.Widget.delete(req.params.widgetId)
             .then(function(widget) {
-                if (widget.datasource) model.Datasource.delete({_id: ObjectId(widget.datasource)});
+                if (widget.datasource) {
+                    model.Datasource.delete({_id: ObjectId(widget.datasource)})
+                        .then(function(datasource) {
+                            datasource.deregister();
+                        });
+                }
                 r.ok(res);
                 return next();
             })

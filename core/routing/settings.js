@@ -14,7 +14,7 @@ module.exports = function(server, model, config) {
         safeConfig.isDatabaseConnected = config.database.isConnected;
 
         safeConfig.widgetTypes = Object.keys(config.widgets);
-        safeConfig.datasourcesTypes = config.datasourcesTypes;
+        safeConfig.datasourcesTypes = config.datasources.types;
 
         r.ok(res, safeConfig);
         return next();
