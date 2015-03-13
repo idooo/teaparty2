@@ -20,7 +20,12 @@
         <input type="text" readonly value="{{ctrl.datasource.last_update_status || 'No status'}}"/>
     </fieldset>
 
-    <fieldset>
+    <fieldset ng-show="ctrl.datasource.last_update_status == 'fail'">
+        <label>Last error</label>
+        <textarea class="code" readonly ng-model="ctrl.datasource.last_error"></textarea>
+    </fieldset>
+
+    <fieldset ng-show="ctrl.datasource.last_update_status != 'fail'">
         <label>Raw data</label>
         <textarea class="code" readonly ng-model="ctrl.datasource.raw_data"></textarea>
     </fieldset>
