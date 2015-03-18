@@ -28,42 +28,6 @@ module.exports = function(server, model, config) {
             }
         }
 
-        function pushData(widget, rawData) {
-            var data = extractBodyData(rawData);
-
-            // TODO: add check that data was saved
-            if (config.widgets[widget.type]) {
-                try {
-                    widget.data = validateAndFormat(data, config.widgets[widget.type])
-                }
-                catch (e) {
-                    r.fail(res, {message: "Widget data validation fail"}, 400);
-                    return next();
-                }
-            }
-            else {
-                widget.data = data;
-            }
-
-            widget.last_update_date = new Date();
-            widget.save();
-
-            r.ok(res, {message: "Widget data was updated"});
-            return next();
-        }
-
-        function validateAndFormat(data, ref) {
-            if (typeof ref.validate === 'function') {
-                if (!ref.validate(data)) {
-                    throw "ValidationError";
-                }
-            }
-            if (typeof ref.format === 'function') {
-                return ref.format(data);
-            }
-            return data;
-        }
-
         var query  = model.Widget.where({ key: getToken(req) });
         query.findOne(function (err, widget) {
 
@@ -71,11 +35,22 @@ module.exports = function(server, model, config) {
                 r.fail(res, {message: "No data to push"}, 400);
                 return next();
             }
-            else if (widget) pushData(widget, req.body);
+            else if (widget) {
+                var data = extractBodyData(req.body);
+
+                widget.pushData(data)
+                    .then(function() {
+                        r.ok(res, {message: "Widget data was updated"});
+                        return next();
+                    })
+                    .catch(function(err) {
+                        r.fail(res, err);
+                        return next();
+                    });
+            }
             else {
                 if (err) r.fail(res, err);
                 else r.fail(res);
-
                 return next();
             }
         });

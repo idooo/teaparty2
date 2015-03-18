@@ -16,6 +16,9 @@ module.exports = function(server, model, config) {
         safeConfig.widgetTypes = Object.keys(config.widgets);
         safeConfig.datasourcesTypes = config.datasources.types;
 
+        // For testing purposes
+        safeConfig.value = Math.random();
+
         r.ok(res, safeConfig);
         return next();
     });

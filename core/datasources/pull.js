@@ -149,7 +149,21 @@ module.exports = function(config, model) {
         else updateObj.last_error = datasource.last_error;
 
         query.findOneAndUpdate(updateObj, function (err, obj) {
-            if (err || obj === null) config.logger.warn('Cannot update datasource', datasource._id, 'in database');
+            if (err || obj === null) return config.logger.warn('Cannot update datasource', datasource._id, 'in database');
+
+            if (success) {
+                model.Widget.get(datasource.widget)
+                    .then(function(widget) {
+                        return widget.pushData(updateObj.raw_data)
+                    })
+                    .then(function() {
+                        config.logger.debug('Widget', datasource.widget, 'data was updated, datasource', datasource._id.toString());
+                    })
+                    .catch(function(err) {
+                        config.logger.warn('Cannot update widget', datasource.widget, 'for datasource',
+                            datasource._id, ':', err.message);
+                    });
+            }
         });
     }
 };

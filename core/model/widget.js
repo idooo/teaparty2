@@ -89,6 +89,46 @@ module.exports = function(mongoose, config) {
     };
 
     /**
+     * Push data to widget
+     * @param data
+     * @returns {Promise}
+     */
+    schema.methods.pushData = function(data) {
+        var self = this;
+
+        function validateAndFormat(data, ref) {
+            if (typeof data !== 'object') data = JSON.parse(data);
+            if (typeof ref.validate === 'function') {
+                if (!ref.validate(data)) {
+                    throw "ValidationError";
+                }
+            }
+            if (typeof ref.format === 'function') {
+                return ref.format(data);
+            }
+            return data;
+        }
+
+        return new Promise(function (resolve, reject) {
+            if (config.widgets[self.type]) {
+                try {
+                    self.data = validateAndFormat(data, config.widgets[self.type])
+                }
+                catch (e) {
+                    return reject({message: "Widget data validation fail"});
+                }
+            }
+            else {
+                self.data = data;
+            }
+
+            self.last_update_date = new Date();
+            self.save();
+            resolve(self);
+        });
+    };
+
+    /**
      * Remove widget by _id
      * @param _id
      * @returns {Promise}
