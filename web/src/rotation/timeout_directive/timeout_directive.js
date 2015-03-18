@@ -20,30 +20,18 @@
 
     function link(scope) {
         scope.id = Math.random();
-        scope.isPopoverOpened = false;
-        scope.closePopover = () => scope.isPopoverOpened = false;
+        scope.availableTimeouts = [15, 30, 45, 60];
     }
 
-    function controller($scope, $element, $attrs, $rootScope, Rotation) {
-        $scope.$on('popoverOpenEvent', function(event, data) {
-            if (is.not.undefined(data) && data.id !== $scope.id) {
-                $scope.closePopover();
-            }
-        });
+    function controller($scope, Rotation) {
 
-        $scope.togglePopover = function() {
-            $rootScope.$broadcast('popoverOpenEvent', {id: $scope.id});
-            $scope.isPopoverOpened = !$scope.isPopoverOpened;
-        };
-
-        $scope.setDashboardTimeout = function(rotation, dashboard, timeout) {
-            $scope.closePopover();
+        $scope.setDashboardTimeout = function(timeout) {
             Rotation.updateDashboard({
-                rotationId: rotation._id,
-                dashboardID: dashboard._id,
+                rotationId: $scope.rotation._id,
+                dashboardID: $scope.dashboard._id,
                 timeout: timeout
             }, function () {
-                dashboard.timeout = timeout;
+                $scope.dashboard.timeout = timeout;
             });
         }
     }

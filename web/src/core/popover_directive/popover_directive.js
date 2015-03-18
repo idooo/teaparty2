@@ -23,14 +23,14 @@
                 };
 
                 scope.togglePopover = function() {
-                    var mode = (scope.popoverElement[0].style.display === 'block') ? 'none' : 'block';
+                    var mode = (scope.popoverElement[0].style.display === 'flex') ? 'none' : 'flex';
                     scope.popoverElement[0].style.display = mode;
                     return mode;
                 };
 
                 scope.selectItem = function(item) {
                     scope.closePopover();
-                    incomingSelect(item);
+                    if (is.not.undefined(incomingSelect)) incomingSelect(item);
                 };
 
                 var template = `
@@ -52,7 +52,7 @@
         };
     }
 
-    function controller($scope, $element, $attrs, $rootScope) {
+    function controller($scope, $element, $rootScope) {
         $scope.$on('popoverOpenEvent', function(event, data) {
             if (is.not.undefined(data) && data.id !== $scope.id) {
                 $scope.closePopover();
