@@ -51,8 +51,12 @@ Teaparty2 will use default config (with invalid DB credentials) located in `teap
 }
 ```
 
-## Pushing data to dashboard
-Right now push is the only way to update widgets' data 
+## Update widget data
+At the current moment there are two ways to update widgets' data. You can choose one of them during a widget creation: Push and Pull datasources. Each widget has its own requirements to incoming data. Please look at widgets folder and check widget's reference .js to get an example of data can be stored in widget.
+
+### Push
+
+Manually update widget data by using Teaparty2 API
 
 To push data, send post request to `http://<teaparty-url>/api/push/<widget-key>` with a correct data object for this widget's type.
 
@@ -63,6 +67,10 @@ curl -H "Content-Type: application/json" -X POST -d '{"value": 35}' http://teapa
 ```
 
 Also there is [node-teaparty](https://github.com/idooo/node-teaparty) Node.js helper module that can make life easier.
+
+### Pull
+
+Teaparty2 will pull data from the remote URL via HTTP and update widgets if data was updated. Please note that right now there is no way to modify data on the fly (expecting in v0.8.0) so remote resource must provide data in a way widget can understand it. 
 
 
 ## Browsers support
