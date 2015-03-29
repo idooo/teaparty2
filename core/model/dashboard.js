@@ -74,7 +74,6 @@ module.exports = function(mongoose, config, models) {
         var self = this;
         return new Promise(function (resolve, reject) {
             var dashboard;
-
             self._simpleDelete(_id)
                 .then(function (_dashboard) {
                     dashboard = _dashboard;
@@ -82,10 +81,7 @@ module.exports = function(mongoose, config, models) {
                     if (dashboard.widgets.length === 0) return resolve(dashboard);
 
                     // Delete all the widgets
-                    var widgetsIDs = [];
-                    dashboard.widgets.forEach(function(widget) {
-                        widgetsIDs.push(widget._id)
-                    });
+                    var widgetsIDs = dashboard.widgets.map(function(widget) { return widget._id });
                     return Promise.all(widgetsIDs.map(function(_id) {
                         return models.Widget.delete(_id);
                     }));
