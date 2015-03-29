@@ -36,8 +36,23 @@ module.exports = {
         var dashboard = h.post('/api/dashboard', { name: 'testdeletedashboard' });
         var dashboardslist1 = h.get('/api/dashboards');
 
+        // Create widgets
+        var widget1 = h.post('/api/widget', { caption: 'widgettestdeletedashboard1', type: 'text' });
+        var widget2 = h.post('/api/widget', { caption: 'widgettestdeletedashboard2', type: 'text' });
+
+        // Add widgets to dashboard
+        h.post('/api/dashboard/' + dashboard._id.toString() + '/widget/' + widget1._id.toString());
+        h.post('/api/dashboard/' + dashboard._id.toString() + '/widget/' + widget2._id.toString());
+
+        // Delete dashboard
         h.delete('/api/dashboard/' + dashboard._id.toString());
+
+        // Get dashboard list
         var dashboardslist2 = h.get('/api/dashboards');
+
+        // Widgets must be deleted
+        var widgetOut1 = h.get('/api/widget/' + widget1._id.toString());
+        var widgetOut2 = h.get('/api/widget/' + widget2._id.toString());
 
         var found = false;
         dashboardslist2.forEach(function(_dashboard) {
@@ -46,6 +61,9 @@ module.exports = {
 
         test.ok(!found);
         test.equal(dashboardslist1.length - 1, dashboardslist2.length);
+
+        test.equal(widgetOut1.code, 404);
+        test.equal(widgetOut2.code, 404);
 
         test.done();
     },

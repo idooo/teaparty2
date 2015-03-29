@@ -13,7 +13,6 @@ module.exports = {
      * @returns {Function}
      */
     get: function(modelName, checkAuth, failedCheckObject) {
-
         return function(_id, authorised) {
             var self = this;
             return new Promise(function (resolve, reject) {
@@ -27,7 +26,7 @@ module.exports = {
                     query = self.where(query);
                 }
                 catch (err) {
-                    reject(err);
+                    reject({message: modelName + " not found"});
                 }
                 query.findOne(function (err, object) {
                     if (object) resolve(object);
@@ -45,7 +44,6 @@ module.exports = {
      * @returns {Function}
      */
     getList: function() {
-
         return function(ids) {
             var self = this;
             return new Promise(function (resolve, reject) {
@@ -86,5 +84,4 @@ module.exports = {
             });
         }
     }
-
 };

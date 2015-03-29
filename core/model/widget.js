@@ -4,7 +4,7 @@ var uuid = require('node-uuid'),
     abstract = require('./abstract'),
     modelName = 'Widget';
 
-module.exports = function(mongoose, config) {
+module.exports = function(mongoose, config, model) {
 
     var schema = mongoose.Schema({
         key: {
@@ -129,11 +129,37 @@ module.exports = function(mongoose, config) {
     };
 
     /**
-     * Remove widget by _id
+     * Delete widget by _id without removing datasource
      * @param _id
      * @returns {Promise}
      */
-    schema.statics.delete = abstract.delete();
+    schema.statics._simpleDelete = abstract.delete();
+
+    /**
+     * Delete widget by _id and its datasource
+     * @param _id
+     * @returns {Promise}
+     */
+    schema.statics.delete = function(_id) {
+        var self = this;
+        return new Promise(function (resolve, reject) {
+            var widget;
+
+            self._simpleDelete(_id)
+                .then(function (_widget) {
+                    widget = _widget;
+                    if (!widget.datasource) return resolve(widget);
+                    return model.Datasource.delete({_id: ObjectId(widget.datasource)})
+                })
+                .then(function(datasource) {
+                    datasource.deregister();
+                    resolve(widget);
+                })
+                .catch(function(err) {
+                    reject(err);
+                });
+        });
+    };
 
     var Widget = mongoose.model(modelName, schema);
 

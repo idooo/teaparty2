@@ -9,7 +9,7 @@ function getUrl() {
     return uuid.v1().replace(/-/g, '');
 }
 
-module.exports = function(mongoose, config) {
+module.exports = function(mongoose, config, models) {
 
     var schema = mongoose.Schema({
         name: {
@@ -59,11 +59,45 @@ module.exports = function(mongoose, config) {
     schema.statics.getDashboards = abstract.getList();
 
     /**
-     * Remove dashboard by _id
+     * Delete dashboard by _id without removing widgets
      * @param _id
      * @returns {Promise}
      */
-    schema.statics.delete = abstract.delete();
+    schema.statics._simpleDelete = abstract.delete();
+
+    /**
+     * Delete dashboard by _id and its widgets
+     * @param _id
+     * @returns {Promise}
+     */
+    schema.statics.delete = function(_id) {
+        var self = this;
+        return new Promise(function (resolve, reject) {
+            var dashboard;
+
+            self._simpleDelete(_id)
+                .then(function (_dashboard) {
+                    dashboard = _dashboard;
+
+                    if (dashboard.widgets.length === 0) return resolve(dashboard);
+
+                    // Delete all the widgets
+                    var widgetsIDs = [];
+                    dashboard.widgets.forEach(function(widget) {
+                        widgetsIDs.push(widget._id)
+                    });
+                    return Promise.all(widgetsIDs.map(function(_id) {
+                        return models.Widget.delete(_id);
+                    }));
+                })
+                .then(function() {
+                    resolve(dashboard);
+                })
+                .catch(function(err) {
+                    reject(err);
+                });
+        });
+    };
 
     /**
      * Is IP address in dashboard's IP range settings

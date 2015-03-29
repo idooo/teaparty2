@@ -26,7 +26,7 @@ module.exports = function(config) {
     });
 
     modelsFiles.forEach(function(modelName) {
-        var tmp = require('./model/' + modelName)(mongoose, config);
+        var tmp = require('./model/' + modelName)(mongoose, config, models);
         models[tmp.name] = tmp.model;
     });
 

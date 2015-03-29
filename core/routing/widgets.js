@@ -49,13 +49,7 @@ module.exports = function(server, model, config) {
         auth.check(req, res, next, config);
 
         model.Widget.delete(req.params.widgetId)
-            .then(function(widget) {
-                if (widget.datasource) {
-                    model.Datasource.delete({_id: ObjectId(widget.datasource)})
-                        .then(function(datasource) {
-                            datasource.deregister();
-                        });
-                }
+            .then(function() {
                 r.ok(res);
                 return next();
             })
@@ -103,7 +97,13 @@ module.exports = function(server, model, config) {
      */
     server.get('/api/widget/:widgetId', function(req, res, next) {
 
-        var query = model.Widget.where({ _id: ObjectId(req.params.widgetId)});
+        try {
+            var query = model.Widget.where({_id: ObjectId(req.params.widgetId)});
+        }
+        catch (err) {
+            r.fail(res, { message: "Widget not found" });
+            return next();
+        }
 
         query.findOne(function (err, widget) {
             if (widget) {

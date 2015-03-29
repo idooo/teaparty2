@@ -6,7 +6,7 @@ CONFIG=$1
 echo "Starting Teaparty server... [config "$CONFIG"]"
 echo "Waiting 10 seconds to run tests..."
 
-eval "(config="$CONFIG" node server.js) &"
+eval "(config="$CONFIG" nopull=true node server.js) &"
 PID=$!
 
 sleep 10

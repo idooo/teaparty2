@@ -17,10 +17,25 @@ module.exports = {
 
     deleteWidget: function (test) {
         var widgetOut1 = h.post('/api/widget', { caption: 'testdeletewidget', type: 'text' });
+
+        // create datasource
+        var datasource = h.post('/api/datasource', {
+            widgetId: widgetOut1._id.toString(),
+            type: 'PULL',
+            url: 'deleteWidgettest1'
+        });
+        h.put('/api/widget/' + widgetOut1._id.toString(), {datasource: datasource._id});
+
+        // remove widget
         h.delete('/api/widget/' + widgetOut1._id.toString());
+
+        // widget and linked datasource must not exist
         var widgetOut2 = h.get('/api/widget/' + widgetOut1._id.toString());
+        var datasourceOut2 = h.get('/api/datasource/' + datasource._id.toString());
 
         test.equal(widgetOut2.code, 404);
+        test.equal(datasourceOut2.code, 404);
+
         test.done();
     },
 
