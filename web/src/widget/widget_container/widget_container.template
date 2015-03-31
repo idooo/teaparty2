@@ -4,8 +4,13 @@
         <i class="icon-cog" ng-click="openWidgetSettingsDialog()"></i>
     </div>
 
+    <div class="widget-caption" ng-show="!!widget.caption && !hideCaption">{{widget.caption}}</div>
+
     <div class="d-widget-container__body"
-         ng-class="{'d-widget-container__body--rendered': rendered}"
+         ng-class="{
+            'd-widget-container__body--rendered': rendered,
+            'd-widget-container__body--no-caption': !widget.caption || hideCaption
+         }"
          ng-transclude></div>
 
 </div>

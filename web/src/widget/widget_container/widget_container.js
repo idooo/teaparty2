@@ -42,6 +42,8 @@
             dashboardId: $scope.dashboardId,
             widget: $scope.widget
         });
+
+        this.hideCaption = function() { $scope.hideCaption = true; }
     }
 
 })();

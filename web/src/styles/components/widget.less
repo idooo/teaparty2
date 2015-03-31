@@ -1,5 +1,4 @@
 // Shared classes for widgets
-
 @import "../variables";
 @import "../mixins";
 
@@ -18,8 +17,12 @@
 	.widget-caption {
 		color: @caption_color;
 		text-align: center;
-		font-size: 18px;
+		position: absolute;
+		font-size: 3vh;
+		height: 4vh;
 		font-weight: 400;
 		z-index: 99;
 		padding-top: 2px;
+		white-space: nowrap;
+		width: 100%;
 	}

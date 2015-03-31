@@ -1,7 +1,5 @@
 <div class="widget-highcharts">
 
-    <span class="widget-caption widget-highcharts__caption">{{widget.caption}}</span>
-
     <span class="spinner" ng-show="rendering"></span>
 
     <div class="widget-highcharts__chart-container"></div>

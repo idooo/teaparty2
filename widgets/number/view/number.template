@@ -1,15 +1,9 @@
 <div class="widget-number">
 
-    <div class="widget-caption">
-        {{widget.caption}}
-    </div>
-
     <div class="widget-number__data">
 
         <span>
-
             {{widget.data.value}}
-
         </span>
 
     </div>

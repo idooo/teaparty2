@@ -1,9 +1,6 @@
 <div class="widget-list">
 
-    <div class="widget-caption" ng-show="!!widget.caption">{{widget.caption}}</div>
-
-    <ul class="widget-list-container"
-        ng-class="{'widget-list-container--with-caption': !!widget.caption}">
+    <ul class="widget-list-container">
 
         <li class="widget-list-item" ng-repeat="item in widget.data">
 
