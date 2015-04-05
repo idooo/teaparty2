@@ -1,4 +1,4 @@
-module.exports.tasks = 
+module.exports.tasks =
 
   wiredep:
     dev:
@@ -12,8 +12,6 @@ module.exports.tasks =
           main: ['js/ngDialog.js', 'css/ngDialog.css']
         'highcharts':
           main: ['adapters/standalone-framework.js', 'highcharts.js']
-        'is_js':
-          main: ['is.min.js']
 
   includeSource:
     options:

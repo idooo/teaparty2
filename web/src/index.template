@@ -9,7 +9,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
         <link href="/images/touch-icon.png" rel="apple-touch-icon" sizes="180x180" />
-        
+
         <base href="/">
 
         <title>Teaparty2</title>
@@ -34,6 +34,8 @@
         <!-- build:js scripts/vendor.min.js -->
             <!-- bower:js -->
             <!-- endbower -->
+
+			<script src="../bower_components/browser-polyfill.js"></script>
             <!-- include: "type": "js", "files": "scripts/vendor.js" -->
         <!-- endbuild -->
 

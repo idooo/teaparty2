@@ -24,6 +24,16 @@ module.exports.tasks =
         }
       ]
 
+    babelPolyfill:
+      files: [
+        {
+          flatten: true
+          expand: true
+          dest: "<%= settings.dist %>/../bower_components"
+          src: ["node_modules/babel/browser-polyfill.js"]
+        }
+      ]
+
     templates:
       files: [
         {
