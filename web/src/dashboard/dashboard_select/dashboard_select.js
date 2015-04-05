@@ -4,7 +4,7 @@
         .module('teaparty2.dashboard')
         .directive('dashboardSelect', dashboardSelectDirective);
 
-    function dashboardSelectDirective() {
+    function dashboardSelectDirective () {
 
         return {
             restrict: 'EA',

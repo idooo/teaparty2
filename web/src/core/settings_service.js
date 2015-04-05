@@ -4,7 +4,7 @@
         .module('teaparty2.core')
         .service('Settings', SettingsService);
 
-    function SettingsService($http, $q) {
+    function SettingsService ($http, $q) {
 
         const ENDPOINT = '/api/settings';
 
@@ -13,7 +13,7 @@
         self.settings = undefined;
 
         self.get = function () {
-            return $q(function(resolve, reject) {
+            return $q(function (resolve, reject) {
                 var http;
 
                 if (angular.isDefined(self.settings)) return resolve(self.settings);

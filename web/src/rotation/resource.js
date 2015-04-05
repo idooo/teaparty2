@@ -4,7 +4,7 @@
         .module('teaparty2.rotation')
         .factory('Rotation', RotationResource);
 
-    function RotationResource($resource) {
+    function RotationResource ($resource) {
         return $resource('/api/rotation/:url', {
                 rotationId: '@rotationId',
                 dashboardID: '@dashboardID'

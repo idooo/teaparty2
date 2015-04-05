@@ -1,10 +1,10 @@
-(function() {
+(function () {
 
     angular
         .module('teaparty2.core')
         .filter('fieldsConcat', FieldsConcatFilter);
 
-    function FieldsConcatFilter() {
+    function FieldsConcatFilter () {
         return function (input = '', fieldName = undefined, delimeter = ', ') {
             var out = [];
             for (let obj of input) {

@@ -1,10 +1,10 @@
-(function() {
+(function () {
 
     angular
         .module('teaparty2.core')
         .service('Auth', AuthService);
 
-    function AuthService($http, localStorageService) {
+    function AuthService ($http, localStorageService) {
 
         const ENDPOINT = '/api/auth';
         const HEADER = 'Authorization-Token';
@@ -26,7 +26,7 @@
          * Read auth token from the local storage
          * @returns {*}
          */
-        function readTokenFromStorage() {
+        function readTokenFromStorage () {
             return localStorageService.get(LS_KEY);
         }
 
@@ -34,7 +34,7 @@
          * Update the auth HTTP header by new token
          * @param token
          */
-        function updateAuthHeader(token) {
+        function updateAuthHeader (token) {
             if (angular.isUndefined(token)) {
                 if (angular.isUndefined(self.token)) {
                     token = self.readTokenFromStorage();
@@ -52,14 +52,13 @@
          * @param token
          * @param callback (with argument 'isAuthorised' (bool))
          */
-        function authorize(token, callback) {
+        function authorize (token, callback) {
             self.token = token;
             self.isAuthorised = true;
             localStorageService.set(LS_KEY, token);
             self.updateAuthHeader();
-            if (angular.isFunction(callback)) {
-                callback(self.isAuthorised);
-            }
+
+            if (angular.isFunction(callback)) callback(self.isAuthorised);
         }
 
         /**
@@ -67,14 +66,13 @@
          * @param callback (with argument 'isAuthorised' (bool))
          * @param message - optional message to pass to callback
          */
-         function deauthorize(callback, message) {
+         function deauthorize (callback, message) {
             self.token = undefined;
             self.isAuthorised = false;
             localStorageService.remove(LS_KEY);
             self.updateAuthHeader();
-            if (angular.isFunction(callback)) {
-                callback(self.isAuthorised, message);
-            }
+
+            if (angular.isFunction(callback)) callback(self.isAuthorised, message);
         }
 
         /**
@@ -83,19 +81,15 @@
          * @param password
          * @param callback
          */
-         function auth(username, password, callback) {
+         function auth (username, password, callback) {
             var http = $http.post(ENDPOINT, {
                 username: username,
                 password: password
             });
 
-            http.success(function(data) {
-                self.authorize(data.token, callback);
-            });
+            http.success(data => self.authorize(data.token, callback));
 
-            http.error(function(data) {
-                self.deauthorize(callback, data);
-            });
+            http.error(data => self.deauthorize(callback, data));
         }
 
         /**
@@ -103,7 +97,7 @@
          * @param token
          * @param callback
          */
-        function check(token, callback) {
+        function check (token, callback) {
             var http;
 
             if (angular.isUndefined(token)) {
@@ -113,13 +107,9 @@
 
             http = $http.get(`${ENDPOINT}/${token}`);
 
-            http.success(function() {
-                self.authorize(token, callback);
-            });
+            http.success(() => self.authorize(token, callback));
 
-            http.error(function() {
-                self.deauthorize(callback);
-            });
+            http.error(() => self.deauthorize(callback));
         }
     }
 

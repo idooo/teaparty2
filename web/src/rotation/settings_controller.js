@@ -4,7 +4,7 @@
         .module('teaparty2.rotation')
         .controller('RotationsSettingsController', rotationsSettingsController);
 
-    function rotationsSettingsController($window, Rotation, Dashboard) {
+    function rotationsSettingsController ($window, Rotation, Dashboard) {
 
         var self = this;
 
@@ -38,17 +38,17 @@
 
         init();
 
-        function init() {
+        function init () {
             self.rotations = Rotation.list();
             self.dashboards = Dashboard.list();
         }
 
-        function createRotation() {
+        function createRotation () {
             (new Rotation()).$save();
             self.rotations = Rotation.list();
         }
 
-        function removeDashboardFromRotation(rotation, dashboard) {
+        function removeDashboardFromRotation (rotation, dashboard) {
             Rotation.removeDashboard({
                 rotationId: rotation._id,
                 dashboardID: dashboard._id
@@ -59,7 +59,7 @@
             });
         }
 
-        function addDashboardToRotation(rotation, dashboard) {
+        function addDashboardToRotation (rotation, dashboard) {
             Rotation.addDashboard({
                 rotationId: rotation._id,
                 dashboardID: dashboard._id
@@ -68,7 +68,7 @@
             });
         }
 
-        function isDashboardInSelectedRotation(dashboard) {
+        function isDashboardInSelectedRotation (dashboard) {
             if (typeof self.selectedRotation === 'undefined' || typeof self.selectedRotation.dashboards === 'undefined') {
                 return false;
             }
@@ -79,27 +79,27 @@
             return false;
         }
 
-        function openDashboards(rotation) {
+        function openDashboards (rotation) {
             self.selectedRotation = rotation;
             self.view = 2;
         }
 
-        function openSettings(rotation) {
+        function openSettings (rotation) {
             self.selectedRotation = rotation;
             self.name = rotation.name;
             self.view = 1;
         }
 
-        function deselectRotation() {
+        function deselectRotation () {
             self.selectedRotation = undefined;
             self.view = 0;
         }
 
-        function getRotationUrl(rotation) {
+        function getRotationUrl (rotation) {
             return self.baseUrl + rotation.url;
         }
 
-        function updateRotation() {
+        function updateRotation () {
             Rotation.update({
                 rotationId: self.selectedRotation._id,
                 name: self.name
@@ -108,7 +108,7 @@
             }, showError);
         }
 
-        function regenerateUrl() {
+        function regenerateUrl () {
             Rotation.update({
                 rotationId: self.selectedRotation._id,
                 url: true
@@ -117,7 +117,7 @@
             }, showError);
         }
 
-        function removeRotation(rotation) {
+        function removeRotation (rotation) {
             Rotation.delete({rotationId: rotation._id});
             for (var i = 0; i < self.rotations.length; i++) {
                 if (rotation._id === self.rotations[i]._id) self.rotations.splice(i, 1);
@@ -125,7 +125,7 @@
             deselectRotation();
         }
 
-        function showError(err) {
+        function showError (err) {
             self.error = err.data ? err.data.error : {message: 'Server is unavailable'};
         }
     }

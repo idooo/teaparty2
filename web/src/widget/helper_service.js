@@ -4,7 +4,7 @@
         .module('teaparty2.widget')
         .service('WidgetHelper', WidgetHelper);
 
-    function WidgetHelper() {
+    function WidgetHelper () {
 
         /**
          * Change font size of text element to fill the parent element

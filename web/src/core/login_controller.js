@@ -4,7 +4,7 @@
         .module('teaparty2.core')
         .controller('LoginController', LoginController);
 
-    function LoginController($rootScope, ngDialog, Auth) {
+    function LoginController ($rootScope, ngDialog, Auth) {
 
         var self = this;
 

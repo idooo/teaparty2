@@ -4,7 +4,8 @@
         .module('teaparty2.core')
         .controller('CentralController', CentralController);
 
-    function CentralController($rootScope, $scope, $state, $stateParams, ModalService, Dashboard, Settings, Auth) {
+    function CentralController ($rootScope, $scope, $state, $stateParams, ModalService,
+								Dashboard, Settings, Auth) {
 
         const IMPORTANT_MESSAGES = [
             'Database connection problem. Check application logs for details',
@@ -50,7 +51,7 @@
 
         $scope.$on('dashboardDeletedEvent', () => init(true));
 
-        $scope.$on('dashboardUpdatedEvent', function(event, data) {
+        $scope.$on('dashboardUpdatedEvent', function (event, data) {
             if (data.reload) init();
             else getDashboardsList(dashboards => $rootScope.dashboards = dashboards);
         });
@@ -74,7 +75,7 @@
          * Get the dashboard list (try to get from cache if it's available), cache it and load dashboard
          * @param cleanCache {boolean}
          */
-        function init(cleanCache=false) {
+        function init (cleanCache=false) {
 
             if (cleanCache) $rootScope.dashboards = [];
 
@@ -104,7 +105,7 @@
          * Redirect to a specific dashboard
          * @param url
          */
-        function goToDashboard(url) {
+        function goToDashboard (url) {
             $state.go('app', {dashboard: url}, {reload: false});
         }
 
@@ -112,7 +113,7 @@
          * Get list of dashboards available for the current user
          * @param callback ([dashboards list])
          */
-        function getDashboardsList(callback) {
+        function getDashboardsList (callback) {
             Dashboard.list(function (data) {
                 self.dashboards = data;
                 if (angular.isFunction(callback)) callback(self.dashboards);
@@ -128,7 +129,7 @@
          *
          * @param input
          */
-        function loadDashboard(input) {
+        function loadDashboard (input) {
             var dashboard;
 
             if (angular.isUndefined(input)) {
@@ -156,7 +157,7 @@
         /**
          * Lock/Unlock dashboard by changing Gridster options
          */
-        function lockUnlockDashboard() {
+        function lockUnlockDashboard () {
             self.isDashboardLocked = !self.isDashboardLocked;
             self.dashboardOptions.resizable.enabled = !self.dashboardOptions.resizable.enabled;
             self.dashboardOptions.draggable.enabled = !self.dashboardOptions.draggable.enabled;
@@ -166,7 +167,7 @@
          * Check if dashboards are available
          * @returns {boolean}
          */
-        function isAnyDashboardAvailable() {
+        function isAnyDashboardAvailable () {
             if (!self.settings.isDatabaseConnected) {
                 self.importantMessage = IMPORTANT_MESSAGES[0];
                 return false;
@@ -182,7 +183,7 @@
         /**
          * Log out
          */
-        function logout() {
+        function logout () {
             Auth.deauthorize();
             $rootScope.dashboards = undefined;
             $rootScope.isAuthorised = false;

@@ -6,7 +6,7 @@
         .module('teaparty2.widget')
         .directive('widgetContainer', widgetContainerDirective);
 
-    function widgetContainerDirective($timeout) {
+    function widgetContainerDirective ($timeout) {
 
         return {
             restrict: 'E',
@@ -26,7 +26,7 @@
          * @param scope
          * @param element
          */
-        function link(scope, element) {
+        function link (scope, element) {
             var children,
                 widgetBody,
                 widgetContentContainer,
@@ -54,12 +54,12 @@
                 rescaleWidget(100);
             });
 
-            function recalculateHeight() {
+            function recalculateHeight () {
                 widgetContentContainer.style.height = widgetBody.offsetHeight + 'px';
                 rescaleWidget();
             }
 
-            function rescaleWidget(timeout) {
+            function rescaleWidget (timeout) {
                 if (angular.isUndefined(scalableElement)) return;
 
                 scalableElement.style.transform = 'scale(1)';
@@ -69,7 +69,7 @@
                 //
                 // This is manipulation with DOM properties outside of Angular
                 // so we do not need specialised $timeout here
-                setTimeout(function() {
+                setTimeout(function () {
                     if (scalableElement.offsetHeight > widgetBody.offsetHeight) {
                         var scaleRatio = widgetBody.offsetHeight / scalableElement.offsetHeight;
                         scalableElement.style.transform = `scale(${scaleRatio})`;
@@ -85,7 +85,7 @@
          * @param $attrs
          * @param ModalService
          */
-        function controller($scope, $element, $attrs, ModalService) {
+        function controller ($scope, $element, $attrs, ModalService) {
             $scope.openWidgetSettingsDialog = () => ModalService.widgetSettings({
                 dashboardId: $scope.dashboardId,
                 widget: $scope.widget

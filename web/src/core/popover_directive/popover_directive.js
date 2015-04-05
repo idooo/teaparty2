@@ -4,7 +4,7 @@
         .module('teaparty2.core')
         .directive('popover', popoverDirective);
 
-    function popoverDirective($compile) {
+    function popoverDirective ($compile) {
         return {
             restrict: 'A',
             replace: false,
@@ -12,23 +12,23 @@
                 items: '=',
                 select: '&'
             },
-            link: function(scope, element) {
+            link: function (scope, element) {
                 var incomingSelect = scope.select();
 
                 scope.id = Math.random();
                 scope.isPopoverOpened = false;
 
-                scope.closePopover = function() {
+                scope.closePopover = function () {
                     scope.popoverElement[0].style.display = 'none';
                 };
 
-                scope.togglePopover = function() {
+                scope.togglePopover = function () {
                     var mode = (scope.popoverElement[0].style.display === 'flex') ? 'none' : 'flex';
                     scope.popoverElement[0].style.display = mode;
                     return mode;
                 };
 
-                scope.selectItem = function(item) {
+                scope.selectItem = function (item) {
                     scope.closePopover();
                     if (angular.isDefined(incomingSelect)) incomingSelect(item);
                 };
@@ -52,14 +52,14 @@
         };
     }
 
-    function controller($scope, $element, $rootScope) {
-        $scope.$on('popoverOpenEvent', function(event, data) {
+    function controller ($scope, $element, $rootScope) {
+        $scope.$on('popoverOpenEvent', function (event, data) {
             if (angular.isDefined(data) && data.id !== $scope.id) {
                 $scope.closePopover();
             }
         });
 
-        $element.on('click', function() {
+        $element.on('click', function () {
             if ($scope.togglePopover() !== 'none') {
                 $rootScope.$broadcast('popoverOpenEvent', {id: $scope.id});
             }

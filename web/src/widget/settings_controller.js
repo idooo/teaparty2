@@ -4,7 +4,7 @@
         .module('teaparty2.widget')
         .controller('WidgetSettingsController', WidgetSettingsController);
 
-    function WidgetSettingsController($scope, $rootScope, ngDialog, Widget, Datasource, DashboardWidgetService) {
+    function WidgetSettingsController ($scope, $rootScope, ngDialog, Widget, Datasource, DashboardWidgetService) {
 
         var self = this;
 
@@ -25,7 +25,7 @@
         self.openDatasourceSettings = openDatasourceSettings;
         self.closeDatasourceSettings = closeDatasourceSettings;
 
-        $rootScope.dashboards.map(function(dashboard) {
+        $rootScope.dashboards.map(function (dashboard) {
             if (dashboard._id !== $scope.ngDialogData.dashboardId) {
                 self.availableDashboards.push(dashboard.name);
             }
@@ -34,7 +34,7 @@
         /**
          * Update widget data
          */
-        function updateWidget() {
+        function updateWidget () {
             Widget.update({
                 widgetId: $scope.ngDialogData.widget._id,
                 caption: self.caption
@@ -47,9 +47,9 @@
         /**
          * Surprise. Removing widget
          */
-        function removeWidget() {
+        function removeWidget () {
             var promise = DashboardWidgetService.removeWidgetFromDashboard($scope.ngDialogData.dashboardId, $scope.ngDialogData.widget._id);
-            promise.then(function() {
+            promise.then(function () {
                 $rootScope.$broadcast('widgetDeletedEvent', {
                     dashboardId: $scope.ngDialogData.dashboardId
                 });
@@ -60,7 +60,7 @@
         /**
          * Create a copy of widget in the same dashboard
          */
-        function cloneWidget() {
+        function cloneWidget () {
 
             var widget = new Widget({
                 type: $scope.ngDialogData.widget.type,
@@ -69,7 +69,7 @@
 
             widget.$save(function (createdWidget) {
                 var promise = DashboardWidgetService.addWidgetToDashboard($scope.ngDialogData.dashboardId, createdWidget._id);
-                promise.then(function() {
+                promise.then(function () {
                     $rootScope.$broadcast('widgetAddedEvent', {
                         dashboardId: $scope.ngDialogData.dashboardId
                     });
@@ -85,7 +85,7 @@
          * @param dashboardName
          */
         /*eslint-disable no-loop-func */
-        function moveToDashboard(dashboardName) {
+        function moveToDashboard (dashboardName) {
             for (let dashboard of $rootScope.dashboards) {
                 if (dashboard.name === dashboardName) {
                     var promise = DashboardWidgetService.moveWidgetToDashboard(
@@ -94,7 +94,7 @@
                         $scope.ngDialogData.widget._id
                     );
 
-                    return promise.then(function() {
+                    return promise.then(function () {
                         $rootScope.$broadcast('widgetAddedEvent', {
                             dashboardId: dashboard._id
                         });
@@ -108,18 +108,18 @@
         }
         /*eslint-enable no-loop-func */
 
-        function showError(err) {
-            self.error = err.data ? err.data.error : { message: 'Server is unavailable' };
+        function showError (err) {
+            self.error = err.data ? err.data.error : {message: 'Server is unavailable'};
         }
 
-        function openDatasourceSettings() {
+        function openDatasourceSettings () {
             self.view = 1;
-            Datasource.get({datasourceId: $scope.ngDialogData.widget.datasource}, function(datasource) {
+            Datasource.get({datasourceId: $scope.ngDialogData.widget.datasource}, function (datasource) {
                 self.datasource = datasource;
             })
         }
 
-        function closeDatasourceSettings() {
+        function closeDatasourceSettings () {
             self.view = 0;
         }
     }

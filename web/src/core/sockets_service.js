@@ -11,7 +11,7 @@
             var self = this;
 
             // Empty placeholder function to make service init visible outside of this module
-            self.init = function() {};
+            self.init = angular.noop;
             self.socketFactory = socketFactory();
 
             self.socketFactory.on('widgets_update', function (data) {

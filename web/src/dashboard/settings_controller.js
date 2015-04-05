@@ -4,7 +4,7 @@
         .module('teaparty2.dashboard')
         .controller('DashboardSettingsController', DashboardSettingsController);
 
-    function DashboardSettingsController($scope, $rootScope, $window, ngDialog, Dashboard) {
+    function DashboardSettingsController ($scope, $rootScope, $window, ngDialog, Dashboard) {
 
         var self = this;
 
@@ -21,7 +21,7 @@
 
         self.baseUrl = $window.location.origin + '/d/';
 
-        function regenerateUrl() {
+        function regenerateUrl () {
             Dashboard.update({
                 dashboardId: $scope.ngDialogData.dashboard._id,
                 url: true
@@ -31,7 +31,7 @@
             }, showError);
         }
 
-        function updateDashboard() {
+        function updateDashboard () {
             Dashboard.update({
                 dashboardId: $scope.ngDialogData.dashboard._id,
                 name: self.name,
@@ -57,11 +57,11 @@
             }, showError);
         }
 
-        function getDashboardUrl() {
+        function getDashboardUrl () {
             return self.baseUrl + $scope.ngDialogData.dashboard.url;
         }
 
-        function removeDashboard() {
+        function removeDashboard () {
             Dashboard.delete({dashboardId: $scope.ngDialogData.dashboard._id}, function () {
                 $rootScope.$broadcast('dashboardDeletedEvent', {
                     dashboardName: $scope.ngDialogData.dashboard
@@ -70,12 +70,12 @@
             });
         }
 
-        function sendUpdateMessage(data) {
+        function sendUpdateMessage (data) {
             $rootScope.$broadcast('dashboardUpdatedEvent', data);
         }
 
-        function showError(err) {
-            self.error = err.data ? err.data.error : { message: 'Server is unavailable' };
+        function showError (err) {
+            self.error = err.data ? err.data.error : {message: 'Server is unavailable'};
         }
     }
 

@@ -4,7 +4,7 @@
         .module('teaparty2.dashboard')
         .directive('dashboardContainer', dashboardContainerDirective);
 
-    function dashboardContainerDirective() {
+    function dashboardContainerDirective () {
         return {
             restrict: 'EA',
             replace: true,
@@ -23,7 +23,7 @@
      * Link function for dashboard directive
      * @param scope
      */
-    function link(scope) {
+    function link (scope) {
         scope.state = 'locked';
 
         scope.$watch('selectedDashboard', function (newDashboard) {
@@ -40,12 +40,11 @@
      * Controller function for dashboard directive
      * @param $scope
      * @param $element
-     * @param $attrs
      * @param $compile
      * @param $timeout
      * @param DashboardWidgetService
      */
-    function controller($scope, $element, $attrs, $compile, $timeout, DashboardWidgetService) {
+    function controller ($scope, $element, $compile, $timeout, DashboardWidgetService) {
 
         var renderTimeout = 1000;
 
@@ -90,7 +89,7 @@
             }, renderTimeout);
         };
 
-        function onResize(event, element, widget, size) {
+        function onResize (event, element, widget, size) {
             var gridster = $scope.$$childHead.gridster,
                 height = (gridster.curColWidth - gridster.margins[0] * 2) * size.y,
                 width = (gridster.curRowHeight - gridster.margins[1] * 2) * size.x;
@@ -101,7 +100,7 @@
             });
         }
 
-        function onDrag(event, element, widget, position) {
+        function onDrag (event, element, widget, position) {
             $scope.$broadcast('widgetPositionChangeEvent:' + widget.id);
             DashboardWidgetService.moveWidget($scope.selectedDashboard._id, widget.id, {
                 position: position
@@ -115,7 +114,7 @@
      * @param source
      * @returns {*}
      */
-    function mergeGridsterOptions(destination, source) {
+    function mergeGridsterOptions (destination, source) {
         for (var key in source) {
             if (source.hasOwnProperty(key)) {
                 if (key === 'resizable' || key === 'draggable') {

@@ -4,7 +4,7 @@
         .module('teaparty2.widget')
         .service('WidgetSubscriber', WidgetSubscriber);
 
-    function WidgetSubscriber() {
+    function WidgetSubscriber () {
 
         this.update = function ($scope, callback) {
             $scope.$on(`widgetUpdateEvent:${$scope.widget._id}`, function (event, data) {

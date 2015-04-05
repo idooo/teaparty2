@@ -4,7 +4,7 @@
         .module('teaparty2.core')
         .service('ModalService', ModalService);
 
-    function ModalService(ngDialog) {
+    function ModalService (ngDialog) {
 
         var self = this;
         var modals = {
@@ -38,7 +38,7 @@
 
         init();
 
-        function init() {
+        function init () {
             for (let name in modals) {
                 self[name] = createModal(modals[name].template, modals[name].controller, modals[name].className);
             }
@@ -51,7 +51,7 @@
          * @param className
          * @returns {Function}
          */
-        function createModal(templateName, controllerName, className) {
+        function createModal (templateName, controllerName, className) {
             var config = {
                 template: `${templateName}`,
                 controller: `${controllerName} as ctrl`

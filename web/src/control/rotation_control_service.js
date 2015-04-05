@@ -4,7 +4,7 @@
         .module('teaparty2.control')
         .service('RotationControlService', rotationControlService);
 
-    function rotationControlService($http, $q) {
+    function rotationControlService ($http, $q) {
 
         const ENDPOINT = '/api/control/rotation';
 
@@ -14,15 +14,15 @@
         self.resumeRotation = resumeRotation;
         self.changeDashboard = changeDashboard;
 
-        function pauseRotation(rotationId) {
+        function pauseRotation (rotationId) {
             return serviceCallFactory(`${ENDPOINT}/${rotationId}/pause`);
         }
 
-        function resumeRotation(rotationId) {
+        function resumeRotation (rotationId) {
             return serviceCallFactory(`${ENDPOINT}/${rotationId}/resume`);
         }
 
-        function changeDashboard(rotationId, dashboardId) {
+        function changeDashboard (rotationId, dashboardId) {
             return serviceCallFactory(`${ENDPOINT}/${rotationId}/${dashboardId}`);
         }
 
@@ -31,8 +31,8 @@
          * @param url
          * @returns {Promise}
          */
-        function serviceCallFactory(url) {
-            return $q(function(resolve, reject) {
+        function serviceCallFactory (url) {
+            return $q(function (resolve, reject) {
                 var http = $http.post(url);
                 http.success(_data => resolve(_data));
                 http.error((err, _data) => reject(err, _data));

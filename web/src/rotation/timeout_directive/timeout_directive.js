@@ -4,7 +4,7 @@
         .module('teaparty2.widget')
         .directive('timeout', timeoutDirective);
 
-    function timeoutDirective() {
+    function timeoutDirective () {
         return {
             restrict: 'EA',
             replace: true,
@@ -18,14 +18,14 @@
         };
     }
 
-    function link(scope) {
+    function link (scope) {
         scope.id = Math.random();
         scope.availableTimeouts = [15, 30, 45, 60];
     }
 
-    function controller($scope, Rotation) {
+    function controller ($scope, Rotation) {
 
-        $scope.setDashboardTimeout = function(timeout) {
+        $scope.setDashboardTimeout = function (timeout) {
             Rotation.updateDashboard({
                 rotationId: $scope.rotation._id,
                 dashboardID: $scope.dashboard._id,
