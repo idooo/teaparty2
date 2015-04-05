@@ -16,6 +16,7 @@
         "defaultParams": true
     },
     "rules": {
+        "new-cap": false,
         "comma-spacing": false,
         "strict": false,
         "semi": false,

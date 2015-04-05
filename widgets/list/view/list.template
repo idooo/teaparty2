@@ -1,6 +1,6 @@
 <div class="widget-list">
 
-    <ul class="widget-list-container">
+    <ul data-scalable="true" class="widget-list-container">
 
         <li class="widget-list-item" ng-repeat="item in widget.data">
 

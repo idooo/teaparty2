@@ -1,5 +1,10 @@
+// Shared classes for widgets
 @import "../variables";
 @import "../mixins";
+
+// Variables
+
+@caption_color: @text_color;
 
 // =======================================================================================
 
@@ -18,7 +23,6 @@
 	}
 
 	&__body {
-		padding-top: 4vh;
 		height: 100%;
 		width: 100%;
 		opacity: 0;
@@ -33,3 +37,24 @@
 		}
 	}
 }
+
+// Widget itslef
+// =======================================================================================
+
+.widget {
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+}
+
+	.widget-caption {
+		color: @caption_color;
+		text-align: center;
+		font-size: 3vh;
+		height: 4vh;
+		font-weight: 400;
+		z-index: 99;
+		padding: 2px 0;
+		white-space: nowrap;
+		width: 100%;
+	}
