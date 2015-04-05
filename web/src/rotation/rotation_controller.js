@@ -23,7 +23,7 @@
             draggable: {enabled: false}
         };
 
-        rotation = Rotation.get({ url: $stateParams.url }, init, () => $state.go('app'));
+        rotation = Rotation.get({url: $stateParams.url}, init, () => $state.go('app'));
 
         function init(_rotation) {
             // Reload page with rotation if anything was changed there
@@ -34,18 +34,18 @@
 
             $scope.$on(`rotationControlEvent:${_rotation._id}`, function (event, data) {
                 if (data._id !== _rotation._id) return;
-                switch(data.type) {
+                switch (data.type) {
                     case 'pause': pauseRotation(); break;
                     case 'resume': resumeRotation(); break;
                     case 'selectDashboard': selectDashboard(data.dashboardId); break;
                 }
             });
 
-            if (is.not.empty(rotation.dashboards)) loadDashboardByIndex(currentIndex);
+            if (rotation.dashboards.length !== 0) loadDashboardByIndex(currentIndex);
         }
 
         function pauseRotation() {
-            if (is.undefined(pauseTimer)) {
+            if (angular.isUndefined(pauseTimer)) {
                 $timeout.cancel(timer);
                 self.paused = true;
                 pauseTimer = $timeout(function () {

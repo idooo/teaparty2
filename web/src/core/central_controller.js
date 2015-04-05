@@ -36,7 +36,7 @@
         self.isHeaderOpen = false;
         self.isDashboardLocked = true;
 
-        Settings.get().then( s => self.settings = s);
+        Settings.get().then(s => self.settings = s);
 
         init();
 
@@ -79,7 +79,7 @@
             if (cleanCache) $rootScope.dashboards = [];
 
             var selectDashboard = function (dashboards) {
-                if (is.not.undefined($stateParams.dashboard) && $stateParams.dashboard) {
+                if (angular.isDefined($stateParams.dashboard) && $stateParams.dashboard) {
                     for (let dashboard of dashboards) {
                         if (dashboard.url === $stateParams.dashboard) return loadDashboard(dashboard);
                     }
@@ -88,7 +88,7 @@
                 return loadDashboard();
             };
 
-            if (is.undefined($rootScope.dashboards) || is.empty($rootScope.dashboards)) {
+            if (angular.isUndefined($rootScope.dashboards) || $rootScope.dashboards.length === 0) {
                 getDashboardsList(function (dashboards) {
                     $rootScope.dashboards = dashboards;
                     selectDashboard(dashboards);
@@ -115,7 +115,7 @@
         function getDashboardsList(callback) {
             Dashboard.list(function (data) {
                 self.dashboards = data;
-                if (is.function(callback)) callback(self.dashboards);
+                if (angular.isFunction(callback)) callback(self.dashboards);
             });
         }
 
@@ -131,11 +131,11 @@
         function loadDashboard(input) {
             var dashboard;
 
-            if (is.undefined(input)) {
-                if (is.empty(self.dashboards)) return;
+            if (angular.isUndefined(input)) {
+                if (self.dashboards.length === 0) return;
                 dashboard = self.dashboards[0];
             }
-            else if (is.string(input)) {
+            else if (angular.isString(input)) {
                 for (let _dashboard of self.dashboards) {
                     if (_dashboard._id === input) {
                         dashboard = _dashboard;
@@ -171,7 +171,7 @@
                 self.importantMessage = IMPORTANT_MESSAGES[0];
                 return false;
             }
-            else if (is.empty(self.dashboards)) {
+            else if (self.dashboards.length === 0) {
                 self.importantMessage = IMPORTANT_MESSAGES[1];
                 return false;
             }

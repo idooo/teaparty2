@@ -27,7 +27,7 @@
         scope.state = 'locked';
 
         scope.$watch('selectedDashboard', function (newDashboard) {
-            if (is.undefined(newDashboard)) return;
+            if (angular.isUndefined(newDashboard)) return;
             scope.renderDashboard();
         });
 

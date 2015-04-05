@@ -35,8 +35,8 @@
          * @param token
          */
         function updateAuthHeader(token) {
-            if (is.undefined(token)) {
-                if (is.undefined(self.token)) {
+            if (angular.isUndefined(token)) {
+                if (angular.isUndefined(self.token)) {
                     token = self.readTokenFromStorage();
                 }
                 else {
@@ -57,7 +57,7 @@
             self.isAuthorised = true;
             localStorageService.set(LS_KEY, token);
             self.updateAuthHeader();
-            if (is.function(callback)) {
+            if (angular.isFunction(callback)) {
                 callback(self.isAuthorised);
             }
         }
@@ -72,7 +72,7 @@
             self.isAuthorised = false;
             localStorageService.remove(LS_KEY);
             self.updateAuthHeader();
-            if (is.function(callback)) {
+            if (angular.isFunction(callback)) {
                 callback(self.isAuthorised, message);
             }
         }
@@ -106,11 +106,9 @@
         function check(token, callback) {
             var http;
 
-            if (is.undefined(token)) {
+            if (angular.isUndefined(token)) {
                 token = self.readTokenFromStorage();
-                if (is.null(token)) {
-                    self.token = undefined;
-                }
+                if (token === null) self.token = undefined;
             }
 
             http = $http.get(`${ENDPOINT}/${token}`);

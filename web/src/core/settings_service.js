@@ -16,7 +16,7 @@
             return $q(function(resolve, reject) {
                 var http;
 
-                if (is.not.undefined(self.settings)) return resolve(self.settings);
+                if (angular.isDefined(self.settings)) return resolve(self.settings);
 
                 http = $http.get(ENDPOINT);
                 http.success(function (data) {

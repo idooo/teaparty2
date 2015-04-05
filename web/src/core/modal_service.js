@@ -57,10 +57,10 @@
                 controller: `${controllerName} as ctrl`
             };
 
-            if (is.not.undefined(className)) config.className = className;
+            if (angular.isDefined(className)) config.className = className;
 
             return function (data) {
-                if (is.not.empty(data)) config.data = data;
+                if (data) config.data = data;
                 ngDialog.open(config);
             };
         }

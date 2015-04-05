@@ -18,7 +18,7 @@
                 $rootScope.$broadcast('dashboardAddedEvent', dashboard);
                 ngDialog.close();
             }, function (err) {
-                self.error = err.data ? err.data.error : { message: 'Server is unavailable' };
+                self.error = err.data ? err.data.error : {message: 'Server is unavailable'};
             });
         }
     }

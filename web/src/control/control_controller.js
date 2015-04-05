@@ -34,7 +34,7 @@
                 });
 
                 // Select first rotation
-                if (is.not.empty(self.rotations)) self.selectedRotation = self.rotations[0];
+                if (self.rotations.length > 0) self.selectedRotation = self.rotations[0];
             });
         }
     }

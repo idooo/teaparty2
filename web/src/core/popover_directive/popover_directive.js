@@ -30,7 +30,7 @@
 
                 scope.selectItem = function(item) {
                     scope.closePopover();
-                    if (is.not.undefined(incomingSelect)) incomingSelect(item);
+                    if (angular.isDefined(incomingSelect)) incomingSelect(item);
                 };
 
                 var template = `
@@ -54,7 +54,7 @@
 
     function controller($scope, $element, $rootScope) {
         $scope.$on('popoverOpenEvent', function(event, data) {
-            if (is.not.undefined(data) && data.id !== $scope.id) {
+            if (angular.isDefined(data) && data.id !== $scope.id) {
                 $scope.closePopover();
             }
         });

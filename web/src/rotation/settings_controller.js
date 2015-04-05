@@ -126,7 +126,7 @@
         }
 
         function showError(err) {
-            self.error = err.data ? err.data.error : { message: 'Server is unavailable' };
+            self.error = err.data ? err.data.error : {message: 'Server is unavailable'};
         }
     }
 
