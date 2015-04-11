@@ -14,6 +14,9 @@ module.exports = function(mongoose, config) {
             required: true,
             default: 'PULL'
         },
+		jsonlt: {
+			type: Object
+		},
         widget: {
             type: mongoose.Schema.Types.ObjectId,
             required: true
@@ -36,7 +39,7 @@ module.exports = function(mongoose, config) {
         },
         interval: {
             type: Number,
-            default: 10
+            default: 60
         }
     });
 

@@ -19,6 +19,7 @@
     "node": "*"
   },
   "dependencies": {
+    "jsonlt": "^0.1.1",
     "mongoose": "~3.8.20",
     "node-uuid": "~1.4.2",
     "promise": "^6.1.0",

@@ -3,6 +3,7 @@
 
 // Variables
 @input_width: 100%;
+@invalid_color: @error_color;
 
 // Form
 // ========================================================================
@@ -44,12 +45,19 @@ fieldset {
 		font-family: monospace;
 		height: 100px;
 		border: none;
-		resize: vertical; 
+		resize: vertical;
 	}
 
 	input:read-only,
 	textarea:read-only {
 		background-color: rgb(239, 239, 239);
+	}
+
+	// Validation
+	&.invalid input,
+	&.invalid textarea,
+	&.invalid .fieldset-message {
+		color: @error_color;
 	}
 }
 

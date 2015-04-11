@@ -66,11 +66,24 @@ module.exports = function(server, model, config) {
         model.Widget.get(req.params.widgetId)
             .then(function (widget) {
 
-                var datasource = new model.Datasource({
-                    type: type,
-                    widget: widget._id,
-                    url: req.params.url
-                });
+				var datasourceOptions = {
+					type: type,
+					widget: widget._id,
+					url: req.params.url
+				};
+
+				// Validate JSONLT and include it to ds options if it's ok
+				if (req.params.jsonlt) {
+					try { datasourceOptions.jsonlt = JSON.parse(req.params.jsonlt) }
+					catch (e) { }
+				}
+
+				if (req.params.interval) {
+					try { datasourceOptions.interval = parseInt(req.params.interval, 10); }
+					catch (e) {}
+				}
+
+                var datasource = new model.Datasource(datasourceOptions);
 
                 datasource.save(function (err, data) {
                     if (err) r.fail(res, err, 400);

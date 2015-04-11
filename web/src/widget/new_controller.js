@@ -12,8 +12,13 @@
         self.availableDatasourcesTypes = [];
         self.widgetType = undefined;
         self.datasourceType = undefined;
-        self.widgetCaption = '';
+		self.widgetCaption = '';
         self.error = '';
+
+		// Datasource defaults
+		self.interval = 60;
+		self.isJsonltValid = true;
+		self.jsonlt = '';
 
         self.addWidget = addWidget;
 
@@ -29,7 +34,10 @@
             if (self.availableDatasourcesTypes.length !== 0) self.datasourceType = self.availableDatasourcesTypes[0];
         });
 
-        function addWidget () {
+		// Watch JSONLT to validate
+		$scope.$watch('ctrl.jsonlt', newValue => validateJSONLT(newValue));
+
+		function addWidget () {
             var widget = new Widget({
                 type: self.widgetType,
                 caption: self.widgetCaption
@@ -58,7 +66,9 @@
             var datasource = new Datasource({
                 type: self.datasourceType,
                 url: self.pullURL,
-                widgetId: widget._id
+                widgetId: widget._id,
+				jsonlt: self.jsonlt,
+				interval: self.interval
             });
 
             datasource.$save(function (createdDatasource) {
@@ -73,6 +83,15 @@
         function showError (err) {
             self.error = err.data ? err.data.error : {message: 'Server is unavailable'};
         }
+
+		function validateJSONLT () {
+			if (self.jsonlt.trim() === '') return self.isJsonltValid = true;
+
+			try { JSON.parse(self.jsonlt) }
+			catch (e) { return self.isJsonltValid = false; }
+
+			return self.isJsonltValid = true;
+		}
     }
 
 })();
