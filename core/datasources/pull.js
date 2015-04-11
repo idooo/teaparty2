@@ -1,14 +1,14 @@
 var Promise = require('promise'),
     request = require('request'),
-	JSONLT = require('jsonlt'),
+    JSONLT = require('jsonlt'),
     ObjectId = require('mongoose').Types.ObjectId,
     DATASOURCE_NAME = 'PULL',
     DISABLE_FLAG = 'nopull';
 
 module.exports = function(config, model) {
 
-	// JSONLT init
-	var jsonlt = new JSONLT({strict: true});
+    // JSONLT init
+    var jsonlt = new JSONLT({strict: true});
 
     // List of registered datasources
     var datasourcesList = [];
@@ -158,13 +158,13 @@ module.exports = function(config, model) {
             if (success) {
                 model.Widget.get(datasource.widget)
                     .then(function(widget) {
-						var data = updateObj.raw_data;
+                        var data = updateObj.raw_data;
 
-						// optional JSONLT transform
-						if (datasource.jsonlt) {
-							if (typeof data !== 'object') data = JSON.parse(data);
-							data = jsonlt.transform(data, datasource.jsonlt);
-						}
+                        // optional JSONLT transform
+                        if (datasource.jsonlt) {
+                            if (typeof data !== 'object') data = JSON.parse(data);
+                            data = jsonlt.transform(data, datasource.jsonlt);
+                        }
 
                         return widget.pushData(data)
                     })

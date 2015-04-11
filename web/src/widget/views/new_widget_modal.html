@@ -30,18 +30,18 @@
                 <input type="text" ng-model="ctrl.pullURL"/>
             </fieldset>
 
-			<fieldset ng-class="{'invalid': !ctrl.isJsonltValid}">
-				<label>
-					<a target="_blank" href="https://github.com/idooo/jsonlt">JSONLT</a> template
-					(optional, <span class="fieldset-message">must be valid JSON</span>)
-				</label>
-				<textarea class="code" ng-model="ctrl.jsonlt"></textarea>
-			</fieldset>
+            <fieldset ng-class="{'invalid': !ctrl.isJsonltValid}">
+                <label>
+                    <a target="_blank" href="https://github.com/idooo/jsonlt">JSONLT</a> template
+                    (optional, <span class="fieldset-message">must be valid JSON</span>)
+                </label>
+                <textarea class="code" ng-model="ctrl.jsonlt"></textarea>
+            </fieldset>
 
-			<fieldset>
-				<label>Update interval in seconds</label>
-				<slider floor="5" ceiling="300" step="5" ng-model="ctrl.interval"></slider>
-			</fieldset>
+            <fieldset>
+                <label>Update interval in seconds</label>
+                <slider floor="5" ceiling="300" step="5" ng-model="ctrl.interval"></slider>
+            </fieldset>
 
         </div>
 

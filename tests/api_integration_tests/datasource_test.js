@@ -6,41 +6,41 @@ module.exports = {
         var res = createWidgetAndDatasource({
             type: 'PULL',
             url: 'http://testurl.com/api/test',
-			interval: 72
+            interval: 72
         }, 'testdatasource1');
 
         var datasourceOut2 = h.get('/api/datasource/' + res.datasource._id.toString());
 
         test.equal(datasourceOut2.type, res.datasource.type);
-		test.equal(datasourceOut2.interval, 72);
+        test.equal(datasourceOut2.interval, 72);
         test.equal(datasourceOut2.url, 'http://testurl.com/api/test');
 
         test.done();
     },
 
-	JSONLT: function (test) {
-		var res = createWidgetAndDatasource({
-			type: 'PULL',
-			url: 'http://testurl.com/api/test',
-			jsonlt: '{"invalid"}'
-		}, 'testdatasource1');
+    JSONLT: function (test) {
+        var res = createWidgetAndDatasource({
+            type: 'PULL',
+            url: 'http://testurl.com/api/test',
+            jsonlt: '{"invalid"}'
+        }, 'testdatasource1');
 
-		var datasourceOut1 = h.get('/api/datasource/' + res.datasource._id.toString());
+        var datasourceOut1 = h.get('/api/datasource/' + res.datasource._id.toString());
 
-		test.ok(typeof datasourceOut1.jsonlt === 'undefined');
+        test.ok(typeof datasourceOut1.jsonlt === 'undefined');
 
-		res = createWidgetAndDatasource({
-			type: 'PULL',
-			url: 'http://testurl.com/api/test',
-			jsonlt: '{"testValue": 124}'
-		}, 'testdatasource1');
+        res = createWidgetAndDatasource({
+            type: 'PULL',
+            url: 'http://testurl.com/api/test',
+            jsonlt: '{"testValue": 124}'
+        }, 'testdatasource1');
 
-		var datasourceOut2 = h.get('/api/datasource/' + res.datasource._id.toString());
+        var datasourceOut2 = h.get('/api/datasource/' + res.datasource._id.toString());
 
-		test.equal(datasourceOut2.jsonlt.testValue, 124);
+        test.equal(datasourceOut2.jsonlt.testValue, 124);
 
-		test.done();
-	},
+        test.done();
+    },
 
     getListOfDatasources: function (test) {
 

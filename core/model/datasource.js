@@ -14,9 +14,9 @@ module.exports = function(mongoose, config) {
             required: true,
             default: 'PULL'
         },
-		jsonlt: {
-			type: Object
-		},
+        jsonlt: {
+            type: Object
+        },
         widget: {
             type: mongoose.Schema.Types.ObjectId,
             required: true

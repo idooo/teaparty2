@@ -12,13 +12,13 @@
         self.availableDatasourcesTypes = [];
         self.widgetType = undefined;
         self.datasourceType = undefined;
-		self.widgetCaption = '';
+        self.widgetCaption = '';
         self.error = '';
 
-		// Datasource defaults
-		self.interval = 60;
-		self.isJsonltValid = true;
-		self.jsonlt = '';
+        // Datasource defaults
+        self.interval = 60;
+        self.isJsonltValid = true;
+        self.jsonlt = '';
 
         self.addWidget = addWidget;
 
@@ -34,10 +34,10 @@
             if (self.availableDatasourcesTypes.length !== 0) self.datasourceType = self.availableDatasourcesTypes[0];
         });
 
-		// Watch JSONLT to validate
-		$scope.$watch('ctrl.jsonlt', newValue => validateJSONLT(newValue));
+        // Watch JSONLT to validate
+        $scope.$watch('ctrl.jsonlt', newValue => validateJSONLT(newValue));
 
-		function addWidget () {
+        function addWidget () {
             var widget = new Widget({
                 type: self.widgetType,
                 caption: self.widgetCaption
@@ -67,8 +67,8 @@
                 type: self.datasourceType,
                 url: self.pullURL,
                 widgetId: widget._id,
-				jsonlt: self.jsonlt,
-				interval: self.interval
+                jsonlt: self.jsonlt,
+                interval: self.interval
             });
 
             datasource.$save(function (createdDatasource) {
@@ -84,14 +84,14 @@
             self.error = err.data ? err.data.error : {message: 'Server is unavailable'};
         }
 
-		function validateJSONLT () {
-			if (self.jsonlt.trim() === '') return self.isJsonltValid = true;
+        function validateJSONLT () {
+            if (self.jsonlt.trim() === '') return self.isJsonltValid = true;
 
-			try { JSON.parse(self.jsonlt) }
-			catch (e) { return self.isJsonltValid = false; }
+            try { JSON.parse(self.jsonlt) }
+            catch (e) { return self.isJsonltValid = false; }
 
-			return self.isJsonltValid = true;
-		}
+            return self.isJsonltValid = true;
+        }
     }
 
 })();
