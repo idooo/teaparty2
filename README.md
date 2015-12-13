@@ -24,6 +24,9 @@ By default there is no auth and everyone can change your dashboards and get acce
 #### Logging
 You can set logging level and also change log file location (default is `teaparty2/logs`). `logging` section is optional.
 
+#### Dark theme
+You have to rebuild Teaparty if you want to have a dark theme. See detailed instructions below
+
 #### Example config
 Teaparty2 will use default config (with invalid DB credentials) located in `teaparty2/config/` if environmental variable `config` was not set during the launch. Here is the example config file:
 
@@ -77,7 +80,7 @@ Teaparty2 will pull data from the remote URL via HTTP and update widgets if data
 Normal browsers and IE10+
 
 ## Build
-Checkout this repo and install everythin you need:
+Checkout this repo and install everything you need:
 
 ```
 npm install && bower install
@@ -120,6 +123,13 @@ tools/api_integration_tests.sh <config_path>
 Build AngularJS application, minimise everything static:
 
 ```
+grunt build
+```
+
+To enable dark theme: rename `web/src/styles/variables.dark.less` to `variables.less` and rebuild an app
+
+```
+mv web/src/styles/variables.dark.less web/src/styles/variables.less
 grunt build
 ```
 

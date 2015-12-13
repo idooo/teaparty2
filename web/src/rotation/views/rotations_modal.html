@@ -36,7 +36,17 @@
                 <td class="rotation-item__dashboards">
                     <a href="#"
                        class="context-link"
-                       ng-click="ctrl.openDashboards(rotation)">{{rotation.dashboards | fieldsConcat:'name'}}</a>
+                       ng-click="ctrl.openDashboards(rotation)">
+                       
+                       <span ng-if="rotation.dashboards.length">
+                           {{rotation.dashboards | fieldsConcat:'name'}}
+                       </span>
+                       
+                       <span ng-if="!rotation.dashboards.length">
+                           Add dashboards
+                       </span>
+                       
+                       </a>
                 </td>
 
                 <td class="rotation-item__copy">

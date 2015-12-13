@@ -50,7 +50,7 @@
                 self.paused = true;
                 pauseTimer = $timeout(function () {
                     resumeRotation();
-                }, PAUSE_DELAY)
+                }, PAUSE_DELAY);
             }
         }
 

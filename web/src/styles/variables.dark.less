@@ -2,7 +2,7 @@
 @font_family: 'Open Sans', sans-serif;
 
 // Colors
-@color0: #ffffff;
+@color0: #2f2f2f;
 @color1: #9b59b6;
 @color2: #c0392b;
 @color3: #27ae60;
@@ -10,7 +10,7 @@
 
 // Global
 @background_color: @color0;
-@text_color: #2f2f2f;
+@text_color: #fff - @background_color;
 
 @error_color: @color2;
 @warning_color: @error_color;
@@ -21,7 +21,7 @@
 @widget_bg_color: lighten(@background_color, 10%);
 
 // Modals
-@modal_bg_color: darken(@background_color, 10%);
+@modal_bg_color: lighten(@background_color, 70%);
 @modal_text_color: #444;
 
 // Media queries

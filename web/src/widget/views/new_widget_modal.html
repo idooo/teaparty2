@@ -20,6 +20,11 @@
             <select ng-model="ctrl.datasourceType"
                     ng-options="option for option in ctrl.availableDatasourcesTypes"></select>
         </fieldset>
+        
+        <fieldset ng-repeat="(setting, type) in ctrl.availableWidgetSettings[ctrl.widgetType]">
+            <label>{{setting}}</label>
+            <input type="text" ng-model="ctrl.settings[setting]"/>
+        </fieldset>
 
         <!-- PULL datasource -->
 

@@ -6,7 +6,7 @@ module.exports.tasks =
       tasks: ['concat:ng', 'babel', 'ngAnnotate', 'develop']
       options: { nospawn: true, reload: false }
     less:
-      files: ['<%= settings.app %>/**/*.less', '<%= settings.widgets %>/**/*.less', ]
+      files: ['<%= settings.app %>/**/*.less', '<%= settings.widgets %>/**/*.less']
       tasks: ['less', 'develop']
       options: { nospawn: true, reload: false  }
     templatesCopy:

@@ -33,7 +33,7 @@
             }, function () {
                 $scope.dashboard.timeout = timeout;
             });
-        }
+        };
     }
 
 })();
