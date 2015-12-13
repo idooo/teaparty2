@@ -16,17 +16,30 @@ module.exports = function(server, model, config) {
      *  - type
      *  - caption
      *  - datasource
+     *  - settings?
      */
     server.post('/api/widget', function(req, res, next) {
 
         auth.check(req, res, next, config);
-
-        var widget = new model.Widget({
-            type: req.params.type,
-            caption: req.params.caption,
-            datasource: req.params.datasource // TODO: validation?
-        });
-
+        
+        var type = helpers.filter(req.params.type);
+        
+        var params = {
+            type: type,
+            caption: helpers.filter(req.params.caption),
+            datasource: helpers.filter(req.params.datasource),
+            settings: {} 
+        }
+        
+        // TODO: validate setting's type
+        if (config.widgets[type] && config.widgets[type].settings) {
+            for (var settingName in config.widgets[type].settings) {
+                var value = helpers.filter(req.params.settings[settingName]);
+                if (value) params.settings[settingName] = value;
+            }
+        }
+        
+        var widget = new model.Widget(params);
         widget.save(function (err, widget) {
             if (err) {
                 r.fail(res, err, 400);
@@ -73,9 +86,9 @@ module.exports = function(server, model, config) {
 
         auth.check(req, res, next, config);
 
-        var paramNames = ['caption', 'datasource'],
+        var paramNames = ['caption', 'datasource', 'src'], // TODO: remove hardcoded src
             updateObj = {};
-
+            
         var query = model.Widget.where({ _id: ObjectId(req.params.widgetId)});
 
         paramNames.forEach(function(paramName) {

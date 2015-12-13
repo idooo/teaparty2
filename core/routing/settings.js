@@ -15,6 +15,13 @@ module.exports = function(server, model, config) {
 
         safeConfig.widgetTypes = Object.keys(config.widgets);
         safeConfig.datasourcesTypes = config.datasources.types;
+        
+        safeConfig.widgetSettings = {};
+        safeConfig.widgetTypes.forEach(function (widgetName) {
+            if (config.widgets[widgetName].settings) {
+                safeConfig.widgetSettings[widgetName] = config.widgets[widgetName].settings;
+            }
+        });
 
         // For testing purposes
         safeConfig.value = Math.random();

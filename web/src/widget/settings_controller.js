@@ -84,7 +84,7 @@
          * Move widget tot dashboard by dashboard name
          * @param dashboardName
          */
-        /*eslint-disable no-loop-func */
+        /* eslint-disable no-loop-func */
         function moveToDashboard (dashboardName) {
             for (let dashboard of $rootScope.dashboards) {
                 if (dashboard.name === dashboardName) {
@@ -106,7 +106,7 @@
                 }
             }
         }
-        /*eslint-enable no-loop-func */
+        /* eslint-enable no-loop-func */
 
         function showError (err) {
             self.error = err.data ? err.data.error : {message: 'Server is unavailable'};
@@ -116,7 +116,7 @@
             self.view = 1;
             Datasource.get({datasourceId: $scope.ngDialogData.widget.datasource}, function (datasource) {
                 self.datasource = datasource;
-            })
+            });
         }
 
         function closeDatasourceSettings () {

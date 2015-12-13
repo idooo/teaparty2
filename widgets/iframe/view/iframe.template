@@ -1,0 +1,10 @@
+<div class="widget-iframe">
+
+    <iframe 
+        width="384" 
+        height="216" 
+        ng-src="{{getIframeSrc()}}" 
+        frameborder="0">
+    </iframe>
+
+</div>

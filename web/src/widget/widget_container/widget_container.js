@@ -74,7 +74,7 @@
                         var scaleRatio = widgetBody.offsetHeight / scalableElement.offsetHeight;
                         scalableElement.style.transform = `scale(${scaleRatio})`;
                     }
-                }, timeout)
+                }, timeout);
             }
         }
 
@@ -93,7 +93,7 @@
 
             this.hideCaption = function () {
                 $scope.hideCaption = true;
-            }
+            };
         }
     }
 
